@@ -1,0 +1,3 @@
+  class QueryMethods 
+  end
+

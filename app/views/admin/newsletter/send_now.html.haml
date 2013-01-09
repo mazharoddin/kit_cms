@@ -1,0 +1,28 @@
+- right_column
+
+- content_for :main do
+  %h1{:style=>"margin-bottom: 20px;"} Sending
+  %h3
+    Newsletter:
+    = "\"#{@newsletter.name}\""
+
+  - if @already_sent
+    Someone has already sent this newsletter.  If you send it again then anybody that received it the previous time will receive it again.  If you wish to go ahead and do that, please click "Send Again" below.
+    %p
+      = button_to "Send Again", "/admin/newsletters/send/#{@newsletter.id}?confirm=1#{params[:test]=='1' ? '&test=1':''}", :confirm=>"You are about to send this newsletter even though it has been sent before.  Are you sure?", :disable_with=>"Sending..."
+ 
+  - if @not_sent_test
+    Nobody has yet sent a test copy of this newsletter. If you want to go ahead and send it to real users without sending a test first, please click "Send" below.
+    %p
+    = button_to "Send Without Test", "/admin/newsletters/send/#{@newsletter.id}?confirm=1", :confirm=>"You are about to send this newsletter to real users without having sent a test copy first.  Are you sure?", :disable_with=>"Sending..."
+
+
+  - if @sent
+    Your newsletter has been scheduled for transmission.  It may take a few minutes for the sending to start.  Once it starts it will be sent quite quickly, but at a finite rate.  If you have thousands of subscribers it will take some hours for all the mails to be sent. Depending on the recipients email systems it make take longer for them to receive the newsletter.
+
+  %br
+  %br
+  = link_to "Newsletter Details", "/admin/newsletters/#{@newsletter.id}"
+  %br
+  %br
+  = link_to "Back to Newsletters", "/admin/newsletters"

@@ -1,0 +1,21 @@
+%tr(id="showing_#{@sub.id}")
+  %td(colspan="3")
+    %ul
+      %li 
+        %b ID:
+        = @sub.id
+      %li
+        %b IP Address:
+        = link_to @sub.ip, "http://www.infobyip.com/ip-#{@sub.ip}.html", :target=>"_blank"
+      %li
+        %b Submitted:
+        = @sub.created_at
+      %li(style="margin-bottom: 10px;")
+        %b Visibility:
+        = @sub.visible==1 ? "Visible" : "Invisible"
+      - @sub.form_submission_fields.each do |field|
+        %li(style="margin-top: 5px; background-color: #eee")
+          %b
+            = field.form_field.name + ":"
+        %li 
+          = format_submission_field(field)

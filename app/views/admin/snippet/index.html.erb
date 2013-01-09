@@ -1,0 +1,33 @@
+<% right_column %>
+
+<% content_for :main do %>
+
+  <h1 class="snippets_icon">Snippets</h1>
+  <span class="field_help">
+    Snippets are piece of content that can be reused.  They are usually small, but can be large if required, and they can appear in templates.  When the snippet is updated all pages that use that snippet will then show the new contents.
+  </span>
+  <br/>
+  <br/>
+  <%= icon_to "Create New Snippet", "/admin/snippet/new", false %><br/>
+
+  <form name="form" style="margin-top: 10px;">
+    <input name="for" value="<%= params[:for] %>" />
+    <input type="submit" value="Search" />
+    <%= link_to_function "Reset", "$('input[name=for]').val(''); $('form[name=form]').submit();" %>
+   </form>
+
+  
+  <%= paginate @snippets %>
+
+  <ul>
+    <% @snippets.each do |snippet| %>
+      <li style="margin-bottom: 10px;">
+      <%= link_to snippet.name, "/admin/snippet/#{snippet.id}" %><br/>
+      <span class="dehighlight">
+        Created <%= time_ago_in_words(snippet.created_at) %> ago by <%= snippet.user.email rescue 'unknown' %>
+      </span><br/>
+      <span><%= truncate(snippet.description, :length=>500) %></span>
+    <% end %>
+  </ul>
+
+<% end %>

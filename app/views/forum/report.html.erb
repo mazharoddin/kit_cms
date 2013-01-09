@@ -1,0 +1,21 @@
+<div id="report_post">
+  
+<h1>Report Post</h1>
+
+<h2>Thread: <%= @post.topic_thread.title %></h2>
+
+<div style="margin-right: 20px; padding: 20px; background-color: #EEE;">
+"<%= truncate(@post.body, :length=>400, :omission=>"...") %>"
+
+by <%= @post.created_by_user.display_name %> <%= time_ago_in_words(@post.created_at) %> ago
+</div>
+
+<p style="color: green;">To report this post please enter your concerns below.</p>
+
+<%= form_for "post_report", :url=>"/forums/report/#{@post.id}" do |f| %>
+<%= text_area_tag "body", params[:body] ? params[:body] : "I would like to bring this post to your attention because...\n\n ", {:rows=>"10", :style=>"width: 950px;"} %>
+<br/>
+<%= submit_tag "Send" %>
+<% end %>
+
+</div>

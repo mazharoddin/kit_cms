@@ -1,0 +1,9 @@
+#links
+  %h1.links_wicon Shortcuts
+  %ul
+    - links = current_user.links
+    - links.each do |link|
+      %li(class="#{'last' if links.last == link }")
+        %a(href="#{link.url}" target="#{'_blank' if link.in_new_window==1}")
+          = link.label
+

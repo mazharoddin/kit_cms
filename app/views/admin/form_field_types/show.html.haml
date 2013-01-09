@@ -1,0 +1,41 @@
+- content_for :main do
+
+  - fft = @form_field_type
+
+  %h1.forms_icon Field Type '#{fft.name}'
+
+  %p
+    %strong Name:
+    = fft.name
+
+  %p
+    %strong Description:
+    = fft.description
+
+  %p 
+    %strong Type:
+    = fft.field_type
+
+  
+  - if ["multiselect", "multicheckbox", "radio", "select","hierarchy"].include?(fft.field_type)
+    %p
+      %strong Options:
+      - if fft.field_type == 'hierarchy'
+        = fft.options ? show_tree(fft.options) : ''
+      - else
+        = fft.options.split('|').join(', ').html_safe rescue ''
+
+  %p 
+    %strong HTML Options:
+    = fft.html_options
+
+  %p
+    %strong Hidden:
+    = fft.hidden? ? "Yes" : "No"
+
+  %p
+    = icon_to "Edit", "/admin/form_field_types/#{fft.id}/edit"
+    = icon_to "Options Editor", "/admin/form_field_types/#{fft.id}/editoptions" if ["multicheckbox", "radio", "select","hierarchy", "multiselect"].include?(fft.field_type)
+
+    = icon_to "Delete", "/admin/form_field_types/#{fft.id}", false, :confirm => 'Are you sure?', :method => :delete if fft.form_fields.size==0
+    = icon_to "List Field Types", "/admin/form_field_types"

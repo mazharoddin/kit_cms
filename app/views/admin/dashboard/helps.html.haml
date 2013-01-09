@@ -1,0 +1,16 @@
+- content_for :main do 
+
+  %h1.help_icon Help Search Results
+
+  .spacer(style="margin-top: 10px;")
+    = form_tag "/db/help", :id=>"search_form", :method=>:get do 
+      = text_field_tag :search, params[:search]
+      = icon_to_function "Search", "$('#search_form').submit();" 
+      = icon_to "Reset", "/admin/helps"
+  
+  %ul
+    - @helps.each do |help|
+      %li 
+        = link_to help.name, "/db/help/#{help.path}"
+
+

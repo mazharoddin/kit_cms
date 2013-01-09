@@ -1,0 +1,8 @@
+- content_for :main do
+  
+  %h1.pagetemplate_icon Page Template Term
+  
+  = render 'form'
+
+  %p
+    = icon_to "Show", "/admin/page_template_terms/#{@page_template_term.id}"

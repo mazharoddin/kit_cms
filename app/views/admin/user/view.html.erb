@@ -1,0 +1,162 @@
+
+<% content_for :main do %>
+<h1 class="user_icon">User '<%= @user.email %>'</h1>
+<div class="bottom_space">
+  <%= icon_to "Back to User List", "/admin/user" %>
+</div>
+<table>
+  <tr><td>ID:</td><td><%= @user.id %></td></tr>
+
+  <% if current_user.superadmin? %>
+  <tr><td>User Permission Level:</td>
+    <td><%= @user.ranking %></td>
+  </tr>
+  <% end %>
+
+  <% if Preference.get_cached(_sid, 'show_groups') %>
+  <tr><td valign='top'><%= link_to "Groups", "/admin/groups" %>:</td><td>
+      <%= @user.groups.map {|g| link_to g.name, "/admin/user/#{@user.id}/group/#{g.id}", :method=>"delete" }.join(", ").html_safe %>
+      <%= "<span class='field_help'>click to remove</span>".html_safe if @user.groups.size>0 %>
+        <% one_group = false %>
+      <div style="display: none;" id="add_to_groups">
+        <ul>
+          <% Group.order(:name).all.each do |group| %>
+          <% next if @user.groups.include?(group)  %>
+          <li>
+          <% one_group = true %>
+          <%= link_to group.name, "/admin/user/#{@user.id}/group/#{group.id}", :method=>:post %> 
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <br/>
+    <%= link_to_function "Add to other groups", "$('#add_to_groups').slideDown(); $('#add_to_groups_link').hide();", :id=>"add_to_groups_link", :class=>"action" if one_group %>
+</td></tr>
+<% end %>
+<tr><td width="200">Login Email:</td><td><div class="top_space"><%= best_in_place @user, :email, :path=>"/admin/user/#{@user.id}" %> <span class='field_help'>click to edit</span></div></td></tr>
+<% if feature?("forums") %>
+<tr><td width="200">Display Name:</td><td><div class="top_space"><%= best_in_place @user, :display_name, :path=>"/admin/user/#{@user.id}" %> <span class='field_help'>click to edit</span></div></td></tr>
+<% end %>
+
+  <tr><td width="200">Password:</td>
+    <td><div class="both_space"><%= best_in_place @user, :password, :path=>"/admin/user/#{@user.id}/password" %></div></td>
+  </tr>
+
+  <tr><td width="200">Sign in count:</td><td><%= @user.sign_in_count %></td></tr>
+  <tr><td>Registered:</td><td><%= time_ago_in_words(@user.created_at) %> ago at <%= @user.created_at %></td></tr>
+    <tr><td>Last sign in:</td><td><%= time_ago_in_words(@user.last_sign_in_at) rescue 'never' %> ago at <%= @user.last_sign_in_at rescue 'never' %></tr>
+    <tr><td>Current sign in:</td><td><%= time_ago_in_words(@user.current_sign_in_at) rescue 'never' %> ago at <%= @user.current_sign_in_at rescue 'never'%></tr>
+      <tr><td>Current sign in IP:</td><td><%= @user.current_sign_in_ip %></td></tr>
+      <tr><td>Last sign in:</td><td><%= time_ago_in_words(@user.last_sign_in_at) rescue 'never' %></td></tr>
+      <tr><td>Last sign in IP:</td><td><%= @user.last_sign_in_ip rescue 'none' %></td></tr>
+      <% if feature?("newsletters") %>
+      <tr><td>Subscribed Newsletter:</td><td><%= @user.subscribe_newsletter==1 ? 'Yes' : 'No' %>
+          <%= link_to "Unsubscribe", "/admin/user/#{@user.id}?newsletter=0", :class=>"action_pl" if @user.subscribe_newsletter==1 %>
+          <%= link_to "Subscribe", "/admin/user/#{@user.id}?newsletter=1", :class=>"action_pl" if @user.subscribe_newsletter==0 %>
+      </td></tr>
+      <% end %>
+  <% if @user.locked_at %>
+  <tr>
+    <td>Locked:</td><td><%= time_ago_in_words(@user.locked_at) %> ago 
+  <%= link_to "Unlock Now", "/admin/user/#{@user.id}?unlock=1" %>
+  </td></tr>
+  <% end %>
+
+  <tr><td>Banned:</td><td>
+      <% if @user.not_banned? %>
+        No
+      <% else %>
+        <%= time_ago_in_words(@user.banned_at) %>
+        <% end %>
+
+      <%= link_to @user.not_banned? ? "Ban" : "Unban", "/admin/user/#{@user.id}?#{@user.not_banned? ? 'ban':'unban'}=1", :class=>"action_pl" %>
+</td></tr>
+<tr><td>Spam Points:</td><td><%= @user.spam_points %>
+    <%= link_to "Zero", "/admin/user/#{@user.id}?spam_points=0", :class=>"action_pl" %>
+</td></tr>
+<tr class="field_help"> <td colspan="2">
+      When a user conducts activity that looks like it might be related to spamming this score is increased.  When it exceeds <%= (Preference.getCached(_sid, 'spam_points_to_ban_user') || "10") %> the user will be automatically banned.
+</td></tr>
+
+<% if feature?("forums") %>
+  <tr><td>Forum Status:</td>
+    <td><%= @user.forum_status %> 
+      <%= link_to "Increase", "/admin/user/#{@user.id}?forum_status=up", :class=>"action_pl" %>
+      <%= link_to "Decrease", "/admin/user/#{@user.id}?forum_status=down", :class=>"action_pl" %>
+      Higher number indicates higher risk
+    </td>
+  </tr>
+
+<tr><td>Moderator:</td><td><%= @user.moderator? ? "Yes" : "No" %> 
+    <%= link_to @user.moderator? ? "Revoke" : "Grant", "/admin/user/#{@user.id}?moderator=#{@user.moderator? ? '0' : '1'}", :class=>"action_pl" %>
+</td></tr>
+<% end %>
+
+  <tr><td>Editor/Admin:</td><td><%= @user.admin? ? "Yes" : "No" %> 
+      <%= link_to @user.admin? ? "Revoke" : "Grant", "/admin/user/#{@user.id}?admin=#{@user.admin? ? '0' : '1'}", :class=>"action_pl" %>
+  </td></tr>
+  <tr><td>Designer:</td><td><%= @user.designer? ? "Yes" : "No" %> 
+      <%= link_to @user.designer? ? "Revoke" : "Grant", "/admin/user/#{@user.id}?designer=#{@user.designer? ? '0' : '1'}", :class=>"action_pl" %>
+  </td></tr>
+  
+  <% if feature?("forums") %>
+  <tr><td>Forum Access Level:</td>
+    <td><%= @user.forum_level %> 
+      <%= link_to "Increase", "/admin/user/#{@user.id}?forum_level=up", :class=>"action_pl" %>
+      <%= link_to "Decrease", "/admin/user/#{@user.id}?forum_level=down", :class=>"action_pl" %>
+
+    </td>
+  </tr>
+  <% end %>
+
+  <% if feature?("ads") %>
+  <tr><td>Advertisments:</td>
+  <td><%= @user.ads.count %>
+    <%= icon_to "Show Ads", "/admin/ads?user_id=#{@user.id}", false,:style=>"display: inline-block; margin-left: 10px; padding: 20px;" %>
+  </td></tr>
+  <% end %>
+  
+
+  <% if @user.ranking <= current_user.ranking %>
+    <tr><td><%= link_to "Login As This User", "/admin/user/#{@user.id}/become", {:method=>"POST", :class=>"action"} %></td></tr>
+  <% end %>
+</table>
+
+<h2 style="margin-top: 20px;">User Attributes</h2>
+  <table>
+    <% UserAttribute.sys(_sid).all.each do |ua| %>
+    <% uav = @user.user_attribute_values.where(:user_attribute_id=>ua.id).first || UserAttributeValue.new %>
+    <tr><td height="30" width="200"><%= ua.name.titleize %>:</td>
+
+      <%# = text_field_tag "parameter[#{ua.id}]", uav ? uav.value : '' %>
+      <td><%= best_in_place uav, :value, :path=>"/admin/user/#{@user.id}/attribute/#{ua.id}" %></td>
+    </tr>
+    <% end %>
+  </table> 
+
+<h2 style="margin-top: 20px; ">User Notes</h2>
+<div style="margin-bottom: 10px;"><%= icon_to_function "Add New Note",  "$('#add_note').slideDown(); $('#add_note_link').hide();", false, :id=>"add_note_link" %> <%= icon_to "EMail User", "/admin/user/#{@user.id}/email" %></div>
+<div id="add_note" class="cms_form" style="display: none;">
+  <%= form_for @user_note, :url=>"/admin/user/#{@user.id}/add_note", :method=>:post do |f| %>
+    <ul>
+      <li><label>Category:</label></li>
+      <li><%= f.text_field :category %></li>
+      <li><label>Note:</label></li>
+      <li><%= f.text_area :description %></li>
+      <li><%= gnric_submit "Save" %></li>
+    </ul>
+    <% end %>
+  </div>
+<table class="attributes">
+<% @user.user_notes.order("created_at desc").each do |note| %>
+  <tr>
+    <td><%= note.category %></td>
+    <td width="100%"><%= note.description ? field_reveal(note.description.html_safe, 160) : '&nbsp;'%></td>
+    <td nowrap><%= time_ago_in_words(note.created_at) %> ago</td>
+    <td nowrap><%= note.created_by.email rescue 'System' %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= icon_to "Back to User List", "/admin/user", false, :style=>"margin-top: 20px;" %>
+<% end unless @user.id.to_i==1 %>

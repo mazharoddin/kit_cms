@@ -1,0 +1,31 @@
+- content_for :main do
+
+  = doc_ready("$('#user_note_subject').focus();")
+
+  %h1.user_icon EMail User
+
+  .cms_form
+    = form_for @note, :url=>"/admin/user/#{@user.id}/email", :method=>:post do |f|
+
+      %p
+        %label To:
+        = @user.email
+
+      %p
+        %label Subject:
+        = f.text_field :subject
+
+      %p
+        %label Reuseable Reply
+        = select_tag :reply, options_from_collection_for_select(Snippet.sys(_sid).where("name like 'mail:%'").all, :id, :mail_name), :include_blank=>true,  :onchange=>"$('#user_note_description').load('/admin/snippet/'+$('#reply option:selected').val()+'/fetch');", :id=>"reply"
+        %br
+        To add reuseable replies, create a 
+        = link_to "snippet", "/admin/snippet"
+        and begin its snippet name "Mail: "
+
+      %p
+        %label Message:
+        = f.text_area :description, :style=>"height: 400px;"
+
+      %p
+        = gnric_submit "Send"

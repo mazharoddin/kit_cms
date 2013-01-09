@@ -1,0 +1,60 @@
+- content_for :page_scripts do
+  = render "page_scripts.js"
+
+- content_for :main do 
+  %h1.forum_icon Forums
+
+  = icon_to "Browse user forums", "/forums"
+  = icon_to "Moderation View", "/admin/forums/moderate"
+
+  #categories
+    %h3 Categories
+    .field_help
+      Click to show details
+    
+    %ul(style="padding-left: 0;")
+      - TopicCategory.sys(_sid).order(:display_order).each do |cat|
+        %li
+          %fieldset(style="margin: 10px;")
+            = link_to_function cat.name, "show_category(#{cat.id});"
+            %br
+            = cat.description
+            = link_to "Edit", "/admin/forums/category/#{cat.id}", :class=>:action, :style=>"float: right; "
+            - topics = cat.topics.order(:display_order)
+            %div(id="category_#{cat.id}" style="display: none;")
+              %h3 Topics
+              %ul(style="margin-left: 20px;")
+                - cat.topics.order(:display_order).each do |topic|
+                  %li
+                    = link_to topic.name, "/admin/forums/topic/#{topic.id}"
+                    %div(id="topic_#{topic.id}" style="display: block;")
+              %div(class="category_form")
+                    
+
+
+  #new_category.cms_form
+    %h3 New Category
+
+    = form_for @topic_category, url: "/admin/forums/create_category" do |f|
+      %label.required Name:
+      = f.text_field :name
+      #new_category_description(style="display: none;")
+        %label Description:
+        = f.text_area :description
+
+      = f.submit "Create"
+
+  #category(style="display: none;")
+    #category_data
+      %div.cms_form
+        = form_for @topic, url: "/admin/forums/create_topic" do |f|
+          = error_messages_for :topic
+          = f.hidden_field :topic_category_id, :class=>"topic_category_id"
+          %ul
+            %li
+              %label.required New Topic Name:
+              = f.text_field :name, :class=>"wide"
+            %li
+            = f.submit "Create"
+
+

@@ -1,0 +1,8 @@
+<% content_for :main do %>
+  
+<h1 class="page_icon">Edit '<%= @page.title!='' ? @page.title : @page.name %>' Page Info</h1>
+	
+<%= render(:partial=>'form.html.haml', :locals=>{:page=>@page}) %>
+
+
+<% end %>

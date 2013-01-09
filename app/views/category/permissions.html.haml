@@ -1,0 +1,43 @@
+- content_for :main do 
+
+  #permissions
+    %h1(class="permissions_icon") Category '#{@category.name}' Permissions
+
+    = link_to "Back to browser", "/pages"
+
+    %h3 Permission to SEE pages in this category
+    .field_help
+      Those listed in the 'Yes' column can see (read) pages in this category.  To stop them from being able to click it move it to the 'No' column.  You can also click to move it from the 'No' column to the 'Yes' column.
+    
+
+    #read.clearfix
+      = render :partial=>"read_permissions"
+
+    %h3 Permission to EDIT pages in this category
+    .field_help
+      This works the same way as the SEE section above, but is in relation to being able to EDIT the contents of the pages in this category. If you add to the 'Yes' column it will also add it to the 'Yes' column in the SEE section above, as it would make no sense to have permission to edit pages that can't be seen. Likewise if you add to the 'No' column in the SEE section above it will also move it to the 'No' column in this section.
+
+    #write.clearfix
+      = render :partial=>"write_permissions"
+
+    .copy(style="margin-bottom: 10px;")
+      = link_to_function "Copy all these permissions &darr;".html_safe, "copy_permissions_to_subs(#{@category.id})", :class=>"action", :method=>:post
+      to all sub-categories of this one (and all sub-categories of those)
+    
+    = link_to "Back to browser", "/pages"
+
+    - unless @category.parent.is_root?
+      #parents(style="margin-top: 20px;")
+        %h3(style="margin-bottom: 0;")
+          Parent Categories
+        %ul
+          - cat = @category.parent
+          - runaway = 0
+          - until cat.is_root? || runaway>1000
+            %li 
+              = link_to cat.name, "/category/#{cat.id}/permissions"
+              - cat = cat.parent
+              - runaway += 1
+
+    
+

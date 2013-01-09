@@ -1,0 +1,28 @@
+= form_for :search, :method=>:get do |f|
+  = hidden_field_tag "target_field", params[:target_field]
+  - if params[:files]
+    = hidden_field_tag "files", "1"
+  = f.text_field :search
+  = f.submit "Search"
+  or
+  = link_to "Reset", "/mercury/images"
+  
+= paginate @images
+
+%table
+  %tr
+    %th Image
+    %th Filename
+    %th
+      Tags (click to edit)
+      = "<br/>Won't save in trial mode".html_safe unless current_user
+
+  - @images.each do |image|
+    %tr
+      %td
+        = image_tag image.url(:thumb)
+      %td
+        = link_to_function image.file_file_name, "parent.set_image_url('#{image.file_path('original')}','#{params[:target_field]}');"
+      %td.tags
+        = best_in_place image, :tags, :type=>:input, :path=>"/mercury/images/#{image.id}"
+

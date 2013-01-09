@@ -1,0 +1,16 @@
+.mercury-snippet-panel
+
+  .filter
+    %input(class="filter" type="text")
+
+  %ul
+    - seen = {}
+    - @blocks.each do |block|
+      - next if seen[block.id]
+      - seen[block.id] = true
+      %li(data-filter="#{block.name} #{block.description}")
+        %img(alt="Block Name" data-snippet="#{block.id}" src="/assets/mercury/default-snippet.png")
+        %h4 
+          = block.name
+        .description
+          = block.description

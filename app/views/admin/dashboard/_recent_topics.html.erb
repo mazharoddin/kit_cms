@@ -1,0 +1,15 @@
+<h1 class="forum_icon">Recent Forum Threads</h1>
+<%= link_to "Forums", "/forums", :class=>"forum_icon icon" %>
+
+<% posts = TopicPost.includes({:topic_thread=>:topic}).sys(_sid).order("created_at desc").select("distinct topic_posts.topic_thread_id").page(params[:forum_page]).per(25) %>
+    <ul>
+      <% posts.each do |post| %>
+        <li>
+          <%= link_to post.topic_thread.title, post.link rescue ''%>
+        </li>
+      <% end %>
+    </ul>
+  </ul>
+  <%= paginate posts, :param_name=>"forum_page" %>
+
+

@@ -1,0 +1,34 @@
+/*
+ *= require_tree "./gnric/cms"
+ *= require_tree "./gnric/ui-lightness"
+ *= require "./gnric/calendar"
+ *= require "./gnric/fancybox"
+*/
+
+.ui-widget {
+  background-color: white;
+  font-family: 'Oxygen', sans-serif, arial, helvetica, sans-serif;
+  font-size:   14px;
+  line-height: 18px;
+}
+
+.ui-widget-header {
+  background-color: #AD3131 !important; 
+  border-color: black;
+  background-image: none;
+}
+
+.ui-dialog {
+  background-color: white;
+}
+
+.ui-dialog-content {
+  padding: 10px;
+}
+
+.ui-dialog-title {
+  background-color: #AD3131 !important; 
+
+}
+
+

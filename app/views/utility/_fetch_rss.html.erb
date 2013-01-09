@@ -1,0 +1,39 @@
+<% id = "rss_#{rand(10000)}" %>
+
+<script type='text/javascript'>
+
+  $(document).ready(function() {
+      var r = $('#<%= id %>');
+      $.post("/utility/fetch_rss", {html: "<%= options[:html] %>", rss: "<%= rss %>", limit: <%= options[:limit] %>, truncate_body: <%= options[:truncate_body] %>, html: '<%= options[:html] %>'}, function(result) { 
+        r.find('div.source').html("<a href='" + result.link + "' rel='nofollow'>" + result.title + "</a>");
+        var items = r.find('ul.items');
+        for (i=0; i<result.items.length; i++) {
+          var item = result.items[i];
+          var parts = item.title.split(' - ');
+          var title;
+          var source;
+          if (parts.length==2) {
+            title = parts[0];
+            source = parts[1];
+          }
+          else {
+            title = item.title;
+            source = '';
+          }
+        
+          items.append("<li><div class='story'>" + title + "<span class='attribution'>" + source + "</span></div> <a <%= 'target=\"#{options[:target]}\"' if options[:target] %> href='" + item.link + "'>Read more</a></li>"); 
+        }
+        });
+  });
+</script>
+
+<div class='rss' id="<%= id %>">
+  <% if options[:block_title].not_blank? %>
+  <h2><%= options[:block_title] %></h2>
+  <% end %>
+  <div class='title'><%= options[:title] %></div>
+  <div class='source'></div>
+  <ul class='items'>
+    
+  </ul>
+</div>

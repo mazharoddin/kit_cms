@@ -1,0 +1,44 @@
+li.markItUpButton a {
+  font-size: 12px;
+  border: thin #555 solid;
+  background-color: #EEE ;
+  padding: 4px 8px;
+  color: #555;
+  border-radius: 4px;
+}
+
+li.markItUpButton {
+  margin-left: 0 !important;
+  margin-right: 5px ;
+}
+
+li.markItUpSeparator {
+  margin: 0 2px !important;
+}
+
+.markItUpHeader ul li {
+  display: inline;
+}
+
+div.markItUp {
+  border: thin #AAA solid;
+  padding: 5px;
+}
+
+div.markItUpHeader {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+div.markItUp textarea {
+  border: none;
+  margin: 0 10px;
+  border: thin #DDD solid;
+  padding: 5px;
+  width: 900px;
+  height: 300px;
+}
+
+iframe.markItUpPreviewFrame {
+  width: 820px;
+}

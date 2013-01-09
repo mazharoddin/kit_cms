@@ -1,0 +1,9 @@
+- content_for :main do
+
+  %ul
+    - @snippets.each do |snippet|
+      %li(data-filter="#{snippet.name} #{snippet.description}")
+        = link_to snippet.name
+        .description
+          = snippet.description
+

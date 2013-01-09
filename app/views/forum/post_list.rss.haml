@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+<channel>
+<title>#{Preference.get_cached(_sid, 'site_name')} #{@page_title}</title>
+<link>#{Preference.get_cached(_sid, 'host')}/forums</link>
+<description>#{@page_title}</description>
+<lastBuildDate>#{Time.now}</lastBuildDate>
+<language>en-us</language>
+- @posts.each do |post|
+  - next unless @mod || (post.is_visible==1 && post.topic_thread.is_visible==1) 
+  <item>
+  <title>#{post.topic_thread.title}: #{truncate(post.display_body, :length=>80)}</title>
+  <link>#{post.topic_thread.link}</link>
+  <description>#{post.display_body}</description>
+  </item>
+</channel>
+</rss>
+
+
+

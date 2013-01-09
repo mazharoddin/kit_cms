@@ -1,0 +1,31 @@
+%ul(style="float: left; width: 340px; margin-right: 10px;")
+  %li.header Yes
+  - if @category.is_readable_anon?
+    %li
+      Everyone
+    %li
+      = link_to_function "Remove visibility to everyone", "category_permission_public(#{@category_id},0);", :class=>"action"
+  - some = false
+  - @permissions[:read_groups].each do |group_id, name|
+    - next if group_id == 0
+    - some = true
+    %li(id="read_#{group_id}")
+      = link_to_function name, "category_permission(#{@category_id}, #{group_id}, 'read', false);"
+      - @read_groups.delete(group_id.to_i)
+  - if some
+    %li 
+      = link_to_function "Remove visibility for above groups".html_safe, "category_permission(#{@category_id}, 0, 'read', false);", :class=>"action"
+
+%ul(style="float: left; width: 340px; ")
+  %li.header No
+  - some = false
+  - @read_groups.each do |group_id, name|
+    - some = true
+    %li(id="read_#{group_id}")
+      = link_to_function name, "category_permission(#{@category_id}, #{group_id}, 'read', true);"
+  - if some 
+    %li 
+      = link_to_function "Make visible to above groups".html_safe, "category_permission(#{@category_id}, 0, 'read', true);", :class=>"action", :style=>"margin-bottom: 5px;"
+  - unless @category.is_readable_anon?
+    %li
+      = link_to_function "Make visible to everyone", "category_permission_public(#{@category_id},1);", :class=>"action"

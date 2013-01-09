@@ -1,0 +1,34 @@
+- content_for :page_scripts do
+  - @thread = TopicThread.first
+  = render :partial=>"mod_thread.js"
+
+#forums.clearfix
+  %ul
+    - @topic_posts.each do |post|
+      - next unless post && post.topic_thread && post.topic_thread.topic
+      %li
+        .poster(style="width: 99%; background-color: #CCC; margin-right: 10px; padding: 5px;" class='clearfix')
+          .left(style='float: left; width: 50%;')
+            = link_to post.topic_thread.topic.name, post.topic_thread.topic.link
+            &rarr;
+            = link_to post.topic_thread.title, post.topic_thread.link
+          .right(style='float: right: width: 49%; text-align:right; margin-left: 10px;')
+            = post.created_at.to_s(:short)
+            |
+            = display_name_for_moderator(post.created_by_user)
+        .body(id="body_#{post.id}" style="margin: 0;")
+          = post.display_body.html_safe
+
+        .post_edits(id="edits_#{post.id}")
+          - seen_user = {}
+          - post.topic_post_edits.each do |edit|
+            - next if seen_user[edit.user_id]
+            - seen_user[edit.user_id] = true
+            .post_edit(id="edit_#{edit.id}")
+              = "Last Edited by #{edit.user.display_name} at #{edit.created_at.to_s(:short)}"
+
+        .mod_comment(id="mod_comment_#{post.id}")
+        .info
+          .mod_actions
+            = render partial:"post_moderation", :locals=>{:post=>post}
+

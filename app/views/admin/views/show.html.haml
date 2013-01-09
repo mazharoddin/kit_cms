@@ -1,0 +1,52 @@
+- content_for :main do
+
+  %h1 View #{@view.name}
+
+  %p 
+    = icon_to "Render", "/view/#{@view.name}"
+  %p
+    %strong Body
+    %pre(style="overflow: auto; width: 725px; border: thin #AAA solid; padding: 10px; ")
+      = @view.body
+  
+  %p
+    %strong Type:
+    = @view.template_type
+
+
+  %p
+    %strong Header
+    %pre(style="overflow: auto; width: 725px; border: thin #AAA solid; padding: 10px; ")
+      = @view.header
+
+  %p
+    %strong Footer
+    %pre(style="overflow: auto; width: 725px; border: thin #AAA solid; padding: 10px; ")
+      = @view.footer
+
+  %p
+    %strong Where Clause:
+    = @view.where_clause
+
+  %p
+    %strong Order By:
+    = @view.order_by
+
+  %p
+    %strong Page Template:
+    = @view.page_template.name
+
+  %p
+    %strong Layout:
+    = @view.layout.name
+
+  %p
+    %strong Per Page:
+    = @view.per_page
+
+
+
+  %p
+    = icon_to "Edit", "/admin/views/#{@view.id}/edit"
+    = icon_to "Delete", [:admin, @view], false,  :confirm => 'Are you sure?', :method => :delete
+    = icon_to "Views", admin_views_path

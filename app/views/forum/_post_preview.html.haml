@@ -1,0 +1,10 @@
+%html
+  %head
+    = stylesheet_link_tag "application"
+    = gnric_stylesheets(['forums'])
+
+  %body
+    .post_preview
+      .post_preview_inner(style="overflow: hidden; border: thin #DDD solid; padding: 5px; ")
+        = post.display_body.html_safe
+

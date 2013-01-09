@@ -1,0 +1,32 @@
+- content_for :main do
+
+  %h1.page_icon Page '#{@page.name}' Contents
+
+  .div(style="margin-bottom: 20px;")
+    = icon_to "Page Info", @page.link('info')
+
+  Show:
+  = icon_to "Current", "/page/#{@page.id}/contents?mode=current" unless params[:mode] == 'current'
+  = icon_to "Draft", "/page/#{@page.id}/contents?mode=draft" unless params[:mode] == 'draft'
+  = icon_to "Autosaved", "/page/#{@page.id}/contents?mode=auto" unless params[:mode] == 'auto'
+  = icon_to "Old", "/page/#{@page.id}/contents?mode=old" unless params[:mode] == 'old'
+
+  
+  - if params[:mode]=='current'
+    %h3 Showing: Current
+    = render :partial=>"contents", :locals=>{:contents=>@page.current_content}
+  
+  - if params[:mode]=='draft'
+    %h3 Showing: Draft
+    = render :partial=>"contents", :locals=>{:contents=>@page.draft_content}
+
+  - if params[:mode]=='auto'
+    %h3 Showing: Autosave
+    = render :partial=>"contents", :locals=>{:contents=>@page.autosave_content}
+  
+  - if params[:mode]=='old'
+    %h3 Showing: Old
+    = render :partial=>"contents", :locals=>{:contents=>@page.old_content}
+
+
+

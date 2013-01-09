@@ -1,0 +1,6 @@
+%input(id="options_#{field_name}" name="options[#{field_name}]" type="text" value="#{params[:options] ? params[:options][field_name] : ''}")
+%label(class="label") &nbsp;
+.open_browser_links
+  %a(href="#" class="no_icon icon mercury-button" style="margin-top: 5px;" id='image_browser_link' onClick="show_image_browser_for_block('options_#{field_name}','fieldset_#{field_name}', '#{mode}');") Show Image Browser
+
+

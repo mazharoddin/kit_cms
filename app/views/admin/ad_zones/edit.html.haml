@@ -1,0 +1,9 @@
+- content_for :main do 
+  
+  %h1.ads_icon Edit Ad Zone '#{@ad_zone.name}'
+
+  = render 'form'
+
+  %p
+    = icon_to "Show", [:admin, @ad_zone]
+    = icon_to "Ad Zones", admin_ad_zones_path

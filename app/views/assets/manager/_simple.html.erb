@@ -1,0 +1,19 @@
+
+
+<ul>
+<% if assets %>
+<% assets.each do |asset| %>
+	<li><% if asset.image? %>
+			<%= link_to(image_tag(asset.url('thumb')), "/assets/#{asset.id}?mode=#{@mode}")  %>
+		<% else %>
+			<%= link_to(asset.file_name, "/assets/#{asset.id}?mode=#{@mode}")  %>
+		<% end %>		
+	</li>
+	
+<% end %>
+<% else %>
+<li>None found</li>
+<% end %>
+
+</ul>
+

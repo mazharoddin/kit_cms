@@ -1,0 +1,25 @@
+%textarea(id="options_#{field_name}" style="height: 200px;" name="options[#{field_name}]")
+  = params[:options][field_name] rescue ''
+- if friendly
+  %div(style="margin-left: 200px;")
+    %b Formatting Help
+    %pre
+      Most styling should be applied through CSS of the block but for occasional styling within blocks use markdown.
+
+      Line breaks: Add two blank spaces at the end of your line.
+
+      Line1XX (where X is a space)
+      Line2XX
+      Line3
+      will give you:
+
+      Line1
+
+      Line2
+
+      Line3
+
+      **bold** gives you bold
+      _underlined_ gives you underlined
+      [Google](http://www.google.com) gives you Google
+      ![tag](http://www.dsc.net/logo.jpg) gives you the logo.jpg image

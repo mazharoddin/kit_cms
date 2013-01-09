@@ -1,0 +1,37 @@
+- content_for :main do 
+
+  %h1.pagetemplate_icon History
+
+  %p
+    %em Type:
+    = @dh.source_object.display_name
+
+  %p
+    %em User:
+    = @dh.user.email if @dh.user
+
+  %p
+    %em Updated At:
+    = @dh.updated_at
+
+  %p
+    %em Body:
+    %br
+    %pre(style="overflow: auto; width: 725px; border: thin #AAA solid; padding: 10px; ")
+      = @dh.body
+
+  - if @dh.header
+    %em Header:
+    %br
+    %pre(style="overflow: auto; width: 725px; border: thin #AAA solid; padding: 10px; ")
+      = @dh.header
+
+  - if @dh.footer
+    %em Footer:
+    %br
+    %pre(style="overflow: auto; width: 725px; border: thin #AAA solid; padding: 10px; ")
+      = @dh.footer
+
+
+  = icon_to "Back", request.referer
+

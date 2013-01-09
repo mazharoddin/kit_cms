@@ -1,0 +1,31 @@
+- content_for :main do
+  
+  %h1.ads_icon Ads
+
+  %table.loosen
+    %tr
+      %th Name
+      %th User
+      %th Zone
+      %th Start Date
+      %th End Date
+      %th Preview 
+    - for ad in @ads
+      %tr
+        %td
+          = strike_if(link_to(ad.name, [:admin, ad]), !ad.is_active?)
+        %td
+          = strike_if(link_to(truncate(ad.user.email, :length=>30), "/admin/user/#{ad.user_id}"), ad.approved_by==nil)
+        %td= ad.ad_zones.collect { |zone| link_to zone.name, [:admin, zone] }.join(',').html_safe
+        %td= strike_if(ad.start_date.to_formatted_s(:short), !ad.in_date?)
+        %td= strike_if(ad.end_date.to_formatted_s(:short), !ad.in_date?)
+        %td
+          %div(style="width: 200px; max-height: 100px; overflow: hidden;")
+            = gnric_ad(ad.id, {:preview=>true, :admin=>true})
+
+  .field_help
+    Strikeouts: name = not activated, user email = not approved, dates = not currently in range
+
+  %p
+    = icon_to "New Ad", new_admin_ad_path
+    = icon_to "Advertisments Dashboard", "/admin/advertisments"

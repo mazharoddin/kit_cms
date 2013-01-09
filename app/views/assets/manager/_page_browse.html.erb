@@ -1,0 +1,37 @@
+
+<% content_for :page_scripts do %>
+	
+		$(document).ready(function() {
+			$('#search_form').submit(function() {
+				$('#search_button').val('Searching');
+				$('#search_button').attr('disabled', true);
+				$.ajax({url:"/pages/search", data:"popup=1&search="+$('input[name=search]').val(), dataType:"html", type:"post",
+				success: function(result) {
+					$('#search_results').html(result);
+					$('#search_button').val('Search');
+					$('#search_button').attr('disabled', false);
+				}
+				
+				});
+				
+				return false;
+			});
+		});
+		
+<% end %>
+
+<div id="popup_browser">
+	
+	<%= form_for "pages", :as=>:post, :url=>"/pages/search?popup=1", :html=>{ :id=>'search_form'} do |f| %>
+		<%= text_field_tag "search", params[:search] %> <%= submit_tag "Search", {:id=>"search_button"} %>
+	<% end %>
+		
+<div id="search_results">
+
+</div>
+
+
+<ul id="folder_1">
+	
+</ul>
+</div>

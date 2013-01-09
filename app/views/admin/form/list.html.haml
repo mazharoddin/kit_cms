@@ -1,0 +1,47 @@
+- content_for :main do 
+
+  %h1.forms_icon Form Submissions '#{@form.title}'
+
+  %div(style="margin: 0 0 10px 8px;")
+    = icon_to "Browse", "/admin/forms/#{@form.id}/browse"
+    = icon_to "Form", "/admin/form/#{@form.id}"
+    = icon_to "Forms", "/admin/forms"
+
+  = paginate @subs
+
+  %table.loosen.form_submissions
+    %tr
+      %th &nbsp;
+      %th ID
+      %th User
+      %th Submitted
+      %th &nbsp;
+      %th &nbsp;
+      %th &nbsp;
+      %th &nbsp;
+    - @subs.each do |sub|
+      %tr(id="sub_#{sub.id}" style="margin-bottom: 10px;")
+        %td.form_title
+          = icon_to_function 'Show', "show_form_submission(#{sub.id});", false, :id=>"show_#{sub.id}"
+          = icon_to_function 'Hide', "hide_form_submission(#{sub.id});", false, :id=>"hide_#{sub.id}", :style=>"display: none;"
+        %td= sub.id
+        %td= sub.user.email if sub.user
+        %td= time_ago_in_words(sub.created_at) + " ago"
+        %td
+          = icon_to_function "#{sub.visible==1 ? 'Invisible' : 'Visible'}", "visible_form_submission(#{sub.id});",false, :class=>"visible"
+          %div(class="visibled hidden")
+            = sub.visible ==1 ? '0' : '1'
+        %td
+          = icon_to_function "#{sub.marked==1 ? 'Unmark' : 'Mark'}", "mark_form_submission(#{sub.id});",false, :class=>"mark"
+          %div(class="marked hidden")
+            = sub.marked==1 ? '0' : '1'
+        %td
+          = icon_to "Edit", "#{@form.url}?edit=#{sub.id}"
+        %td
+          = link_to_function "Destroy", "destroy_submission(#{sub.id});", :class=>"action", :confirm=>"Are you sure?  This is permanent and cannot be undone."
+
+  = paginate @subs
+
+  %div(style="margin: 20px 0 10px 8px;")
+    = icon_to "Export CSV", "/admin/forms/#{@form.id}/export"
+

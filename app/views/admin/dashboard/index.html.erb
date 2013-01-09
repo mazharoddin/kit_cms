@@ -1,0 +1,28 @@
+
+<div id="left" class="clearfix">
+<div  id="left-box1" class="box">
+  <div id="dash-recent">
+    <%= render :partial=>"admin/dashboard/recent_pages" %>
+  </div>
+</div>
+
+<div  id="left-box2" class="box">
+  <div id="dash-recent">
+    <% if feature?('forums') %>
+     <%= render :partial=>"admin/dashboard/recent_topics" %>
+     <% else %>
+     <h1 class="activity_icon">Dashboard Activity</h2>
+     <% @no_pagination = true %>
+      <% @activity = Activity.order("updated_at desc").sys(_sid).page(params[:page]).per(10) %>
+      <%= render :partial=>"admin/dashboard/activity_list" %>
+    <% end %>
+  </div>
+</div>
+</div>
+
+
+<div id="right">
+  <% right_column %>
+  <%= yield :right %>
+</div>
+

@@ -1,0 +1,92 @@
+- content_for :main do 
+
+  %h1.preferences_icon Your Preferences
+
+  %ul.settings
+    %li
+      %b Dashboard 'Advanced' or 'Normal' mode:
+      = bold_if link_to("Advanced", "/admin/preference?advanced=advanced"), pref("advanced_mode")=='advanced'
+      |
+      = bold_if link_to("Normal", "/admin/preference?advanced=normal"), pref("advanced_mode")=='normal'
+      .field_help
+        In advanced mode various additional options will be shown throughout the dashboard.
+    %li 
+      %b Show 'Shortcuts' in right column:
+      = bold_if link_to("Yes", "/admin/preference?links=true"), pref("show_links_box")=="true"
+      |
+      = bold_if link_to("No", "/admin/preference?links=false"), pref("show_links_box")=="false"
+      .field_help
+        Show or hide the list of shortcut links in the column on the right of the dashboard. These shortcut links can be edited below.
+    %li
+      %b Show 'Recent Pages' in right column:
+      = bold_if link_to("Yes", "/admin/preference?recent=true"), pref("show_recent_pages_box")=="true"
+      |
+      = bold_if link_to("No", "/admin/preference?recent_pages=false"), pref("show_recent_pages_box")=="false"
+      .field_help
+        Show or hide the list of most recently edited pages in the column on the right of the dashboard.
+    %li
+      %b Show 'Todo' in right column:
+      = bold_if link_to("Yes", "/admin/preference?todo=true"), pref("show_todo_box")=="true"
+      |
+      = bold_if link_to("No", "/admin/preference?todo=false"), pref("show_todo_box")=="false"
+      .field_help
+        Show or hide the list of todo items in the column on the right of the dashboard.
+    %li 
+      %b Show 'Activity' in right column:
+      = bold_if link_to("Yes", "/admin/preference?activity=true"), pref("show_activity_box")=='true'
+      |
+      = bold_if link_to("No", "/admin/preference?activity=false"), pref('show_activity_box')=='false'
+      .field_help
+        Show or hide the list of site activity in the column of the right of the dashboard.
+    %li 
+      %b Show 'Status' in right column:
+      = bold_if link_to("Yes", "/admin/preference?status=true"), pref("show_status_box")=='true'
+      |
+      = bold_if link_to("No", "/admin/preference?status=false"), pref('show_status_box')=='false'
+      .field_help
+        Show or hide the system status in the column of the right of the dashboard.
+    %li
+      %b EU Cookie acceptance:
+      = link_to_function "Revoke", "revoke_cookie_acceptance(); alert('Done!');"
+      .field_help
+        If you have accepted the warning about cookies you can click here to revoke this acceptance, so you'll be shown the warning again.
+
+    %li
+      %b Browse Cateogry Tree:
+      Click page name to: 
+      = bold_if link_to("Edit Page", "/admin/preference?page_click=edit"), pref("page_click")=="edit"
+      |
+      = bold_if link_to("View Page Info", "/admin/preference?page_click=info"), pref("page_click")=="info"
+      .field_help 
+        What do you want to happen when you click on a page in the Browse Tree?  
+
+    %li.advanced
+      %b Show Locked Pages in Category Tree:
+      = bold_if link_to("Show", "/admin/preference?hide_locked=false"), pref("hide_locked")=="false"
+      |
+      = bold_if link_to("Hide", "/admin/preference?hide_locked=true"), pref("hide_locked")=="true"
+
+  %h1.links_icon Shortcut Links
+  %table.looser
+    - if current_user.user_links.count == 0
+      No links - the default set will be used
+    - else
+      - current_user.user_links.each do |link|
+        %tr
+          %td
+            %div(style="margin-bottom: 10px;")
+              %a(href="#{link.url}")= link.label
+          %td
+            = icon_to "Delete", "/admin/preference?del_link=#{link.id}", false, :style=>"margin-left: 20px;"
+
+  .cms_form
+    = form_for @user_link, :url=>"/admin/preference/update", :method=>:put do |f|
+      %label Label
+      = f.text_field :label
+      %label URL
+      = f.text_field :url
+      %label In New Window
+      = f.check_box :in_new_window
+      %br
+      %br
+      = gnric_submit "Save"

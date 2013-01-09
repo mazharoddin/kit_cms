@@ -1,0 +1,46 @@
+- content_for :page_scripts do
+  $(document).ready(function() {
+  $('.terms').each(function() {
+  $(this).autocomplete(
+  {
+  serviceUrl: '/page/#{@page.id}/possible_terms?page_template_term_id='+ $(this).attr('data-field')
+  });  
+  });
+
+  if ($('.box form div.entry:visible').length==0) {
+  $('a#[name=add]').hide();
+  }
+
+  $("input[type=text]").keydown(function(e) { 
+  if (e.keyCode == 13) 
+  $(this).closest("form").submit(); 
+  });
+  });
+  
+- content_for :main do 
+
+  %h1.page_icon Page '#{@page.title}' Terms
+
+  .space(style="margin-bottom: 10px;")
+    = icon_to "Page Info", "/page/#{@page.id}/info"
+
+  = form_for :term, :url=>"/page/#{@page.id}/terms", :remote=>true do |f|
+    %table.loosen
+      - @page.page_template.page_template_terms.includes(:form_field_type).each do |pgt|
+        %tr(id="row_#{pgt.id}" style="#{'display: none;' if pgt.can_repeat==0 && @page.has_term_for(pgt)}")
+          %td
+            %label
+              = pgt.name
+              = ":"
+          %td
+            .entry
+              = render :partial=>"form/form_field", :locals=>{:type=>pgt.form_field_type, :field=>pgt, :value=>params["field_#{pgt.id}"], :is_mandatory=>false, :has_error=>false, :show_options_editor=>true}
+      %tr
+        %td &nbsp;
+        %td= gnric_submit "Add"
+
+  %table.loosen(id="terms" style="margin-top: 20px;")
+    - @terms.each do |term|
+      - next unless term && term.page_template_term
+      = render :partial=>"term", :locals=>{:term=>term}
+

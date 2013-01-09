@@ -1,0 +1,33 @@
+#list_tickets
+
+  .title
+    Sales for #{item.name}
+
+  %table
+    %tr.column_titles
+      %th Firstname
+      %th Lastname
+      %th Email
+      %th Quantity
+      %th Price Each
+      %th Sold
+
+    - sales = item.ticket_sales.order("created_at desc")
+    - sales = sales.where(:id=>options[:only_sale_id]) if options[:only_sale_id]
+    - sales.all.each do |sale|
+      %tr
+        %td.firstname
+          = sale.firstname
+        %td.lastname
+          = sale.lastname
+        %td.email
+          = sale.email
+        %td.quantity
+          = sale.quantity
+        %td.price_each
+          = sale.unit_price
+        %td.sold
+          = sale.created_at.to_formatted_s(:short)
+
+  .download_link
+    = link_to "Download as CSV", "/tickets/sold_as_csv/#{item.class.name}/#{item.id}"

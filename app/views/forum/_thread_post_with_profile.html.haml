@@ -1,0 +1,67 @@
+.left
+  .byline(class="clearfix")
+    .poster
+      = link_to_if pref("forum_users_profile_link",true)=='true', post.created_by_user_display_name, "/user/profile/#{post.created_by_user_id}"
+    .datetime 
+      = post.created_at.strftime(Preference.getCached(_sid, 'date_time_format'))
+    .post_number
+      = "##{'%02d' % post.post_number}" if post && post.post_number
+ 
+  .body
+    %div(style="overflow: auto;" class="#{'hidden_thread_title' unless post.is_visible?}" id="body_#{post.id}")
+      = post.display_body.html_safe
+
+    .post_edits(id="edits_#{post.id}")
+      - seen_user = {}
+      - post.topic_post_edits.each do |edit|
+        - next if seen_user[edit.user_id]
+        - seen_user[edit.user_id] = true
+        .post_edit(id="edit_#{edit.id}")
+          = "Last Edited by #{edit.user.display_name} at #{edit.created_at.to_s(:short)}"
+
+.right
+  .options
+    .add_post
+      = link_to t("forum.add_message"), current_user ? "#add_post" : "/users/sign_in" if !@thread.is_locked? || @mod
+    .report
+      = link_to t("forum.report"), "/forums/report/#{post.id}"
+
+  .user
+    .avatar 
+      - avatar = post.created_by_user.loaded_attributes(:avatar).asset rescue nil
+      - if avatar
+        = image_tag(avatar.url(:forum)) if avatar
+      - else
+        = image_tag(pref("default_avatar",true))
+
+    .display_name 
+      =  link_to_if pref("forum_users_profile_link",true)=='true', post.created_by_user_display_name, "/user/profile/#{post.created_by_user_id}"
+    .tagline
+      - tagline = post.created_by_user.loaded_attributes(:tagline)
+      = truncate(tagline ? tagline.value : '', :length=>40) if tagline
+    - extra = extra_profile(post)
+    = extra if extra.not_blank?
+    .forum_rating
+      - rating = post.created_by_user.forum_rating(true, 0)
+      - if rating
+        = "#{t('forum.forum_rating')}: #{rating}".html_safe
+    
+
+  .rate
+    - if current_user 
+      - unless post.already_voted || current_user.id == post.created_by_user_id
+        .label
+          = t("forum.rate_this_post")
+        = link_to_function t("forum.positive").html_safe, "$.post('/forum/post/#{post.id}/rate/1');"
+        = link_to_function t("forum.negative").html_safe, "$.post('/forum/post/#{post.id}/rate/-1');"
+    - else
+      = link_to "Sign In", "/users/sign_in"
+      = t("forum.to rate post")
+
+  .edit
+    - if post.created_by_user == current_user && post.created_at > Time.now - (Preference.get_cached(_sid, "forum_post_edit_time") || "0").to_i.minutes 
+      = link_to_function t("forum.edit_post").html_safe, "user_edit_post(#{post.id});"
+
+
+
+

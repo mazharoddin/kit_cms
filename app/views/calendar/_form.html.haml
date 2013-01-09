@@ -1,0 +1,152 @@
+%script(type='text/javascript')
+  $(document).ready(function() {
+  $('#calendar_entry_start_date').datepicker({
+  showOn: "both",
+  dateFormat: "dd/mm/yy",
+  });
+
+  $('#calendar_entry_end_date').datepicker({
+  showOn: "both",
+  dateFormat: "dd/mm/yy",
+  minDate:'0'
+  });
+
+  $('#calendar_entry_start_time, #calendar_entry_end_time').timepicker({ 
+  stepMinute: 15
+  });
+
+  });
+
+  function select_all_days() {
+  $('p.days_of_week input[type=checkbox]').attr('checked', true);
+  }
+
+  function select_no_days() {
+  $('p.days_of_week input[type=checkbox]').attr('checked', false);
+  }
+
+- if current_user
+  .cms_form
+    = form_for [:admin, calendar_entry], :url=>'/calendar/entry' do |f|
+      = f.error_messages
+      = hidden_field_tag :success, options[:success]
+      = hidden_field_tag :edit_url, options[:edit_url]
+      = f.hidden_field :id
+      %p.calendar_name
+        = f.label "Calendar"
+        - if choose_calendar
+          = f.select :calendar_id, options_from_collection_for_select(Calendar.sys(_sid).order(:name).all, "id", "name", calendar_entry.calendar_id)
+        - else
+          = ": #{calendar_entry.calendar.name}"
+          = f.hidden_field :calendar_id
+      %p.title
+        = f.label "Title", :class=>"required"
+        = f.text_field :name
+
+      %p.type
+        = f.label "Type"
+        = f.select :calendar_entry_type_id, options_from_collection_for_select(CalendarEntryType.order(:name), "id", "name", calendar_entry.calendar_entry_type_id)
+
+      %p.start_date
+        = f.label "Start Date", :class=>"required"
+        = f.text_field :start_date
+        #start_date(style="display:none;")
+      %p.end_date
+        = f.label "End Date", :class=>"required"
+        = f.text_field :end_date
+
+      - if Preference.get_cached(_sid, "calendar_show_days_of_week")=='true'
+        %p.days_of_week
+          %span.monday
+            Monday 
+            = f.check_box :on_1
+          %span.tuesday
+            Tuesday
+            = f.check_box :on_2
+          %span.wednesday
+            Wednesday 
+            = f.check_box :on_3
+          %span.thursday
+            Thursday
+            = f.check_box :on_4
+          %span.friday
+            Friday
+            = f.check_box :on_5
+          %span.saturday
+            Saturday
+            = f.check_box :on_6
+          %span.sunday
+            Sunday
+            = f.check_box :on_0
+
+          %span.all
+            = link_to_function "All", "select_all_days();"
+
+      %p.start_time
+        = f.label "Start Time"
+        = f.text_field :start_time
+
+      %p.end_time
+        = f.label "End Time"
+        = f.text_field :end_time
+
+      %p.description
+        = f.label "Description"
+        = f.text_area :description, :style=>"width: 600px; height: 200px;"
+
+      = f.fields_for :location do |lf|
+        %p.address1
+          = lf.label "Address 1"
+          = lf.text_field :address1
+        %p.address2
+          = lf.label "Address 2"
+          = lf.text_field :address2
+        %p.town
+          = lf.label "Town/City"
+          = lf.text_field :city
+        %p.postcode
+          = lf.label "Postcode", :class=>"required"
+          = lf.text_field :postcode
+          .web
+            Use "web" for an online event
+        %p.country
+          = lf.label :country
+          = lf.country_select(:country)
+
+      %p.telephone
+        = f.label "Telephone"
+        = f.text_field :telephone
+
+      %p.email
+        = f.label "EMail"
+        = f.text_field :email
+
+      %p.website
+        = f.label "Website URL"
+        = f.text_field :website
+
+      %p.image
+        = f.label "Upload an image"
+        = f.file_field :image
+
+      - if options[:show_ticket_sales]
+        %p.sell_tickets
+          = f.label "Sell Tickets"
+          = f.check_box :sell_tickets
+
+        %p.tickets_remaining
+          = f.label "Tickets Remaining"
+          = f.text_field :tickets_remaining
+
+        %p.ticket_price
+          = f.label "Ticket Price"
+          = f.text_field :ticket_price
+
+      %p.save
+        - if request.fullpath =~ /\/admin\/calendar_entries\//
+          = gnric_submit "Save"
+        - else
+          = f.submit "Save"
+- else
+  = link_to "Sign In", "/users/sign_in"
+  to add an entry

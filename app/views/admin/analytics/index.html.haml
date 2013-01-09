@@ -1,0 +1,30 @@
+- content_for :head do
+  %script(src="https://www.google.com/jsapi")
+  = javascript_include_tag "gnric/gadash-1.0" 
+  %script(src="https://apis.google.com/js/client.js?onload=gadashInit")
+
+- content_for :main do
+  %h1.analytics_icon Analytics
+
+  %button(id="authorize-button" style="visibility: hidden")
+    Sign In To Analytics
+
+  #chart_options
+    Days to view: 
+    = select_tag :days, options_for_select([7,14,30,60,90,180,365,720], 30)
+    = select_tag :metric, options_for_select({"Page Views"=>:pageViews,"Visitors"=>:visitors,"Visits"=>:visits}, :pageViews)
+    = button_to_function "Show", "update_chart_options()";
+
+
+  #links(style="margin: 10px 0;")
+    = icon_to "More", "https://www.google.com/analytics/web", false, :target=>"_blank"
+    
+
+  #chart_container(style="height: 400px; position: relative;")
+    #message(style="position: absolute; top: 200px; left: 300px;")
+      Loading... please wait
+
+  %script(type="text/javascript")
+    = render :partial=>"admin/analytics/charts.js.erb"
+    
+

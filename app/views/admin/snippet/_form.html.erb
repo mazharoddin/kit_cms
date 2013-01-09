@@ -1,0 +1,11 @@
+<div class="cms_form">
+  <%= form_for [:admin, block] do |f| %>
+
+    Name: <%= f.text_field :name %><br/>
+    Body: <%= f.text_area :body %> <br/>
+    Show Editors: <%= f.check_box :show_editors %><br/>
+    Description: <%= f.text_area :description %><br/>
+    <%= f.submit "Save" %> or <%= link_to "Cancel", "/admin/block" %>
+    <% end %>
+</div>
+

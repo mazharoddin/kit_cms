@@ -1,0 +1,15 @@
+- content_for :page_scripts do 
+  = render(:partial=>"category/tree_browser", :formats=>[:js]) 
+  = render(:partial=>"category/setup_filter", :formats=>[:js])
+
+- content_for :main do 
+
+  %h1.browse_icon Browse
+  = render :partial=>"category/filter" 
+
+  #browser
+    
+  = link_to_function "Refresh", "refresh_tree('editor', null);", :class=>"icon refresh_icon"
+
+
+

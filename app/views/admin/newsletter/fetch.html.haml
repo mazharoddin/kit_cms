@@ -1,0 +1,26 @@
+- right_column
+
+- content_for :main do
+  %h1{:style=>"margin-bottom: 20px;"} New Newsletters
+
+  = link_to "Back to Newsletters", "/admin/newsletters"
+  %br
+  %br
+  = link_to "Check Again", "/admin/newsletters/fetch"
+  %table{:border=>"1", :cellpadding=>"5", :cellspacing=>"0"}
+    %tr
+      %th
+        From
+      %th
+        Subject
+      %th
+        Sent
+    - @mails.each do |mail|
+      %tr
+        %td
+          = mail.from.first
+        %td
+          = mail.subject
+        %td 
+          = mail.date
+

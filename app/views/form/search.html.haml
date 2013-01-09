@@ -1,0 +1,20 @@
+%h2 Search
+
+= form_tag "/form/search/all" do |f|
+
+  = text_field_tag :for, params[:for]
+
+  = submit_tag "Search"
+
+- if @results
+  = paginate @results
+
+  %ul
+    - @results.each do |result|
+      - sub = result.load
+      %li
+        - if sub.form.search_result_format.not_blank?
+          = render :inline=>sub.form.search_result_format,  :locals=>{:submission=>sub}
+        - else
+          = sub.name
+    

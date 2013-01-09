@@ -1,0 +1,4 @@
+- content_for :main do 
+  %h1 Group '#{@group.name}'
+
+  = paginate @members

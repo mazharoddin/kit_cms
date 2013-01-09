@@ -1,0 +1,12 @@
+%tr(id="row_#{asset.asset.id}")
+  %td
+    = link_to image_tag(asset.asset.url('thumb')), asset.asset.url('original'), :class=>"fancybox"
+  %td
+    .spacing(style="margin-right: 20px;")
+      = asset.asset.display_name
+  %td
+    %b Link:
+    = best_in_place(asset, :link, :path=>"/admin/gallery/image/#{asset.id}/update")
+  %td
+    = link_to "Remove", "/admin/gallery/#{@gallery.id}/image/#{asset.asset.id}", :method=>:delete, :remote=>true, :class=>"action"
+

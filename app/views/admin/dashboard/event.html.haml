@@ -1,0 +1,33 @@
+- content_for :main do
+  %h1 Error #{@event.id}
+
+  %p
+    %b Name:
+    = @event.name
+
+  %p 
+    %b IP:
+    = @event.ip_address
+
+  %p 
+    %b URL:
+    = @event.url
+
+  %p 
+    %b Reference:
+    = @event.reference
+
+  %p 
+    %b Created:
+    = @event.created_at
+
+  %p
+    %b User:
+    = @event.user.email rescue 'n/a'
+
+  %p
+    %b Notes:
+    %div(style="white-space:nowrap; font-family: courier; overflow: scroll; width: 725px; border: thin #AAA solid; padding: 10px; ")
+      = highlight_app(@event.notes)
+
+

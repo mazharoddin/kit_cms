@@ -1,0 +1,16 @@
+
+= link_to_function "Add note", "$('#comment_form').slideDown(); $('#body').focus();", :style=>"color: yellow;"
+
+#comment_form(style="display: none;")  
+  = text_area_tag :body, '', {:size=>"40x5"} 
+  = button_to_function "Save", "submit_notes();"
+
+%ul
+  - @page.page_comments.reverse.each do |pc|
+    %li(style="margin-bottom: 10px;")
+      %b #{pc.user.email}
+      @
+      = pc.created_at.to_s(:db)
+      %br
+      = pc.body
+

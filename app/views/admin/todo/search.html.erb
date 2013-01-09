@@ -1,0 +1,32 @@
+<% content_for :main do %>
+  <div id="todo"> 
+  <h1 class="todo_icon">To Do</h1>
+
+
+ <form name="form">
+    <input name="for" value="<%= params[:for] %>" />
+    <input type="submit" value="Search" />
+    <%= link_to_function "Reset", "$('input[name=for]').val(''); $('form[name=form]').submit();" %>
+  </form>
+
+
+   <%# will_paginate @todos, {:class=>"", :param_name=>"todo_page", :params=>{:controller=>"admin/todo", :action=>"search", :for=>params[:for]}, :inner_window=>1, :outer_window=>1} %>
+    <%= paginate @todos %> 
+   <ul>
+     <% @todos.each do |todo| %>
+      <% next unless todo %>
+      <li class="todo_item" id="todo_<%= todo.id %>">
+      <%= link_to_function todo.name, "todo_clicked(#{todo.id})", {:id=>"todo_link_#{todo.id}", :class=>"todo_link #{ 'strike' if todo.closed_at}"} %>
+    <span class="dehighlight">
+      <%= todo.description %><br/>
+      Created <%= time_ago_in_words(todo.created_at) %> ago by <%= todo.user.email %>
+    </span>
+    </li> 
+       
+  <% end %>
+  </ul>
+
+  <%= render :partial=>"admin/todo/scripts" %>
+</div>
+<% end %>
+

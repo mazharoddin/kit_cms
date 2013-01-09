@@ -1,0 +1,52 @@
+- content_for :page_scripts do
+  = render :partial=>"post_scripts", :locals=>{:thread=>thread}, :handler=>[:erb], :formats=>[:js]
+
+- if flash[:form_message]
+  #form_message
+    = flash[:form_message]
+
+- if current_user && current_user.display_name.is_blank?
+  #set_display_name(style="#{'display: none;' unless show}")
+    = t "forum.no_display_name"
+    = form_for current_user, :url=>"/forum/display_name", :method=>:post, :html=>{:class=>"cr_submit this_post_form", :honeypot=>true} do |f|
+      = t "forum.display_name"
+      = f.text_field :display_name
+      = link_to_function t("forum.set_display_name"), "send_this_form();", :class=>"action"
+      #display_name_message
+
+- if current_user && current_user.display_name.not_blank?
+  = form_for @post,  :url=>(thread==nil ? @topic.link : @thread.link), :html=>{:honeypot=>true, :class=>"this_post_form"}  do |form| 
+
+    = form_check_code
+    = render :partial=>"add_message_banner", :locals=>{:show_header=>show_header}
+
+    #add_post(class="clearfix" style="#{'display:none' unless @post.body || show}")
+      #post_form.clearfix
+        - if @about_page_title
+          = t "forum.create_discussion_about"
+          "#{@about_page_title}"
+          = hidden_field_tag :page_id, @page_id
+        - if thread==nil
+          #title
+            %label(label_for='post_title')
+              = t "forum.post_title"
+            = form.text_field :title
+        #body
+          %label(label_for='post_body')
+            = t "forum.post_body"
+          = form.text_area :body
+
+        - formatting = gnric_snippet('Forum Post Formatting Help')
+        - if formatting.not_blank?
+          #formatting_help
+            = gnric_snippet('Forum Post Formatting Help', 'Formatting Help')
+
+        #submit
+          = link_to_function t("forum.submit_post"), "send_this_form();", :class=>"action"
+          = link_to_function t("forum.preview_post"), "$('#body .markItUpButton9').mouseup();", :class=>"action"
+          .display_name
+            Posting as &quot;
+            = current_user.display_name if current_user && current_user.display_name
+            &quot;
+
+

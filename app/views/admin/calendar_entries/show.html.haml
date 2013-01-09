@@ -1,0 +1,90 @@
+- content_for :main do
+  %h1.calendar_icon Calendar Entry
+
+  .clearfix(style="width: 700px;")
+    .left(style="float: left;")
+      %p
+        %strong Name:
+        = @calendar_entry.name
+
+      %p
+        %strong Calendar:
+        = link_to @calendar_entry.calendar.name, [:admin, @calendar_entry.calendar]
+      %p
+        %strong Start Date:
+        = @calendar_entry.start_date.to_formatted_s(:gnric_short_date)
+
+      %p
+        %strong End Date:
+        = @calendar_entry.end_date.to_formatted_s(:short_date)
+
+      - unless @calendar_entry.no_days
+        %strong Days:
+        = @calendar_entry.list_days(', ')
+
+      %p
+        %strong Type:
+        = @calendar_entry.calendar_entry_type.name
+
+      %p
+        %strong Description:
+        = @calendar_entry.description
+
+      - if Preference.get_cached(_sid, "calendar_use_regions")!='false'
+        %p
+          %strong Region:
+          = @calendar_entry.location.subregion.name
+      %p
+        %strong Location:
+        = @calendar_entry.location.display
+
+      %p
+        %strong Telephone:
+        = @calendar_entry.telephone
+
+      %p
+        %strong Email
+        = @calendar_entry.email
+
+      %p
+        %strong Website:
+        = link_to @calendar_entry.website, @calendar_entry.website
+
+      %p
+        %strong Created By:
+        = @calendar_entry.user.email
+
+      %p 
+        %strong Approved At:
+        = @calendar_entry.approved_at.to_s
+        = icon_to "Approve", "/admin/calendar_entries/#{@calendar_entry.id}?approve=1", false, :method=>:post unless @calendar_entry.approved_at
+
+      %p 
+        %strong Tickets:
+        = "Are #{@calendar_entry.sell_tickets==1 ? '':'NOT'} being sold"
+
+      %p
+        %strong Ticket Price:
+        = @calendar_entry.ticket_price
+
+      %p
+        %strong Tickets Remaining:
+        = @calendar_entry.tickets_remaining
+
+      - if @calendar_entry.sell_tickets==1
+        %p 
+          = icon_to "Show Tickets Sold", "/admin/calendar_entries/#{@calendar_entry.id}/sold"
+
+    - unless @calendar_entry.image.url =~ /missing.png/
+      .right(style="float: right; width: 300px;")
+        %p 
+          = image_tag @calendar_entry.image.url(:thumb)
+        %p 
+          = image_tag @calendar_entry.image.url(:medium)
+
+  %p
+    = icon_to "Edit", edit_admin_calendar_entry_path(@calendar_entry)
+    = icon_to "Delete", [:admin, @calendar_entry], false, :confirm => 'Are you sure?', :method => :delete
+    = icon_to "New Entry", "/admin/calendar_entries/new?calendar_id=#{@calendar_entry.calendar_id}"
+    = icon_to "Calendars", [:admin, Calendar]
+

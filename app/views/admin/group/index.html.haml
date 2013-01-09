@@ -1,0 +1,14 @@
+- content_for :main do 
+
+  %h1 Groups
+
+  %h3 New Group
+  = form_for @group, :url=>"/admin/group", :method=>:put do |f|
+    = f.text_field :name
+    = f.submit "Save"
+
+  %ul
+    - Group.order(:name).all.each do |group|
+      %li(class='clearfix' style="margin-top: 5px;")
+        = link_to group.name, "/admin/user?grp_id=#{group.id}", :style=>"margin-right: 20px;"
+        = link_to "Delete", "/admin/group/#{group.id}", :method=>:delete, :class=>"action"

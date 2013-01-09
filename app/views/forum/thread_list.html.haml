@@ -1,0 +1,24 @@
+- if @show_watch
+  %script(type='text/javascript')
+    function favourite_thread(thread_id, user_id) {
+    $.post('/forums/thread/' + thread_id + '/favourite', null, function(result) {
+    $('#thread_' + thread_id).slideUp(); 
+    });
+    }
+  
+- if @mod 
+  - content_for :page_scripts do
+    = render :partial=>"topic_index", :handler=>[:erb], :formats=>[:js]
+
+#forums.clearfix
+
+  = render :partial=>"introduction"
+  #list_title
+    %h2
+      = link_to t("forum.name"), "/forums", :class=>"breadcrumb"
+      &rarr;
+      = t(@list_name)
+
+  - show_post_options = false
+
+  = render(partial:"thread_list",:locals=>{:options=>{:show_post_options=>false, :show_topic=>true, :show_headings=>true, :show_meta=>true, :show_mod=>@mod, :paginate=>true, :show_watch=>@show_watch}, :threads=>@threads}) 

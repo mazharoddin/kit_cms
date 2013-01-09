@@ -1,0 +1,64 @@
+= doc_ready("$('#comment form').validate();")
+
+- content_for :page_scripts do
+  function comment_added() {
+  $('#comment').html("<div class='comment_added'>#{options[:added_message] || 'Comment added.  Thanks.'}</div>");
+  }
+
+- if options[:show_form]
+  #comment
+    - if options[:reveal_form]
+      .reveal
+        = link_to_function "Add Comment", "$('#comment .display').slideDown(); $('#comment .reveal').hide();"
+    
+    .display(style='#{options[:reveal_form] ? "display: none;" : ""}')
+      = form_for @comment, :url=>"/utility/add_comment", :remote=>true, :honeypot=>true do |f|
+        = form_check_code
+        .body
+          = f.label "Comment"
+          = f.text_area :body, {:onFocus=>"#{ '$(\'#comment .user_fields\').slideDown();' if options[:extra_reveal] }", :class=>'required'}
+          .explanation
+            = options[:body_help] || "HTML will be removed"
+
+        .user_fields(style="#{'display: none;' if options[:extra_reveal]}")
+          - unless options[:dont_use_name] 
+            .user_name
+              = f.label "Your name"
+              = f.text_field :user_name, :class=>'required'
+
+          - unless options[:dont_use_email] 
+            .user_email
+              = f.label "Your email"
+              = f.text_field :user_email, :class=>'required email'
+              .explanation
+                = options[:explain_email] || "Email won't be shown"
+          
+          - unless options[:dont_use_url] 
+            .user_url
+              = f.label "Your website"
+              = f.text_field :user_url, :class=>'optional'
+
+          .submit
+            = f.submit options[:submit_label] || "Submit"
+
+- if options[:show_comments]
+  #comments
+    - if options[:reveal_existing]
+      .reveal
+        = link_to_function "Show Comments", "$('#comments .display).slideDown(); $('#comments .reveal').hide();"
+
+    - comments = load_comments(request.fullpath, options)
+    - unless options[:no_pagination]
+      = paginate comments, :param_name=>:cpage
+    %ul.display(style='#{options[:reveal_existing] ? "display: none;" : ""}')
+      - comments.each do |comment|
+        %li
+          .user_name
+            = comment.user_name ? comment.user_name : 'Anonymous'
+          .datetime
+            = time_ago_in_words(comment.created_at) 
+            ago
+          .body
+            = comment.body
+
+

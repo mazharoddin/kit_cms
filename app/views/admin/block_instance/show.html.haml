@@ -1,0 +1,44 @@
+- content_for :main do
+
+  %h1.block_icon Block Instance
+
+  - unless @instance
+    No instance found
+  - else
+
+    %p
+      = icon_to "Instance List", "/admin/block_instances#{'?page_id=' + @instance.page_id.to_s if @instance.page_id}"
+
+    %p
+      %b ID:
+      = @instance.instance_id
+    %p
+      %b Block Name:
+      - if @block
+        = link_to @block.name, "/admin/blocks/#{@block.id}"
+        %p
+          %b Description:
+          = @block.description
+        %b Preview:
+
+        %div(style="border: thin black solid; padding: 10px; width: 720px; overflow: hidden; margin-bottom: 20px;")
+          = gnric_block(@instance.id, @instance.version).html_safe
+
+        - has_params = !(@options.size==1 && @options.first.field_name == 'no_params')
+
+        - if has_params
+          %p 
+            %b Parameters:
+            %ul
+              - @options.each do |option|
+                %li
+                  %b
+                    = option.prompt
+                  %pre= option.field_value
+
+        %p
+          = icon_to "Edit Instance", "/admin/block_instance/#{@instance.id}/edit"
+      - else
+        Block definition no longer exists
+
+

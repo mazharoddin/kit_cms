@@ -1,0 +1,46 @@
+- content_for :main do 
+  
+  %h1.ads_icon Ad Zone '#{@ad_zone.name}'
+
+  .cms_form
+    %p
+      %label Name:
+      = @ad_zone.name
+
+    %p
+      = icon_to "This Zone's Ads", "/admin/ads?zone_id=#{@ad_zone.id}"
+    %p
+      %label Description:
+      = @ad_zone.description
+
+    %p
+      %label Ad Unit:
+      = link_to @ad_zone.ad_unit.name, [:admin, @ad_zone.ad_unit]
+
+    %p
+      %label Period:
+      = @ad_zone.period
+
+    %p
+      %label Minimum Period
+      = "#{pluralize(@ad_zone.minimum_period_quantity, @ad_zone.period)}"
+
+    %p
+      %label Concurrency Limit
+      = "#{@ad_zone.concurrency_limit==0 ? 'Unlimited' : @ad_zone.concurrency_limit} advertisments"
+
+    - if @ad_zone.url_pattern.not_blank?
+      %p
+        %label URL Pattern
+        = @ad_zone.url_pattern
+
+      %p
+        %label Priority
+        = @ad_zone.priority
+
+  %p
+    = icon_to "Edit", edit_admin_ad_zone_path(@ad_zone)
+    = link_to "Destroy", [:admin, @ad_zone], :confirm => 'Are you sure?', :method => :delete, :class=>"action"
+
+  %p
+    = icon_to "Ad Zones", admin_ad_zones_path

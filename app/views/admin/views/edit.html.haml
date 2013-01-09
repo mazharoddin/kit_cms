@@ -1,0 +1,9 @@
+- content_for :main do
+  %h1 Edit View
+
+  = render 'form'
+
+  %p
+    = icon_to "Show", [:admin, @view]
+    = icon_to "Views", admin_views_path
+

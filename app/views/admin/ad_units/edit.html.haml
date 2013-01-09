@@ -1,0 +1,9 @@
+- content_for :main do
+  
+  %h1.ads_icon Edit '#{@ad_unit.name}' Ad Unit
+
+  = render 'form'
+
+  %p
+    = icon_to "Show", [:admin, @ad_unit]
+    = icon_to "Ad Units", admin_ad_units_path

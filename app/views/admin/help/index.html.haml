@@ -1,0 +1,24 @@
+- content_for :main do
+
+  %h1.help_icon Help Editor
+
+  .cms_form
+    %fieldset(style="padding-top: 5px; width: 700px;")
+      %legend New Page
+      = form_for :help, :url=>"/admin/helps", :method=>:post do |f|
+        %label Title:
+        = f.text_field :name
+
+        = gnric_submit "Create"
+  .spacer(style="margin-top: 10px;")
+    = icon_to "Images", "/admin/help/images"
+  .spacer(style="margin-top: 10px;")
+    = form_tag "/admin/helps", :id=>"search_form", :method=>:get do 
+      = text_field_tag :search
+      = icon_to_function "Search", "$('#search_form').submit();" 
+      = icon_to "Reset", "/admin/helps"
+  %ul
+    - @helps.each do |help|
+      %li 
+        = link_to help.name, "/db/help/#{help.path}"
+

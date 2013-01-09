@@ -1,0 +1,10 @@
+<script type='text/javascript' src='/javascripts/ace/ace.js'></script>
+<script type='text/javascript' src='/javascripts/ace/theme-textmate.js'></script>
+<script type='text/javascript' src='/javascripts/ace/mode-<%= mode %>.js'></script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+      create_ace_editor('<%= mode %>', '<%= form_field %>', '<%= j content %>'); 
+  });
+</script>
+

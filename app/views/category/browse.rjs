@@ -1,0 +1,4 @@
+REMOVE???
+is_popup = params[:popup]!=nil
+
+page.replace(params[:target], render(:partial=>"#{is_popup ? 'popup':'browse'}_#{params[:mode]}", :locals=>{:category=>@category, :is_first=>params[:first]=='1'}))

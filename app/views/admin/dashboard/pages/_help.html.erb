@@ -1,0 +1,38 @@
+<h1>Kit CMS and Community Management</h1>
+<p>This area provides help and resources for using Gnric to manage your website.
+</p>
+
+<h2>The Basics</h2>
+<ul>
+		<li><a href="/db/getting-started">Getting Started</a></li>
+		<li><a href="/db/dashboard">My Dashboard</a></li>
+		<li><a href="/db/structure">Website structure</a></li>
+		<li><a href="/db/newsletters">Newsletters</a></li>
+</ul>
+<h2>Content Management System</h2>
+	<ul>
+		<li><a href="/db/creating-content">Creating Content</a></li>
+		<li><a href="/db/editing-content">Editing Content</a></li>
+		<li><a href="/db/seo-content">Optimising content</a></li>
+		<li><a href="/db/publishing-status">Publishing status</a></li>
+
+                <% if can?(:access, :rails_admin) %>
+                <li><a href="/db/templates">Templates, Layouts and Stylesheets</a></li>
+                <li><a href="/db/blocks">Blocks</a></li>
+                <li><a href="/db/help/definitions">Definitions for Parts of a Page</a></li>
+                <% end %>
+
+	</ul>
+<h2>Community Management</h2>
+	<ul>
+		<li><a href="/db/user-management">User management</a></li>
+		<li><a href="/db/forum-moderation">Forum moderation</a></li>
+	</ul>
+	
+<h2>Quick links</h2>
+	<ul>
+	<li><a href="/db/insert-image">Inserting an image</a></li>
+	<li><a href="/db/insert-link">Inserting a link</a></li>
+	<li><a href="/db/editor-helper">Editor helper</a></li>
+	<li><a href="/db/image-sizes">Image sizes</a></li>
+	</ul>

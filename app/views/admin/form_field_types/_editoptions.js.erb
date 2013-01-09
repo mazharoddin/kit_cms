@@ -1,0 +1,109 @@
+$(document).ready(function() {
+  setup_data(<%= hier %>);
+});
+
+var is_hier = false;
+
+function setup_data(hier) {
+
+  is_hier = hier;
+var data = "<%= data %>";
+
+var lines = data.split('|');
+var op = ""
+
+
+for (i=0; i<lines.length; i++) {
+  op += "<li id='line_" + i + "'>";
+
+  var line = lines[i];
+
+  var items = line.split('~');
+  op += "<input id='parent_" + i + "' style='margin-top: 10px; width: 200px;' name='parent_" + i + "' value='" + items[0] + "' /> <a href='#' class='icon no_icon' onClick='remove_parent(" + i + ");'>Remove</a>";
+
+  if (hier) {
+    op += "<ul style='margin-left: 150px;' id='childrenof_" + i + "'>";
+      for (j=1; j<items.length; j++) {
+        op += "<li><input style='margin-top: 10px; width: 200px;' id='childof_" + i + "_" + j + "' name='childof_" + i + "_" + j + "' value='" + items[j] + "' /> <a href='#' class='no_icon icon' onClick='remove_child(" + i + ", " + j + ");'>Remove</a></li>";
+
+      }
+      if (is_hier) {
+        op += "<li><input onkeyup='added_child(" + i + ", " + items.length + ");' style='margin-top: 10px; margin-bottom: 10px; width: 200px;' name='childof_" + i + "_" + items.length + "' id='childof_" + i + "_" + items.length + "' value='' /></li>";
+      }
+    op += "</ul>";
+  }
+
+  op += "</li>";
+}
+
+  op += "<li>";
+  op += "<input onkeyup='added_parent(" + lines.length + ");' style='margin-top: 10px; width: 200px;' id='parent_" + lines.length + "' name='parent_" + lines.length + "' value='' /> <ul style='margin-left: 150px;' id='childrenof_" + lines.length + "'></ul> ";
+  op += "</li>";
+
+
+$('#data').append(op);
+
+}
+
+function added_parent(id) {
+  var op = '';
+  var new_id = id + 1;
+  op += "<li><input onkeyup='added_parent(" + new_id + ");' id='parent_" + new_id + "' style='margin-top: 10px; width: 200px;' name='parent_" + new_id + "' value='' /><ul style='margin-left: 150px;' id='childrenof_" + new_id + "'></ul> ";
+
+  $('#parent_' + id).attr('onkeyup', '');
+  $('#parent_' + id).parent().append(op);
+  if (is_hier) {
+    $('#childrenof_' + id).append("<li><input onkeyup='added_child(" + id + ", 0)' id='childof_" + id + "_0" + "' style='margin-bottom: 10px; width: 200px;' name='childof_" + id + "_" + "1' /></li>");
+  }
+  show_warning();
+}
+
+function added_child(parent_id, id) {
+  var op = '';
+  var new_id = id + 1;
+  op += "<li><input onkeyup='added_child(" + parent_id + ", " + new_id + ");' style='margin-bottom: 10px; width: 200px;' name='childof_" + parent_id + "_" + new_id + "' value='' id='childof_" + parent_id + "_" + new_id + "'/></li>";
+  $('#childrenof_' + parent_id).append(op);
+  $('#childof_' + parent_id + "_" + id).attr('onkeyup', '').after(" <a href='#' class='no_icon icon' onClick='remove_child(" + parent_id + ", " + id + ");'>Remove</a>");
+ }
+
+function remove_parent(id) {
+  $('#line_' + id).remove();
+  show_warning();
+}
+
+function remove_child(parent_id, id) {
+  $('#childof_' + parent_id + "_" + id).parent().remove();
+  show_warning();
+}
+
+function complete() {
+  var op = '';
+  var last_parent = null;
+  $('#data li input').each(function(i, e) {
+    var id = $(e).attr('id');
+    var splits = id.split('_');
+    var parent_id = splits[1];
+    var v = $(e).val();
+    if (v!=='undefined' && v!=='') {
+      if (last_parent!==parent_id) {
+        if (op!=='') {
+          op += "|";
+        }
+        last_parent = parent_id;
+        op += v; 
+      } 
+      else {
+        op += "~";
+        op += v;
+      }
+    }
+  });
+
+  $('#form_field_type_options').val(op);
+
+  $("#options_edit form").submit();
+}
+
+function show_warning() {
+  $(".warning").slideDown();
+}

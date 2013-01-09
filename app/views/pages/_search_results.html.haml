@@ -1,0 +1,17 @@
+#results.search_icon
+
+  - if @results
+    - published_status = Page.published_status(_sid).id
+    = paginate @results
+    #ul
+      - @results.each do |result|
+        - model = result.load
+        - if model.instance_of?(Page)
+          - page = model
+          - next unless (page.status_id==published_status && page.is_deleted==0)
+          - next unless pref("dont_check_permissions_on_search_results")=='true' || page.category.user_can_read?(current_user)
+          %li.page
+            = link_to page.full_path, page.full_path, {:onMouseOver=>"tree_context_menu('#menu_page_' + #{page.id});"} 
+
+    = paginate @results
+

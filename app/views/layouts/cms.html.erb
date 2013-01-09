@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render :partial=>'/layouts/cms-common', :locals=>{:include_menu=>true} %>
+    <%= stylesheet_link_tag "gnric_admin" %>
+    <% if content_for?(:head) %>
+    <%= yield :head %>
+    <% end %>
+
+
+    <% if content_for?(:page_scripts) %>
+    <script type="text/javascript">
+      <%= yield :page_scripts %>
+      </script>
+      <% end %>
+
+      <% if notice.not_blank? %>
+      <script type="text/javascript">
+        $(document).ready(function() {
+            notify('<%= j notice %>'); 
+            });
+</script>
+<% end %>
+
+       </head>
+       <body class="app_body clearfix">
+
+         <div id="wrapper">
+           
+           <div id="inner">
+             <%= render(:partial=>"/utility/menu") %>
+
+  <div id="page" class="clearfix">	
+    
+    <div id="cms-boxed" class="clearfix" >
+      <div style="display: none;" class="message" id="notice_box"><div id="notice"><%= notice %></div></div>
+		
+		<% if alert %>
+	    	  <div  class="message"  id="alert"><%= alert %></div>
+		<% end %>
+	
+	  <% # two options - either define a "main" content which will get boxed, or just a normal yield, which won't '%>
+	  <% if content_for(:main) && content_for(:main).length>0 %>
+      <div id="left" class="clearfix" >
+        <div class="outer-box">
+			<div class='box'>
+          		<%= yield :main %>
+        	</div>
+        </div>
+
+      <div id="right">
+        <% right_column %>
+        <%= yield :right %>
+      </div>
+	  <% else %>
+		<%= yield%>
+	  <% end %>
+	
+    </div>
+
+  </div>
+  </div>
+  </div>
+</body>
+</html>
+

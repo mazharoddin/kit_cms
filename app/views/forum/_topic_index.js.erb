@@ -1,0 +1,28 @@
+function delete_thread(id, action) {
+  $.ajax({
+    type: 'delete',
+  url: '/forums/thread/' + id + (action==1 ? '?undelete=1' : ''),
+  dataType: 'script'
+  });
+}
+
+function done_delete(id, deleted) {
+  title_field = $('#title-'+id);
+
+  if (deleted==1 && title_field.hasClass('hidden_thread_title')) {
+    title_field.removeClass('hidden_thread_title');
+  } else if (deleted==0 && !title_field.hasClass('hidden_thread_title')) {
+    title_field.addClass('hidden_thread_title');
+  }
+
+  if (deleted==0) {
+    $('#delete-thread-' + id).hide();
+    $('#undelete-thread-' + id).show();
+  }
+  else {
+    $('#delete-thread-' + id).show();
+    $('#undelete-thread-' + id).hide();
+  }
+
+}
+

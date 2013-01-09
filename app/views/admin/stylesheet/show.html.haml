@@ -1,0 +1,28 @@
+- content_for :main do 
+
+  %h1.stylesheets_icon Stylesheet '#{@sheet.name}'
+
+  .cms_form
+    = form_for @sheet, :url=>"/admin/stylesheet/#{@sheet.id}", :method=>:post do |f|
+      = f.error_messages
+      %ul
+        %li
+          %label Name:
+          = f.text_field :name
+        %li
+          %label Last Updated By:
+          = @sheet.user.email rescue ''
+        %li
+          %label Created:
+          = @sheet.created_at
+        %li
+          %label Updated:
+          = @sheet.updated_at
+      - if flash[:notice]
+        #error_explanation
+          = flash[:notice]
+      = ace_editor('scss', :sheet, :body, f, "stylesheet_body")
+
+      = gnric_submit "Save"
+      = link_to "Delete", "/admin/stylesheet/#{@sheet.id}", :method=>:delete, :class=>"action", :confirm=>"Are you sure you want to delete this stylesheet?  It cannot be undone."
+      = icon_to "Cancel", "/admin/stylesheets"

@@ -1,0 +1,22 @@
+- content_for :main do 
+  %h1 Gallery 
+
+  .cms_form
+    = form_for @gallery, :url=>"/admin/gallery/#{@gallery.id}" do |f|
+      %label Name
+      = f.text_field :name
+      %label Image Duration (milliseconds)
+      = f.text_field :delay
+      %label Transition Duration (milliseconds)
+      = f.text_field :transition_duration
+      %label Transition
+      = f.text_field :transition
+      .text_field
+        Comma separated list of transitions.  Default is 'fade'. Others available are: sliceDown sliceDownLeft sliceUp sliceUpLeft sliceUpDown sliceUpDownLeft fold random slideInRight slideInLeft boxRandom boxRain boxRainReverse boxRainGrow boxRainGrowReverse 
+      %label Width
+      = f.text_field :width
+      %label Height
+      = f.text_field :height
+      .save(style="margin-top: 10px;")
+        = gnric_submit "Save"
+

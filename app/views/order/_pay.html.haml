@@ -1,0 +1,64 @@
+%h1 Place Your Order
+
+%h2= @order.description
+
+- units_price = 0
+- total_tax = 0
+- total_price = 0
+
+%table
+  - @order.order_items.each do |item|
+    %tr
+      %td 
+        = item.name
+      %td
+        = item.unit_price
+      %td
+        = item.quantity
+      %td
+        = item.tax_rate
+      %td
+        = item.total_price
+      - units_price += (item.unit_price * item.quantity)
+      - total_tax += (item.unit_price * item.quantity) * item.tax_rate
+      - total_price += (tem.unit_price * item.quantity * (1 + item.tax_rate)
+
+  %tr
+    %td Total
+    %td &nbsp;
+    %td &nbsp;
+    %td &nbsp;
+    %td= total_price
+
+%h2 Your Billing Details
+
+= form_for @order, :url=>"/order/process_payment" do  |f|
+  
+  %p
+    %label First Name
+      = f.text_field :first_name
+
+  %p
+    %label Last Name
+      = f.text_field :last_name
+
+  %p
+    %label Address Line 1
+      = f.text_field :address1
+  
+  %p
+    %label Address Line 2
+      = f.text_field :address2
+
+  %p
+    %label Town/City
+      = f.text_field :town
+
+  %p
+    %label Postal Code
+      = f.text_field :postcode
+
+  %p
+    = f.submit "Pay Now"
+
+

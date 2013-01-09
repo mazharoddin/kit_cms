@@ -1,0 +1,23 @@
+<%= form_tag "/admin/dashboard/search", :method=>:get do %>
+Search for:
+<input name="for" value="<%= params[:for] %>" id="search_field" />
+
+<ul>
+      
+  <li>Pages: <%= check_box_tag "include_pages", "1", params[:include_pages] %></li>
+  <li><ul style='margin-left: 20px;'>
+      <li>Historic versions: <%= check_box_tag "include_old", "1", params[:include_old] %></li>
+      <li>Autosaved versions: <%= check_box_tag "include_autosave", "1", params[:include_autosave] %></li>
+      <li>Draft versions: <%= check_box_tag "include_draft", "1", params[:include_draft]  %></li>
+    </ul>
+    </li>
+    <% @to_search.each do |ts| %>
+    <% next if ts=='Page' %>
+    <% display = ts=='Asset' ? 'File' : ts %>
+      <li><%= display.pluralize %>: <%= check_box_tag "include_#{ts.pluralize.downcase}", "1", params["include_#{ts.pluralize.downcase}".to_sym] %></li>
+      <% end %>
+    </ul>
+  
+  <input type="submit" value="Search" />
+<% end %>
+

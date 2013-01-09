@@ -1,0 +1,68 @@
+ <script>
+  function add_todo() {
+    item = $('#todo_to_add').val();
+    $('#todo_to_add').val('');
+    $.ajax({
+          url: '/admin/todo',
+          type: 'post',
+          dataType: 'html',
+          data: 'todo[name]=' + item,
+          success: function(data) {
+            $('#todo').html(data);
+          } 
+       }); 
+  }
+
+  function todo_clicked(todo_id) {
+      var mode = '';
+      if ($('#todo_link_'+todo_id).hasClass("strike")) {
+        mode = 'undone';
+      }
+      else {
+        mode = 'done';
+      }
+      $.ajax({
+        url: '/admin/todo/mark/' + todo_id + '/' + mode,
+        type: 'post',
+        success: function() {
+          if (mode=='done') {
+            $('#todo_link_'+todo_id).addClass("strike");
+          } else {
+            $('#todo_link_'+todo_id).removeClass("strike");
+          }
+        }
+      });
+    }
+
+    function setup_todos() {
+      $('form[name=todo_search_form]').submit(function () {
+        $.ajax({
+          url: '/admin/todo/search',
+          type: 'post',
+          dataType: 'html',
+          data: 'for=' + $('input[name=todo_search]').val(),
+          success: function(data) {
+            $('#todo').html(data);
+          } 
+
+        });
+        return false;
+      });
+
+       $('#todo .paginate a').click(function (){  
+          $.ajax({
+            url: this.href,
+            type: 'get',
+            dataType: 'html',
+            success: function(data) {
+              $('#todo').html(data);
+          }});
+            return false;
+        });
+       
+
+    }
+
+  </script>
+
+

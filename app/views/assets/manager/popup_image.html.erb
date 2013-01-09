@@ -1,0 +1,142 @@
+<%= render :partial=>"/assets/manager/scripts" %>
+
+<% selected_asset = params[:id]!=nil %>
+
+<% content_for :page_scripts do %>
+
+function select_asset(id) {
+	prepare_preview();
+	$('#original_size').show();
+	
+	path = $.trim($('#path-'+id).html());	
+	path = path.replace('/thumb/','/original/');
+	w = parseInt($('#width-'+id).html());
+	h = parseInt($('#height-'+id).html());
+	if (h>w) {
+		portrait = true;
+		set = 'height';
+	} else {
+		portrait = false;
+		set = 'width';
+	}
+
+	$('#selected_image').html("<img style='float: none; padding: 0; " + set + ": 500px;' id='image_preview' src='"+path+"' />");
+	$('#selected_name').html($('#name-'+id).html());
+	selected_height = parseInt($('#height-'+id).html());
+	selected_width = parseInt($('#width-'+id).html());
+	$('#selected_size').html(selected_width + 'x' + selected_height);
+
+}
+
+function insert() {
+	parent.insert_content($('#selected_image').html());	
+	parent.close_assets('image');
+}
+
+function open_with(selection) {
+      j_selection = $(selection.getNode());
+
+		if (j_selection.outerHTML().indexOf("<img")==0) {
+			process_image_input(j_selection.outerHTML());
+		}
+}
+
+function process_image_input(image) {
+	prepare_preview();
+	$('#original_size').hide();
+	
+	jimage = $(image);
+	
+	h = jimage.css('height');
+	w = jimage.css('width');
+	if (h=='0px') {
+		h = 0;
+	} else {
+		h = parseInt(h)
+	}
+	if (w=='0px') {
+		w = 0;
+	} else {
+		w = parseInt(w);
+	}
+	if (h>w) {
+		portrait = true;
+		set = 'height';
+	} else {
+		portrait = false;
+		set = 'width';
+	}
+	
+	size_selector = $('input[value='+(portrait ? h : w)+']');
+	
+	if (typeof size_selector === 'undefined') {
+		$('input[value=custom]').attr('checked', 'checked');
+		if (w>0) {
+			$('#custom_width').val(w);
+		}
+		if (h>0) {
+			$('#custom_height').val(h);
+		}
+	} else {
+		size_selector.attr('checked', 'checked');
+	}
+	$('#selected_image').html(image);
+	redraw_image();
+}
+
+
+$(document).ready( function () {
+
+	$("#asset_tabs").tabs();	
+	<% if selected_asset %>
+		select_asset(<%= @assets.first.id %>);
+	<% else %>
+		$('#asset_preview_tab').hide();
+		$('#asset_tabs-preview').hide();
+	<% end %>
+	
+        parent.report_loaded('image'); 
+});
+
+<% end %>
+
+
+
+<div  id="asset_manager">
+
+<div class="clearfix" id="asset_tabs">
+	
+	<ul>
+		<li><a href="#asset_tabs-upload">Image Upload</a></li>
+		<li><a href="#asset_tabs-browse">Browse</a></li>
+		<li><a href="#asset_tabs-recent-uploads">Recent</a></li>
+		<li id="asset_preview_tab"><a href="#asset_tabs-preview">Preview</a></li>		
+	</ul>
+	
+	<div id="asset_tabs-upload">
+		<% @asset = Asset.new %>
+		<%= render :partial=>"/assets/manager/form" %>
+	</div>
+	
+	<div id="asset_tabs-browse">
+		
+		<span id='current'></span>
+		
+		<%= render :partial=>"/assets/manager/asset_search" %>
+		<div id="assets">
+			<%= render :partial=>"/assets/manager/assets", :locals=>{:assets=>@assets} %>
+		</div>
+	</div>	
+	
+	<div id="asset_tabs-recent-uploads">
+		<%= render(:partial=>"/assets/manager/simple", :locals=>{:assets=>@recent})%>	
+	</div>
+	
+	<div id="asset_tabs-preview" class="clearfix">
+		<%= render(:partial=>"/assets/manager/preview") %>
+	</div>
+</div>	
+
+</div>
+
+

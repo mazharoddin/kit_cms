@@ -1,0 +1,16 @@
+<% text = gnric_snippet!(@post.system_id, 'Forum New Post Notification') %>
+<% if text.not_blank? %>
+  <%= render :inline=>text %>
+<% else %>
+  
+Hello <%= @to_user.display_name %>.
+
+There has been a new post on the thread you're watching entitled '<%= @post.topic_thread.title %>'.  
+
+To view the post and any others that have been made more recently, click this link:
+
+<%= @post.topic_thread.link(true) %>
+
+To stop receiving notifications for this particular message you should click the "Stop Watching" button on the tread.
+
+<% end %>

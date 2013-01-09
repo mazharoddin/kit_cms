@@ -1,0 +1,74 @@
+- content_for :page_scripts do
+
+  function updated(id, moderated, visible) {
+  console.debug(moderated + " " + visible);
+  var mod;
+  var nmod;
+  var vis;
+  var vnmod;
+  
+  if (moderated==0) {
+  mod = 'No';
+  nmod = 1;
+  }
+  else {
+  mod = 'Yes';
+  nmod = 0;
+  }
+ 
+  if (visible==0) {
+  vis = 'No';
+  vnmod = 1;
+  }
+  else {
+  vis = 'Yes';
+  vnmod = 0;
+  }
+
+  console.debug(id + ", " + moderated + ", " + visible + ", " + mod + ", " + nmod + "," + vis + ", " + vnmod);
+
+  $('#mod_link_' + id + ' a').text(mod).attr('href', '/admin/dashboard/user_comment/' + id + '?comment[is_moderated]='+nmod);
+
+  $('#vis_link_' + id + ' a').text(vis).attr('href', '/admin/dashboard/user_comment/' + id + '?comment[is_visible]='+vnmod);
+  }
+  
+- content_for :main do 
+
+  %h1.user_icon User Comments
+
+  .links
+    = form_tag "/admin/dashboard/user_comments", :method=>:get do
+
+      Moderated:
+      = check_box_tag(:moderated, "1", params[:moderated]=="1")
+      Unmoderated:
+      = check_box_tag(:unmoderated, "1", params[:unmoderated]=="1" )
+
+      Visible:
+      = check_box_tag(:visible, "1", params[:visible]=="1")
+      Not visible:
+      = check_box_tag(:invisible, "1", params[:invisible]=="1")
+
+      = submit_tag "Show"
+
+  %table.comments.loosen(style="margin: 10px 0;")
+    %tr
+      %th(width='300') URL
+      %th(width='200') User
+      %th Moderated
+      %th Visible
+    - @comments.each do |comment|
+      %tr
+        %td
+          = link_to comment.url, comment.url
+        %td
+          = link_to_if comment.user_id!=0, comment.user_email, "/admin/user/#{comment.user_id}" 
+        %td(id="mod_link_#{comment.id}")
+          = link_to comment.is_moderated? ? 'Yes' : 'No', "/admin/dashboard/user_comment/#{comment.id}?comment[is_moderated]=#{comment.is_moderated? ? 0 : 1}", :method=>:post, :remote=>true
+        %td(id="vis_link_#{comment.id}")
+          = link_to comment.is_visible? ? 'Yes' : 'No', "/admin/dashboard/user_comment/#{comment.id}?comment[is_visible]=#{comment.is_visible? ? 0 : 1}", :method=>:post, :remote=>true
+      %tr
+        %td(colspan="4")
+          = field_reveal(comment.body, 200)
+
+

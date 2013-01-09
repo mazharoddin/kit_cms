@@ -1,0 +1,82 @@
+- content_for :main do
+
+  %h1.user_icon Attribute '#{@attribute.name}'
+  
+  = icon_to "Attributes", "/admin/users/attributes"
+
+  .cms_form
+    = form_for @attribute, :url=>"/admin/users/attribute/#{@attribute.id}", :method=>:post do |f|
+      %ul
+        %li
+          %label(for="attribute_name") Name:
+          = f.text_field :name
+
+        %li.advanced
+          %label(for="code_name") Code Name:
+          = f.text_field :code_name
+
+        %li
+          %label(for="attribute_type") Type:
+          
+          = f.select :form_field_type_id, options_from_collection_for_select(field_types, :id, :name, @attribute.form_field_type_id), :style=>"margin-right: 20px;"
+          = icon_to_show("Show Types", "types")
+          %ul#types(style="display: none;")
+            - field_types.each do |ft|
+              %li
+                = ft.name
+                \:
+                = ft.description
+
+        %li 
+          %label(for="attribute_description") Description:
+          = f.text_area :description
+          .field_help
+            This description will be visible to the user if the attribute itself is editable by the user
+
+        %li
+          %label(for="attribute_show_on_signup") Show On Signup:
+          = f.check_box :show_on_signup
+          .field_help(style="display:inline;")
+            Show this field on the sign up form
+
+        %li
+          %label(for="attribute_owner_visible") Visible to the user
+          = f.check_box :owner_visible
+          .field_help(style="display:inline;")
+            Can the user to whom this attribute belongs see the value of this attribute (usually on their profile page)?
+
+        %li
+          %label(for="attribute_owner_editable") Editable by the user
+          = f.check_box :owner_editable
+          .field_help(style="display:inline;")
+            Can the user to whom this attribute belongs change the value of the attribute (usually on their profile page)?
+
+        %li
+          %label(for="attribute_is_mandatory") Is Mandatory
+          = f.check_box :is_mandatory
+          .field_help(style="display:inline;")
+            If the user edits their profile, is this field mandatory, i.e. must they enter a value?
+
+        %li
+          %label(for="attribute_user_visible") Visible to any registered user
+          = f.check_box :user_visible
+          .field_help(style="display:inline;")
+            Can the value of this attribute be seen by any logged in user?
+        %li
+          %label(for="attribute_public_visible") Visible to everyone (including search engines)
+          = f.check_box :public_visible
+          .field_help(style="display:inline;")
+            Can anyone at all, even users who aren't logged in and search engines, see the value of this attribute?
+
+        %li
+          %label(for="attribute_order_by") Relative Order
+          = f.text_field :order_by
+          .field_help
+            The relative order of this attribute when displayed - the higher the number the later in the list it will appear, the lower the number the earlier in the list.
+
+        %li(style="margin-top: 5px;")
+          = gnric_submit "Save"
+          = link_to "Delete", "/admin/users/attribute/#{@attribute.id}", :method=>:delete, :class=>"action", :confirm=>"Are you sure?  This cannot be undone and if you delete an attribute then any values associated with it will also be removed"
+          = icon_to "Attributes", "/admin/users/attributes"
+        
+

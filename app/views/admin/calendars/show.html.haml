@@ -1,0 +1,26 @@
+- content_for :main do 
+  %h1.calendar_icon Calendar
+
+  %p
+    = icon_to "New Entry", "/admin/calendar_entries/new?calendar_id=#{@calendar.id}"
+  %p
+    %strong Name:
+    = @calendar.name
+  %p 
+    %strong Description:
+    = @calendar.description
+  
+  %p 
+    %strong Created By:
+    = @calendar.user.email
+  %p
+    %strong Last Edited:
+    = @calendar.updated_at
+  %p
+    = icon_to "Entries", "/admin/calendar_entries?calendar_id=#{@calendar.id}"
+    = icon_to "Edit", edit_admin_calendar_path(@calendar)
+    - unless Preference.get_cached(_sid, 'hide_calendar_delete')=='true'
+      = icon_to "Permanently Delete Calendar", [:admin, @calendar], false, :confirm => 'Are you sure?', :method => :delete
+    = icon_to "List", admin_calendars_path
+
+  = gnric_calendar @calendar.id

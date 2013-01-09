@@ -1,0 +1,40 @@
+.cms_form
+  = form_for [:admin, @block] do |f|
+    = f.error_messages
+    %p
+      = f.label :name
+      = f.text_field :name
+
+    %p 
+      = f.label "Show Editors"
+      = f.check_box :show_editors
+    %p
+      = f.label "Page Templates in which this block will be available"
+      #div
+        = f.check_box :all_templates
+        All
+      - for pt in PageTemplate.sys(_sid).order(:name).all 
+        #templates
+          = check_box_tag "block[page_template_ids][]", pt.id, @block.page_templates.include?(pt) 
+          = pt.name
+    %p
+      = f.label :description
+      = f.text_area :description
+
+    %a(name='editor')
+    %p
+      = f.label :body
+      = ace_editor('html', :block, :body, f)
+    %p
+      = gnric_submit "Save"
+      = gnric_submit "Save And Edit Again"
+
+%script(type='text/javascript')
+  $(document).ready(function() {
+  });
+
+  function template_selects() {
+  if ($('#block_all_templates').is(':checked')) {
+   
+  }
+  }

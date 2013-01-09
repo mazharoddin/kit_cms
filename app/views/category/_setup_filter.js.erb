@@ -1,0 +1,7 @@
+$(document).ready(function() {
+  $("#lookfor").keyup(function(){
+   if(typeof(window.delayer) != 'undefined')
+      clearTimeout(window.delayer);
+   window.delayer = setTimeout(search_tree_data, 500);
+  });
+});

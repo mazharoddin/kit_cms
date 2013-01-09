@@ -1,0 +1,9 @@
+<div id="most_recent">
+  <h2>MOST RECENT:</h2>
+
+  <% TopicPost.sys(_sid).limit(2).includes([:topic_thread,:created_by_user]).joins(:topic_thread).order('topic_posts.id desc').where("topic_threads.is_visible=1 and topic_posts.is_visible = 1").all.each do |post| %>
+  <div style="margin-top: 10px; margin-bottom: 5px; font-size: 14px; font-weight: bold; overflow: hidden;"><%= link_to post.topic_thread.title, post.link, :style=>"color: #e0277d !important;" %></div>
+    <div class="thread_body"><%= truncate(strip_tags(post.body), :length=>100, :omission=>"...").html_safe %></div>
+    <div class="thread_by" style="text-align: right;"><%= post.created_by_user.display_name %></div>
+  <% end %>
+</div>

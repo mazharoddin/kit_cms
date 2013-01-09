@@ -1,0 +1,18 @@
+- gallery_id = "gallery_#{gallery.id}_#{rand(100000)}"
+
+.gallery(style="width: #{gallery.width}px; height: #{gallery.height}px; overflow: hidden;" class='nivoSlider #{gallery.name.urlise}' id='#{gallery_id}')
+  - gallery.gallery_assets.order(:display_order).includes(:asset).each do |ga|
+    - next unless ga && ga.asset
+    - img = image_tag(ga.asset.best_url(gallery.width, gallery.height), :style=>"display: none;", :height=>gallery.height, :width=>gallery.width)
+    = link_to img, ga.link
+
+%script(type="text/javascript")
+  $(document).ready(function() {
+  var gallery = $('##{gallery_id}').nivoSlider({
+  effect: '#{gallery.transition || "fade"}',
+  controlNav: false,
+  directonNav: false,
+  pauseTime:#{gallery.delay},
+  animSpeed: #{gallery.transition_duration},
+  });
+  });

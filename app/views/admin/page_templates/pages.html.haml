@@ -1,0 +1,16 @@
+- content_for :main do
+
+  %h1.pagetemplate_icon Pages Using Template '#{@page_template.name}'
+
+  = icon_to "Back to Template", [:admin, @page_template]
+
+  = paginate @pages
+
+  %ul
+    - @pages.each  do |page|
+      %li
+        = link_to page.name, "/page/#{page.id}/info"
+        = "[#{page.status.name}]"
+  
+  = paginate @pages
+

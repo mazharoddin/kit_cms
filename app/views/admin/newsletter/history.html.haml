@@ -1,0 +1,59 @@
+- right_column
+
+- content_for :main do
+  %h1{:style=>"margin-bottom: 20px;"} Newsletter Details
+
+  = link_to "Back to Newsletters", "/admin/newsletters"
+
+  %h3
+    Newsletter:
+    = "\"#{@newsletter.name}\""
+
+  Send: 
+  = button_to "To #{current_user.email}", "/admin/newsletters/email/#{@newsletter.id}", :confirm=>"Are you sure?", :disable_with=>"Sending..."
+  = button_to "To Testers", "/admin/newsletters/send/#{@newsletter.id}?test=1", :confirm=>"Are you sure?", :disable_with=>"Sending..."
+  = link_to "Show Testers", "/admin/newsletters/#{@newsletter.id}?check=1&test=1"
+  = button_to "To Subscribers", "/admin/newsletters/send/#{@newsletter.id}", :confirm=>"You are about to send this newsletter to real users.  Are you sure?", :disable_with=>"Sending..."
+  = link_to "Show Subscribers", "/admin/newsletters/#{@newsletter.id}?check=1"
+
+  %br
+  %table{:border=>"1", :cellpadding=>"5", :cellspacing=>"0"}
+    %tr
+      %th
+        Sent At
+      %th
+        Type
+      %th
+        Recipients
+    - @newsletter.newsletter_sends.order("created_at desc").each do |sends|
+      %tr
+        %td
+          = sends.sent_at.to_s(:db)
+        %td
+          = sends.is_test? ? "Test" : "Subscibers"
+        %td
+          = link_to "Show Recipients", "/admin/newsletters/#{@newsletter.id}?recips=#{sends.id}"
+  - if @send
+    %h3 
+      Recipients for send at
+      = @send.sent_at.to_s(:db)
+
+  - if params[:check]
+    %h3
+      = "Recipients for #{params[:test] ? 'Test' : 'Subscriber'} Mode"
+
+  - if @recipients
+    = paginate @recipients
+    %ul
+      - @recipients.each do |recip|
+        %li
+          = receiver(recip).email 
+          - if recip.instance_of?(NewsletterSent)
+            = recip.updated_at.to_s(:db)
+            = "[ #{recip.status} ]" 
+          = pluralize(receiver(recip).email_failures, "fail")  if receiver(recip).email_failures > 0
+    = paginate @recipients
+  %br
+  %br
+  = link_to "Back to Newsletters", "/admin/newsletters"
+

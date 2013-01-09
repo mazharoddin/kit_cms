@@ -1,0 +1,31 @@
+
+  <h1 class="todo_wicon">To Do</h1>
+  <% todos = Todo.includes(:user).where("closed_at is null").where(["user_id = ? or user_id=0",current_user.id]).order("created_at desc") %>
+  <% todos = todos.where(["name like ?", "%#{@search_for}%"]) if @search_for %>
+  <% todos = todos.page(@page_num).per(5) %>
+  <div style="margin-bottom: 10px;">
+    <%= link_to "Show More", "/admin/todo", :class=>'right_action' %>
+  </div>
+
+  <ul>
+    <% todos.each do |todo| %>
+    <li class="todo_item" id="todo_<%= todo.id %>"><%= link_to_function todo.name, "todo_clicked(#{todo.id})", {:id=>"todo_link_#{todo.id}", :class=>"todo_link"} %>
+    </li> 
+    <% end %>
+  </ul>
+  <script>
+    $(document).ready(function() {
+      setup_todos();      
+    });
+  </script>
+  <div id="todo_form"  style="margin-top: 10px;">
+    <input name="todo_name" id="todo_to_add">
+    <%= link_to_function "Add", "add_todo()", :class=>"right_action" %>
+  </div>
+
+  <% unless request.xhr? %>
+
+  <%= render :partial=>"admin/todo/scripts" %>
+
+  <% end %>
+

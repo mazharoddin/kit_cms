@@ -1,0 +1,34 @@
+$(document).ready(function() {
+
+  $('#topic_category_name').on('keydown', function() {
+    if ($('#topic_category_name').val()!='') {
+      $('#new_category_description').show();
+    }
+  });
+
+  $('#topic_name').on('keydown', function() {
+    if ($('#topic_name').val()!='') {
+      $('#new_topic_details').show();
+    }
+  });
+  
+  <% if @selected_cat %>
+    show_category(<%= @selected_cat %>);
+  <% end %>
+});
+
+var open_category = -1;
+
+show_category = function(category_id) {
+  if (open_category>=0) {
+    $('#category_' + open_category).find('.category_form').html('');
+    $('#category_' + open_category).slideUp();
+  }
+  open_category = category_id;
+  var form = $('#category').html();
+  $('#category_' + category_id + ' .category_form').html(form);
+  $('#category_' + category_id + ' .category_form .topic_category_id').val(category_id);
+  $('#category_' + category_id).slideDown();
+}
+
+

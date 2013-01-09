@@ -1,0 +1,50 @@
+- content_for :main do
+  
+  %h1.goals_icon Goal '#{@goal.name}'
+
+  .cms_form
+
+    %p
+      = icon_to "List Scores", "/admin/goals/#{@goal.id}/scores"
+
+    %p
+      %label Name
+      = @goal.name
+
+    %p
+      %label Type
+      = @goal.goal_type.titleize
+
+    - if @goal.goal_type == 'URL'
+      %p 
+        %label Match Type
+        = @goal.match_type
+
+      %p
+        %label Match Value
+        = @goal.match_value
+
+    %p 
+      %label Notes
+      = @goal.notes
+
+    %p 
+      %label Experiments
+      - names =  @goal.experiments.collect { |e| link_to e.name, [:admin, e] }
+      = names.join(', ').html_safe
+
+    %p
+      %label Created By
+      = @goal.user.email
+
+    %p 
+      %label Created At
+      = @goal.created_at.to_s(:short)
+
+    %p
+      = icon_to "Edit", edit_admin_goal_path(@goal)
+      - if @goal.experiments.size==0
+        = link_to "Delete", [:admin, @goal], :confirm => 'Are you sure?', :method => :delete, :class=>"action" 
+
+    %p
+      = icon_to "Goals", admin_goals_path

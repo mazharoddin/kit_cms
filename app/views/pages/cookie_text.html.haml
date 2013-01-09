@@ -1,0 +1,5 @@
+%p
+  = gnric_snippet('cookie-text', 'If you want to use this website, to comply with EU legislation, you need to grant us the right to place cookies in your webbrowser.  If you do not agree to this then unfortunately you will be unable to use this website. <a href="/cookies">More info</a>.'.html_safe)
+
+%p(style="margin-top: 10px; width: 60px; margin-left: auto; margin-right: auto;")
+  = button_to_function "Grant", "accept_cookies();", :name=>"grant"

@@ -1,0 +1,19 @@
+<div style="margin-bottom: 10px; border: thin red solid; padding: 20px;" id="errorExplanation">
+<h1 style="font-weight: bold; margin-bottom: 20px;">Oops.  Something isn't right</h1>
+<p><span style="font-weight: bold; color: red;"><%= session[:error_message] %></span></p>
+
+<p style="margin-top: 10px;">
+Try following links from the <a href="/">home page</a>.  If it still doesn't work please do get in touch <% if @reference %>and quote reference <%= @reference %><% end %>.
+</p>
+</div>
+
+<% if is_admin? || debug? %>
+<hr/>
+<h2 style="margin-top: 50px;">Debug</h2>
+
+<%= session[:debug_error_message] %>
+
+<pre>
+<%= @notes %>
+</pre>
+<% end %>

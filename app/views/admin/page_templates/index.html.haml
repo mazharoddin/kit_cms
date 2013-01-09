@@ -1,0 +1,19 @@
+- content_for :main do
+
+  %h1.pagetemplate_icon Page Templates
+
+  %div(style="margin-bottom: 10px;")
+    = icon_to "New", new_admin_page_template_path
+
+  = paginate @page_templates
+
+  %table.loosen
+    %tr
+      %th Name
+      %th Last Edited
+
+    - for page_template in @page_templates
+      %tr
+        %td(style="margin-bottom: 30px;")= link_to page_template.name, [:admin, page_template]
+        %td= time_ago_in_words(page_template.updated_at) + " ago"
+

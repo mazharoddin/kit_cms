@@ -1,0 +1,99 @@
+- content_for :main do
+  
+  %h1.ads_icon Ad '#{@ad.name}'
+
+  .cms_form
+    %p
+      %label Preview:
+
+    %div(style="width: 720px; border: thin #aaa solid; padding: 10px;")
+      = gnric_ad(@ad.id, {:admin=>true})
+
+    %p
+      %label Name:
+      = @ad.name
+
+    %p 
+      %label Status:
+      = @ad.status
+      - act = @ad.activated==nil ? "activate" : "deactivate"
+      = link_to act.titleize, "/admin/ad/#{@ad.id}/activate/#{act}", :class=>"action", :method=>:post, :style=>"margin-left: 10px;"
+
+    %p
+      %label Approved By
+      - if @ad.approved_by
+        = @ad.approved_by.email
+      - else
+        = link_to "Approve", "/admin/ad/#{@ad.id}/activate/approve", :class=>"action", :method=>:post, :style=>"margin-left: 10px;"
+
+    %p
+      %label House Ad:
+      = @ad.is_house_ad? ? "Yes" : "No"
+
+    %p
+      %label Weighting:
+      = @ad.weighting
+
+    %p 
+      %label Zones:
+      = @ad.ad_zones.collect {|zone| link_to zone.name, [:admin, zone]}.join(', ').html_safe
+
+    %p
+      %label Body:
+      - if @ad.creative_file_name
+        .warning(style="color: red;")
+          This will not be used because a creative has been uploaded
+      = @ad.body
+
+    %p
+      %label HTML Permitted
+      = @ad.allow_html ? "Yes" : "No"
+
+    - if @ad.creative_file_name
+      %p
+        %label File Name
+        = @ad.creative_file_name
+
+      %p
+        %label File Size
+        = @ad.creative_file_size
+
+      %p 
+        %label File Type
+        = @ad.creative_content_type
+    %p
+
+    %p
+      %label User:
+      = @ad.user.email
+
+    %p
+      %label Start Date:
+      = @ad.start_date.to_formatted_s(:short)
+
+    %p
+      %label End Date:
+      = @ad.end_date.to_formatted_s(:short)
+
+    %p
+      %label Price Paid:
+      = pounds(@ad.price_paid)
+
+    %p
+      %label Paid At:
+      = @ad.paid_at.to_formatted_s(:short) if @ad.paid_at
+
+    %p
+      %label Updated At:
+      = @ad.updated_at.to_formatted_s(:short)
+
+    %p 
+      %label Notes:
+      = @ad.notes
+
+    %p
+      = icon_to "Edit", edit_admin_ad_path(@ad)
+      = link_to "Destroy", [:admin, @ad], :confirm => 'Are you sure?', :method => :delete, :class=>"action"
+
+    %p
+      = icon_to "Ads", admin_ads_path

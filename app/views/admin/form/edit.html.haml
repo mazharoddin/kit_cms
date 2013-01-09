@@ -1,0 +1,8 @@
+- content_for :main do
+
+  %h1.forms_icon Edit Form "#{@form.title}"
+
+  = render 'form'
+
+  %p
+    = icon_to "Show", "/admin/form/#{@form.id}"

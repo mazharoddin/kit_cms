@@ -1,0 +1,95 @@
+<%= render :partial=>"/assets/manager/scripts" %>
+
+<% content_for :page_scripts do %>
+  function select_asset(id) {
+       	$('#asset_tabs').tabs('select', '#asset_tabs-link');
+                
+	path = $.trim($('#path-'+id).html());	
+        $('input[name=url]').val(path);
+}
+
+function open_with(selection) {
+	tree_open_folder(1,true,true);
+
+        j_selection = $(selection.getNode());        
+
+	reset_form();
+        if (j_selection.outerHTML().toLowerCase().indexOf('<a')==0) {
+                
+		$('input[name=url]').val(j_selection.attr('href'));
+		$('input[name=title]').val(j_selection.attr('title'));
+		$('input[name=link]').val(j_selection.text());
+		$('input[name=target]').attr('checked', (j_selection.attr('target')=='_blank') ? 'checked' : '');
+	}
+	else if (j_selection.outerHTML().toLowerCase().indexOf('<img')==0) {
+		$('input[name=link]').val(j_selection.outerHTML());		
+	}
+	else {
+	  $('input[name=link]').val(selection.getContent({format:'text'}));
+	}
+}
+
+function reset_form() {
+	$('input[name=url]').val('');
+	$('input[name=title]').val('');
+	$('input[name=link]').val('');
+	$('input[name=target]').attr('checked', '');
+}
+
+function select_page(path) {
+	$('input[name=url]').val(path);
+	$('#asset_tabs').tabs('select','#asset_tabs-link');
+}
+
+$(document).ready( function () {
+
+	$("#asset_tabs").tabs();	
+        <% selected_asset = params[:id]!=nil %>
+	<% if selected_asset %>
+		select_asset(<%=  params[:id] %>);
+        <% end %>
+
+        parent.report_loaded("link");
+});
+
+<% end %>
+
+<div  id="asset_manager">
+
+<div id="asset_tabs">
+	
+	<ul>
+		<li><a href="#asset_tabs-link">Link</a></li>
+		<li><a href="#asset_tabs-page">Link to Page</a></li>
+		<li><a href="#asset_tabs-file">Link to File</a></li>
+
+	</ul>
+	
+	<div id="asset_tabs-link">
+		<%= render :partial=>"/assets/manager/link" %>
+	</div>
+	
+	<div id="asset_tabs-page">
+		<%= render :partial=>"/assets/manager/page_browse" %>
+	</div>	
+	
+        <div id="asset_tabs-file">
+            <%= button_to_function "Upload File", "$('#upload_asset').slideDown();" %> 
+            <div class="hidden" id="upload_asset">
+          	<% @asset = Asset.new %>
+		<%= render :partial=>"/assets/manager/form" %>
+            </div> 
+                <%= render :partial=>"/assets/manager/asset_search" %>
+          <div id="assets">
+            <%= render :partial=>"/assets/manager/assets", :locals=>{:assets=>@assets} %>
+          </div>
+	</div>
+	
+</div>	
+
+</div>
+
+
+
+
+

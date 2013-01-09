@@ -1,0 +1,2 @@
+$('#favourite').html("<%= p render(:partial=>"favourite_link", :locals=>{:page_url=>@page}) %>");
+

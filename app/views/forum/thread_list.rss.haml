@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+<channel>
+<title>#{Preference.get_cached(_sid, 'site_name')} #{@page_title}</title>
+<link>#{Preference.get_cached(_sid, 'host')}/forums</link>
+<description>#{@page_title}</description>
+<lastBuildDate>#{Time.now}</lastBuildDate>
+<language>en-us</language>
+- @threads.each do |topic_thread|
+  - next unless @mod || (topic_thread.is_visible==1) 
+  <item>
+  <title>#{topic_thread.title}</title>
+  <link>#{topic_thread.link}</link>
+  <description>#{topic_thread.title}</description>
+  </item>
+</channel>
+</rss>
+
+

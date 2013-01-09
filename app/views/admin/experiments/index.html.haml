@@ -1,0 +1,18 @@
+- content_for :main do
+  
+  %h1.experiments_icon Experiments
+
+  .field_help
+    "Experiments" allow you to experiment with variations of a page.  This works by showing some visitors one page and other visitors a variation of that page and seeing which leads to the highest rate of meeting some particular #{link_to "goal", "/admin/goals"}. 
+
+
+  %table.loosen
+    %tr
+      %th Name
+    - for experiment in @experiments
+      %tr
+        %td= link_to experiment.name, [:admin, experiment]
+
+  %p
+    = icon_to "New Experiment", new_admin_experiment_path
+    = icon_to "Goals", admin_goals_path

@@ -1,0 +1,24 @@
+var words = [
+<% c = 0 %>
+<% @histogram.each do |h| %>
+  <% c += 1 %>
+  <% break if c>25 %>
+  <%= "{text:\"#{h[0]}\", weight: #{h[1]}},".html_safe %>
+<% end %>
+];
+
+
+$(document).ready(function() {
+  $('#cloud').jQCloud(words);
+
+  var search_words = [];
+  var l = Math.min(10,words.length-1);
+  for (i = 0; i<=l; i++) {
+    search_words.push(words[i].text); 
+  } 
+
+  $.get("/db/content/match/<%= @page.id %>", { words: search_words }, function(result) {
+    $('#searches').html(result);
+  });
+});
+

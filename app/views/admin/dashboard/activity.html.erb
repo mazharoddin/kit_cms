@@ -1,0 +1,36 @@
+<% content_for :main do %>
+  <h1 class="activity_icon">Activity</h1>
+  <form name="form">
+    Search: <input name="for" value="<%= params[:for] %>">
+  </form>
+
+  <div id="activity-list" style="margin-top:10px;">
+    <%= render(:partial=>"admin/dashboard/activity_list") %>
+  </div>
+
+  <% right_column %> 
+
+  <script>
+  $(document).ready(function () {
+	
+    $('form[name=form]').submit(function() { return false });
+    
+    $('input[name=for]').observe_field(0.5,
+    function() { 
+      $.ajax({
+        url: '/admin/dashboard/activity',
+        type: 'get',
+        dataType: 'html',
+        data: 'for=' + $(this).val(),
+        success: function(data) {
+          $('#activity-list').html(data);
+        }
+      });
+    });
+  });
+
+
+
+</script>
+
+<% end %>

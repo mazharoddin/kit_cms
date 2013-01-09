@@ -1,0 +1,12 @@
+<h1 class="pages_icon">Recent Pages</h1>
+
+  <%= link_to "All Pages", "/pages", :class=>"pages_icon icon" %>
+
+  <% pages = Page.sys(_sid).order("updated_at desc").page(params[:recent_page]).per(25) %>
+    <ul>
+      <% pages.each do |page| %>
+        <li><%= link_to list_name(page,40,true), page.link('info'), {:title=>page.title} %></li>
+      <% end %>
+    </ul>
+
+    <%= paginate pages, :param_name=>"recent_page" %> 

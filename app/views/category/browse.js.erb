@@ -1,0 +1,4 @@
+
+<% is_popup = params[:popup]!=nil %>
+
+$("#<%= params[:target] %>").html("<%= j render(:partial=>"#{is_popup ? 'popup':'browse'}_#{params[:mode]}", :layout=>false, :locals=>{:category=>@category, :is_first=>params[:first]=='1'}) %>");

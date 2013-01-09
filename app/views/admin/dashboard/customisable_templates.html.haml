@@ -1,0 +1,12 @@
+- content_for :main do 
+
+  %h1 Customisable Templates
+
+  %table.loosen
+
+    - @list.each do |template,request|
+      %tr
+        %td= template
+        %td= request
+
+

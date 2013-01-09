@@ -1,0 +1,6 @@
+= item.name
+= "<span class='not_reorder'>&rarr;</span>".html_safe
+= ("<span class='not_delete not_reorder'> " + link_to(item.link_url, item.link_url) + " </span>").html_safe
+= icon_to_function "Edit", "edit_menu_item(#{item.menu_id}, #{item.id});", false, :class=>"edit hidden "
+- if item.children.size==0
+  = icon_to "Delete", "/menu/item/#{item.id}", false, :method=>:delete, :class=>"hidden not_reorder delete", :confirm=>"Are you sure?"

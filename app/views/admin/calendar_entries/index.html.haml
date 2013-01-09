@@ -1,0 +1,21 @@
+-content_for :main do
+  %h1.calendar_icon Calendar Entries
+
+  %div(style="margin-bottom: 10px;")
+    = icon_to "New", new_admin_calendar_entry_path + "?calendar_id=#{params[:calendar_id]}" if params[:calendar_id]
+  
+  %div(style="margin-bottom: 10px;")
+    = icon_to "Unapproved Only", "/admin/calendar_entries?calendar_id=#{params[:calendar_id]}&unapproved=1"
+    = icon_to "Approved Only", "/admin/calendar_entries?calendar_id=#{params[:calendar_id]}&approved=1"
+
+  = paginate @calendar_entries
+
+  %table
+    %tr
+      %th Calendar
+      %th Name
+
+    - for calendar_entry in @calendar_entries
+      %tr
+        %td= link_to calendar_entry.calendar.name, "/admin/calendars/#{calendar_entry.calendar_id}"
+        %td= link_to calendar_entry.name, [:admin, calendar_entry]

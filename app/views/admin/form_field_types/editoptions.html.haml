@@ -1,0 +1,29 @@
+- content_for :main do 
+
+  %script(type='text/javascript')
+    = render :partial=>"editoptions", :formats=>"js", :locals=>{:data=>@form_field_type.options, :hier=>@form_field_type.field_type=='hierarchy'}
+
+  - fft = @form_field_type
+  %h1.forms_icon Edit Options for Field Type '#{fft.name}'
+
+  - if @form_field_type.field_type=='checkbox'
+    Only the first option is used for a checkbox
+    
+    
+  #options_edit.clearfix
+    = form_for fft, :url=>"/admin/form_field_types/#{fft.id}/editoptions" do |f|
+      .l(style="float: left; width: 375px;")
+        Enter one option per box
+        .warning(style='display: none;')
+          Changes are not saved until you press Save.
+        = f.hidden_field :options
+        = hidden_field_tag :referer, @referer
+        %ul#data
+      .r(style="float: left; width: 300px;")
+        .note(style='margin-bottom: 10px;')
+          or Paste in multiple values, one per line
+        = text_area_tag :text_options, nil, :style=>"width: 300px; height: 200px;"
+
+  = link_to_function "Save", "complete();", :class=>"action"
+
+

@@ -1,0 +1,156 @@
+- mini = options[:mini]==true
+
+- unless mini
+  = render :partial=>"/calendar/calendar_scripts", :formats=>["js"], :locals=>{:options=>options} 
+
+- if params[:day]
+  %script(type='text/javascript')
+    $(document).ready(function() {
+    month_show_day(#{params[:day]});
+    });
+
+- if params[:select_today] && params[:month]==nil && params[:year]==nil
+  %script(type='text/javascript')
+    $(document).ready(function() {
+    month_show_day(#{Time.now.day});
+    });
+
+
+#calendar(class="clearfix #{options[:class] if options[:class]} #{mini ? 'mini' : 'full'}")
+  - if options[:show_filters]
+    .filters(class="clearfix")
+      = form_tag request.fullpath.split('?')[0], :method=>:get do
+        = hidden_field_tag :month, date.month
+        .type.clearfix
+          .left
+            %label Choose your type of event
+            Type: 
+            = select_tag :etid, "<option value='0'>All</option>".html_safe + options_from_collection_for_select(CalendarEntryType.sys(_sid).order(:name).all, :id, :name, params[:etid]).html_safe
+          .right
+            .go
+              = submit_tag "Find events"
+            
+        .location.clearfix
+          %label Narrow your search
+          .postcode
+            %label Enter your postcode
+            Postcode:
+            = text_field_tag :postcode, params[:postcode]
+            %label Maximum Distance
+            = select_tag :distance, options_for_select([['10','10'],['20','20'],['30','30'],['50','50'],['100+','10000000']], params[:distance]) 
+            miles
+            %br
+            .go
+              = submit_tag "Search", :name=>"search_postcode"
+          .region
+            %label or select a region
+            Area: 
+            = select_tag :rid, "<option value='0'>All</option>".html_safe + options_from_collection_for_select(Region.order(:name).all, :id, :name, params[:rid]).html_safe
+            .subarea
+              = select_tag :srid, "<option value='0'>All</option>".html_safe
+            .go
+              = submit_tag "Search", :name=>"search_area"
+
+  - if options[:show_header]
+    - if date.month==12
+      - next_month = 1
+      - previous_month = 11
+      - next_year = date.year + 1
+      - previous_year = date.year
+    - elsif date.month==1
+      - next_month = 2
+      - previous_month = 12
+      - next_year = date.year
+      - previous_year = date.year - 1
+    - else
+      - next_month = date.month + 1
+      - previous_month = date.month - 1
+      - next_year = date.year
+      - previous_year = date.year
+    .header(class="clearfix")
+      .previous
+        = link_to "&lt;".html_safe, current_path_with_new_params("month=#{previous_month}&year=#{previous_year}&srid=#{params[:srid]}&etid=#{params[:etid]}")
+      .month
+        = date.strftime("%B")
+      .next
+        = link_to "&gt;".html_safe, current_path_with_new_params("month=#{next_month}&year=#{next_year}&srid=#{params[:srid]}&etid=#{params[:etid]}")
+
+  - if options[:show_days]
+    .clear
+    %ol.titles.clearfix
+      - for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] do
+        %li
+          = day
+      .clear
+    %br 
+  %ol.grid.clearfix
+    - entries.keys.sort.each do |key|
+      - days = entries[key]
+      %li(id="box_#{key}" rel='#{key}' class="date_box #{date.strftime("%A").downcase if key==1} #{'today' if (date+(key-1).days).to_date==Date.today}")
+        - if mini
+          = key
+        - else
+          = link_to_function key, "month_show_day(#{key})"
+        - if days.size==0 || mini
+          &nbsp;
+        - else 
+          %div
+            - cnt = 0
+            - days.each do |entry|
+              - cnt += 1
+              %p
+                - if cnt>3
+                  - if Preference.get_cached(_sid, 'calendar_show_event_count')=='true'
+                    - cnt = days.size
+                    .event_count
+                      = "#{cnt}"
+                  
+                  = link_to_function "more...", "month_show_day(#{key})"
+                  - break
+                - else
+                  = "*" unless entry.approved_at
+                  = link_to_function truncate(entry.name, :length=>20), "month_show_entry(#{key}, #{entry.id})"
+    .clear
+
+  - unless mini
+    .details
+      - entries.keys.sort.each do |key|
+        %ul(id="day_#{key}" style="display: none;")
+          %h2
+            = (date+key.days-1).strftime('%e %B %Y')
+          - days = entries[key]
+          - days.each do |entry|
+            %li(class="entry_#{entry.id}")
+              %h3
+                = link_to entry.name, current_without_params + "/" + entry.url
+              - unless entry.approved_at
+                %p 
+                  = icon_to "Approve", "/admin/calendar_entries/#{entry.id}?approve=1", false, :method=>:post
+              - if entry.sell_tickets==1 && options[:buy_url] && entry.in_future?
+                %p.tickets
+                  - if entry.tickets_remaining>0
+                    = link_to "Buy Tickets", "#{options[:buy_url]}?id=#{entry.id}", :method=>:get
+                  - else
+                    Tickets no longer available to buy online 
+              
+              %p
+                = entry.description rescue ""
+              - unless entry.location.is_web?
+                %p
+                  = entry.location.subregion.name rescue ''
+                  = "(#{'%d' % entry.location.distance_from(position)} miles from #{params[:postcode]})" if position 
+              %p 
+                = entry.location.display rescue ''
+              %p
+                = entry.start_date.to_formatted_s(:rfc822)
+                = entry.start_time.to_formatted_s(:time) rescue ''
+                to  
+                = entry.end_date.to_formatted_s(:rfc822) unless entry.start_date == entry.end_date
+                = entry.end_time.to_formatted_s(:time) rescue ''
+              - unless entry.no_days
+                %p
+                  %label.days
+                  = entry.list_days(', ')
+
+
+

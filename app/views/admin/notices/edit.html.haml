@@ -1,0 +1,10 @@
+- content_for :main do
+  
+  %h1 Notices
+
+  = render 'form'
+
+  %p
+    = link_to "Show", [:admin, @notice]
+    |
+    = link_to "View All", admin_notices_path

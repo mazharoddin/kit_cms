@@ -1,0 +1,53 @@
+
+- content_for :main do 
+
+  %h1.layout_icon Layout '#{@layout.name}'
+
+  .cms_form
+    = form_for @layout, :url=>"/admin/layouts/#{@layout.id}", :method=>:put do |f|
+      = f.error_messages
+      %ul
+        %li
+          %label Name:
+          = f.text_field :name
+        %li
+          %label Type:
+          = f.select :handler, options_for_select(["haml", "erb"])
+        %li
+          %label Last Updated By:
+          = @layout.user.email
+        %li
+          %label Created:
+          = @layout.created_at
+        %li
+          %label Updated:
+          = @layout.updated_at
+        %li
+          %label Stylesheets
+          = f.text_field :stylesheets
+          %br
+          Existing stylesheets:
+          = HtmlAsset.where(:file_type=>"css").sys(_sid).order(:name).all.collect {|s| s.name}.join(", ")
+          .dehighlight
+            Comma separated list of stylesheets to include.  If left blank it will default to the standard 'application'.
+        %li
+          %label Javascripts
+          = f.text_field :javascripts
+          %br
+          Existing javascripts:
+          = HtmlAsset.where(:file_type=>"js").sys(_sid).order(:name).all.collect {|s| s.name}.join(", ")
+          .dehighlight
+            Comma separated list of javascripts to include.  If left blank it will default to none.
+        %li
+          %label Body
+          = ace_editor('html', :layout, :body, f)
+
+        %li
+          = render :partial=>"utility/design_history", :locals=>{:object=>@layout}
+      
+      = gnric_submit "Save"
+      - if @layout.page_templates.count == 0 
+        = link_to "Delete", "/admin/layouts/#{@layout.id}", :method=>:delete, :class=>"action", :confirm=>"Are you sure you want to delete this layout?  It cannot be undone."
+
+      = icon_to "Cancel", "/admin/layouts"
+

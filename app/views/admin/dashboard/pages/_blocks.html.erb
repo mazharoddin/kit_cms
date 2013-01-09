@@ -1,0 +1,108 @@
+<h1>Blocks</h1>
+
+<p>Blocks are pre-defined page elements which can be used in various places in various ways.  They can have parameters to allow them to display something different in each circumstance. As you'll read below, they can appear in layouts, in templates and in editable regions of a page.  They can be shared between pages or unique to a page.  They can contain any content, including various modules which provide advanced content such as a map, a form or a picture gallery.</p>
+
+<h2>Defining a Block</h2>
+
+<p>Blocks are created by choosing "Blocks" from the "Design" menu.  A block can be available only to a specific page template, or it can be available to all page templates.  This doesn't dictate that a block necessarily be used, it is just a mechanism to avoid showing a user the option of adding a block to a page which is using a template in which that block would have no purpose.  For example, a "Article References" block might be available only on a page created with the "Article" template.</p>
+
+<p>A block description should be added to allow an editor/user to know what the block does when they are choosing from a list of available blocks whilst they're editing a page.</p>
+
+<p>The main part of a block is its "body".  The body contains the content which will be displayed when the block is used.  This can contain any HTML you wish (the HTML is not sanitised).  If complex functionality is required withint the block it should be formatted as an ERB template.  For example, you could use a loop:
+
+<pre>
+&lt;% [ "North", "East", "South", "West" ].each do |region| %>
+  &lt;h2>&lt;%= region %>&lt;/h2>
+&lt;% end %>
+</pre>
+
+<h2>Block Parameters</h2>
+
+<p>One of the most powerful features available in a block is that of a Block Parameter.  These allow you to have part of the block be prompted for so that the user provides a value.  To define a parameter, use this syntax:
+
+<pre>
+  [[field_id:field_type:title]]
+</pre>
+
+where "field_id" is a unique identifier for the parameter, "field_type" is one of the following:
+
+<ul>
+  <li><code>line</code>: A single line of text</li>
+  <li><code>text</code>: Several lines of text, i.e. one or more paragraphs</li>
+  <li><code>friendly</code>: Several lines of text, with friendly formatting (for adding links, bold, italic, etc.)</li>
+<li><code>image</code>: A single line field with an image browser</li>
+  <li><code>link</code>: A single line field with a link browser</li>
+<li><code>gallery</code>: A select showing the names of the defined galleries</li>
+<li><code>menu</code>: A select showing the names of the defined menus</li>
+<li><code>snippet</code>: A select showing the names of the defined snippets</li>
+<li><code>form</code>: A select showing the names of the defined forms</li>
+</ul> 
+
+and the title is the prompt shown to the editor for this field.  It can consist of anything other than a closing square bracket "]".
+</p>
+
+<p>Parameters are used in the same place they are defined.  That is, when the page is shown, the value of the parameter will replace the parameter definition.  For example, consider this block body definition:
+
+<pre>
+  Hello [[name:line:Contact Name]]!!!
+</pre>
+
+When this snippet is placed on a page, the user will be prompted to enter a "Contact Name".  If they were to enter "Sally Jones" then when the block is rendered on a page it would look like this:
+<pre>
+  Hello Sally Jones!!!
+</pre>
+</p>
+
+<p>For a slightly more advanced example, consider how to add an image in a Block.  The parameter part is actually the "src" tag of the HTML &lt;img> tag, so the block body definition would look like this:
+
+<pre>
+  &lt;img src="[[image:line:Image Source]]" />
+</pre>
+
+or better still, use the parameter type "image" so that the user is offered an image browser to help them fill in the value of the parameter, like this:
+
+<pre>
+  &lt;img src="[[image:image:Image Source]]" />
+</pre>
+
+Assuming the user entered "/images/picture.jpg" as the image source, the end result of either of this would be:
+
+<pre>
+  &lt;img src="/images/picture.jpg" />
+</pre>
+</p>
+
+<h2>Using Blocks</h2>
+
+<p>There are three ways blocks can be used.  These are:
+<ol>
+  <li>The user can add them to an editable region on a page - the parameters the user sets will be stored as part fo the page, so it will be different on each page.  The user can deploy multiple blocks in one editable region and surround the block with other content.</li>
+  <li>An Editable Block which appears in the Page's Template (<i>not</i> in a layout) - how to use this is described below. This is akin to creating an editable region and forcing the user to put a particular block in it, and nothing else.  You must specify default values for any parameters for the block.  The block is stored with the page and so can have different parameters on every page which uses it. Unlike Block Instances described below, the parameters are set when the user edits the page, in the page editor itself.</li>
+  <li>A Block Instance which appears in a Template or a Layout - these blocks must be created, along with their parameters, before they are used on a page. They are shared by every page that uses the layout or template in which they appear.  The parameters are set in the Dashboard.  The parameters can be changed at any time and will immediately change on every page that uses them.  The syntax for using them is shown below.
+</ol>
+</p>
+
+<h3>Editable Block</h3>
+<p>Note, as described above, these can only be used in a Page Template, not in a Layout.</p>
+<pre>
+  = gnric_editable_block(block_instance_id, block_id, { defaults })
+</pre>
+For example:
+<pre>
+  = gnric_editable_block('special_block_27', 7, {:url=>"http://www.dsc.net", :color=>"red"})
+</pre>
+<p>The block_instance_id must be unique within the page the block is to appear (i.e. if you have two of these editable blocks in one template they must each have different instance IDs. The block_id is the identifier for the actual block definition.  Defaults is a hash with one entry per default value.</p>
+
+<h3>Block Instance</h3>
+<p>Note, as described above, these can appear in either a Page Template or a Layout.</p>
+<pre>
+  = gnric_block(instance_id)
+</pre>
+<p>instance_id is the name of the block instance, which is set at the time the block instance is created.  To create a block instance, first choose from the list of <a href="/admin/blocks">blocks</a>, then view the detail of the block concerned and choose Create Instance.  Give it a name and set its parameters.  You can change the parameters at any time and they will instantly be updated on every page on which this Block Instance appears.</p>
+
+
+
+
+
+
+

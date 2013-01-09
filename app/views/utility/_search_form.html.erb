@@ -1,0 +1,7 @@
+<%= form_tag "/admin/dashboard/search", :id=>"dash_search", :method=>:get do %>
+<input name="for" value="<%= params[:for] %>" id="search_field" />
+<input type='hidden' name="include_pages" value="1" />
+<%= link_to_function "Search", "$('#dash_search').submit();", :class=>"right_action" %>
+<% end %>
+
+

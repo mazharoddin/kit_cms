@@ -1,0 +1,13 @@
+.add_message_banner(class="clearfix")
+  %div
+    - if show_header
+      %h2
+        = t "forum.add_your_message_title"
+    #post_preamble(class="clearfix")
+      #guidelines_link
+        = link_to t("forum.guidelines"), "/system/guidelines", :target=>"_blank" 
+      #getting_started_link
+        = link_to t("forum.getting_started"), "/system/getting-started", :target=>"_blank"
+      #posting_tips(style='display: none;')
+        = link_to t("forum.posting_tips"), "/system/posting-tips", :target=>"_blank"
+

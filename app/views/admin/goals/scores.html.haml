@@ -1,0 +1,26 @@
+- content_for :main do
+
+  %h1.goals_icon Scores for Goal '#{@goal.name}'
+
+  .notes
+    = @goal.notes
+
+  = paginate @scores
+
+  %table.loosen
+    %tr
+      %th User
+      %th At
+      %th Experiment Option
+    - @scores.each do |score|
+      %tr
+        %td= score.user.email
+        %td= score.created_at.to_s(:short)
+        %td= score.experiment_option
+
+
+  = paginate @scores
+
+  .top_space
+    = icon_to "Goals", "/admin/goals"
+    = icon_to "Experiments", "/admin/experiments"

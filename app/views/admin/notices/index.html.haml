@@ -1,0 +1,14 @@
+- content_for :main do
+  %h1 Notices
+
+  %table
+    %tr
+      %th Name
+    - for notice in @notices
+      %tr
+        %td= notice.name
+        %td= link_to 'Show', [:admin, notice]
+        %td= link_to 'Edit', edit_admin_notice_path(notice)
+        %td= link_to 'Destroy', [:admin, notice], :confirm => 'Are you sure?', :method => :delete
+
+  %p= link_to "New Notice", new_admin_notice_path

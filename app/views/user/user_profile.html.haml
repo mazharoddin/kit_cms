@@ -1,0 +1,47 @@
+- owner = current_user && @user.id == current_user.id
+- one_editable = false
+
+#user_profile
+  %h1 
+    - if owner
+      Your Profile
+    - else
+      Profile For
+      - if @pro_forma
+        = "Profile for <%= @user.display_name %>".html_safe
+      - else
+        = @user.display_name || 'User'
+
+  - if owner
+    .edit_account_link
+      = link_to "Change Email/Password", "/users/edit"
+
+  %ul(class='attributes')
+    - UserAttribute.sys(_sid).order(:order_by).where("public_visible = 1 #{current_user ? ' or user_visible = 1' : ''} #{current_user && current_user.id == @user.id ? ' or owner_visible = 1 ' : ''}").each do |attr|
+      - one_editable = true if attr.owner_editable==1
+      - uav = @user.user_attribute_values.where(:user_attribute_id=>attr.id).first rescue nil
+      %li(class='attribute_#{attr.name.urlise} field_#{attr.id}')
+        %div(class="attribute_label")
+          = attr.name
+        %div(class="attribute_value")
+          - if attr.form_field_type.has_asset?
+            - if @pro_forma
+              = "<%= image_tag(@user.image_#{attr.name}(:original)) %>".html_safe
+              <!-- as well as :original, size can be :thumb (100x100) or :large (500x500) --> 
+            - else
+              - if uav && uav.asset
+                = image_tag uav.asset.url(:large) if uav
+              - else
+                &nbsp;
+          - else
+            - if @pro_forma
+              = "<%= @user.#{attr.name} %>".html_safe
+            - else
+              = uav.value if uav
+          
+
+  - if owner && one_editable
+    .edit_profile_link
+      = link_to "Edit Profile", "/user/profile/edit"
+  
+

@@ -1,0 +1,62 @@
+- has_groups = form.form_field_groups.size > 0
+
+.cms_form
+  %label Fields
+  %table.loosen
+    %tr
+      %th Name
+      %th.advanced Code Name
+      %th Type
+      %th Order
+      %th Mandatory
+      %th &nbsp;
+      %th &nbsp;
+
+    - form.form_field_groups.each do |ffg|
+      %tr
+        %td(colspan="7" style="font-weight: bold;")= "Group: #{link_to ffg.name, "/admin/form_field_groups/#{ffg.id}/edit"}".html_safe
+
+      - if ffg.form_fields.size == 0
+        %tr
+          %td(colspan="7")
+            No fields in this group
+      - else
+        - ffg.form_fields.each do |field|
+          = render :partial=>"admin/form/field_row", :locals=>{:field=>field, :form=>form}
+
+      %tr
+        %td(colspan=7) &nbsp;
+
+    - if has_groups 
+      %tr
+        %td(colspan="5" style="font-weight: bold;")
+          No Group
+          %span(style="font-weight: normal;") (will appear after all groups)
+          = icon_to "New Group", "/admin/form_field_groups/new?form_id=#{form.id}"
+
+    - form.form_fields.where(:form_field_group_id=>nil).each do |field|
+      = render :partial=>"admin/form/field_row", :locals=>{:field=>field, :form=>form}
+
+
+
+  %label(style="margin-top: 20px;") Add Field 
+  .both_space
+    = icon_to "Define Field Types", "/admin/form_field_types"
+  %table.loosen
+    %tr
+      %th &nbsp;
+      %th Type Name
+      %th Data Type
+      %th Allow Blank
+      %th Description
+
+    - FormFieldType.sys(_sid).where(:hidden=>0).order(:name).all.each do |type|
+      %tr
+        %td= link_to "Add to Form", "/admin/form/#{form.id}/fields?add=#{type.id}", :class=>"action", :method=>:post
+        %td(nowrap)= link_to type.name, "/admin/form_field_types/#{type.id}"
+        %td= type.field_type.titleize
+        %td= type.allow_blank?.to_s.titleize
+        %td= type.description
+
+
+

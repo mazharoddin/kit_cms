@@ -1,0 +1,7 @@
+- content_for :main do 
+
+  %ul
+    - @cats.all.each do |cat|
+      %li
+        = cat["Name"]
+        = cat["Colour__c"]

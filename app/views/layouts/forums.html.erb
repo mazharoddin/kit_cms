@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render :partial=>"/layouts/gnric_header" %>
+</head>
+<body class="" style="margin: 5px;">
+  <div id="main">
+  <% if notice %>
+  <p class="notice"><%= notice %></p>
+  <% end %>
+  <% if alert %>
+  <p class="alert"><%= alert %></p>
+  <% end %>
+  
+<%= yield %>
+  </div>
+</body>
+</html>
+

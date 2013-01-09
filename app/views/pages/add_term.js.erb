@@ -1,0 +1,13 @@
+<% @new_terms.each do |term| %>
+  $('#terms').append("<%= j render :partial=>"term", :locals=>{:term=>term} %>");
+  <% if term.page_template_term.can_repeat == 0 %> 
+    $('#row_' + <%= term.page_template_term_id %>).hide();
+  <% else %>
+    $('#row_' + <%= term.page_template_term.id %> + ' select').val('');
+  <% end %>
+  $('#row_' + <%= term.page_template_term_id %> + ' .field').val('');
+  if ($('.box form div.entry:visible').length==0) {
+    $('a#[name=add]').hide();
+  }
+<% end %>
+$('.box form input[type=text]').first().focus();

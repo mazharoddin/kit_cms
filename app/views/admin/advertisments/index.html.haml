@@ -1,0 +1,46 @@
+- content_for :main do 
+
+  %h1.ads_icon Advertisment Dashboard
+
+  #preview(style="width: 730px; height: 600px; overflow: hidden; border: thin #AAA solid; text-align: center;")
+    Ad Preview
+
+  %h3 Unapproved Ads
+  %table.loosen
+    %tr
+      %th Name
+      %th User
+      %th Zones
+      %th Start
+      %th End
+      %th Paid
+      %th Approve
+
+    - @ads.each do |ad|
+      %tr(class="ad_details" rel="#{ad.id}")
+        %td
+          = link_to ad.name, [:admin, ad]
+          %div(id="preview_#{ad.id}" style="display: none;")
+            = gnric_ad(ad.id)
+        %td= link_to truncate(ad.user.email, :length=>30), "/admin/user/#{ad.user_id}"
+        %td= ad.ad_zones.collect { |zone| link_to zone.name, [:admin, zone] }.join(',').html_safe
+        %td= ad.start_date.to_formatted_s(:short)
+        %td= ad.end_date.to_formatted_s(:short)
+        %td= ad.paid_at.to_formatted_s(:short) if ad.paid_at
+        %td= link_to "Approve", "/admin/ad/#{ad.id}/activate/approve", :class=>"action", :method=>:post if ad.approved_by_id == nil
+  .field_help
+    Hover for preview
+
+  %h3 Setup
+  = icon_to "Ad Units", "/admin/ad_units"
+  &rarr;
+  = icon_to "Ad Zones", "/admin/ad_zones"
+  &rarr;
+  = icon_to "Ads", "/admin/ads"
+
+  %script(type='text/javascript')
+    $(document).ready(function() {
+    $(".ad_details").on('mouseenter', function() {
+    $('#preview').html($('#preview_' + $(this).attr('rel')).html()); 
+    });
+    });

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= yield :title %></title>
+  <!-- layout: minimal -->
+
+  <%= render :partial=>'/layouts/cms-common', :locals=>{:include_menu=>true} %>
+  <%= stylesheet_link_tag "gnric_admin" %>
+
+  <%= csrf_meta_tag %>
+
+  <%= content_for(:head) %>
+
+  <script type="text/javascript">
+          <%= content_for :page_scripts %>
+  </script>
+
+</head>
+<body class="minimal_body" style="margin: 5px;">
+  <% if notice %>
+  <p class="notice"><%= notice %></p>
+  <% end %>
+  <% if alert %>
+  <p class="alert"><%= alert %></p>
+  <% end %>
+  
+<%= yield %>
+
+</body>
+</html>
+

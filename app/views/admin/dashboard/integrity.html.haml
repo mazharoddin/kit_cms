@@ -1,0 +1,28 @@
+- content_for :main do
+
+  %h2 Integrity Check 
+
+  %h3 Home Page
+  %p
+    - if @home_page
+      = @home_page.name
+      - if @home_page.deleted? || !@home_page.is_published?
+        %span.check_warning but not visible
+    - else
+      %span.check_error Not Created Yet
+  
+  %h3 Domain Name
+  %p
+    = Preference.get_cached(@system_id, 'host')
+
+  %h3 Site Name
+  %p
+    = Preference.get_cached(@system_id, 'site_name')
+
+  %h3 Checks
+
+  %ul
+    - @checks.each do |check|
+      %li= check
+
+ 

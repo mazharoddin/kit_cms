@@ -1,0 +1,41 @@
+= doc_ready("$('#buy_ads form').validate();")
+  
+%h3= "Ad '#{@ad.name}' @ #{pounds(@ad.cost_with_tax)}".html_safe
+
+#buy_ads
+  = form_for @order, :url=>"/order/pay_for_ads", :method=>:post do |f|
+    
+    = hidden_field_tag :ad_id, @ad.id
+
+    %p
+      %label First Name:
+      = f.text_field :firstname, :class=>"required"
+
+    %p
+      %label Last Name:
+      = f.text_field :lastname, :class=>"required"
+
+    %p
+      %label Address (line 1):
+      = f.text_field :address1, :class=>"required"
+
+    %p
+      %label Address (line 2):
+      = f.text_field :address2
+
+    %p
+      %label Town/City
+      = f.text_field :town, :class=>"required"
+
+    %p
+      %label Postcode
+      = f.text_field :postcode, :class=>"required", :minlength=>5
+
+    %p
+      %label Email
+      = f.text_field :email, :class=>"required email"
+
+    %p
+      = f.submit "Submit"
+
+

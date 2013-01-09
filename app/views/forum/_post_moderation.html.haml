@@ -1,0 +1,31 @@
+- thread = post.topic_thread
+= link_to "Link", "#{thread.link}##{post.id}" 
+= link_to_function "Delete", "delete_post(#{thread.id},#{post.id},0,'')", {:id=>"delete_#{post.id}", :style=>(post.is_visible==1 ? '' : 'display:none;') } 
+= link_to_function "Undelete", "delete_post(#{thread.id},#{post.id},1,'')", {:style=> (post.is_visible==1 ? 'display:none;':''), :id=>"undelete_#{post.id}"} 
+= link_to_function "Edit", "edit_post(#{thread.id}, #{post.id})" 
+- has_comment = post.moderation_comment && post.moderation_comment!=''
+= link_to_function "Show moderation comments", "show_mod_comments(#{post.id})", {:id=>"mod_button_#{post.id}", :class=>has_comment ? '' : 'hidden'} 
+
+= link_to_function "Spam", "mod_spam(#{post.id});"
+= link_to "User", "/admin/user/#{post.created_by_user_id}"
+= link_to post.created_by_user.email, "/admin/user/#{post.created_by_user_id}/email"
+= "Banned" if post.created_by_user.banned_at != nil
+.ip
+  Votes:
+  = post.created_by_user.forum_votes
+  &nbsp;
+  &nbsp;
+  Points: 
+  = post.created_by_user.forum_points
+  &nbsp;
+  &nbsp;
+  Status: 
+  = post.created_by_user.forum_status rescue ''
+  &nbsp;
+  &nbsp;
+  Spam:
+  = post.created_by_user.spam_points
+  &nbsp;
+  &nbsp;
+  IP: #{post.ip}
+

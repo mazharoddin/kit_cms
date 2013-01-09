@@ -1,0 +1,8 @@
+- content_for :main do
+  
+  %h1.experiments_icon Experiment '#{@experiment.name}'
+
+  = render 'form'
+
+  %p
+    = icon_to "Experiments", admin_experiments_path

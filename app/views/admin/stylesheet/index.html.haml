@@ -1,0 +1,29 @@
+- content_for :main do
+
+  %h1.stylesheets_icon Stylesheets
+
+  %div(style="margin-bottom: 10px;")
+    = icon_to_function "New", "$('#new').slideDown(); $('#new_link').hide();", false, :id=>"new_link"
+
+  #new(style="display: none; margin-top: 10px;" class="cms_form")
+    = form_for @sheet, :url=>"/admin/stylesheet", :method=>:put do |f|
+
+      = f.text_field :name
+      = gnric_submit "Create"
+  
+  = paginate @sheets
+
+  %table#stylesheets.loosen
+    %tr
+      %th
+        Name
+      %th
+        Last Edited
+    - @sheets.each do |sheet|
+      %tr
+        %td
+          = link_to sheet.name.titleize, "/admin/stylesheet/#{sheet.id}"
+        %td
+          = time_ago_in_words(sheet.updated_at)
+          ago
+

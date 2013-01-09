@@ -1,0 +1,66 @@
+<script type="text/javascript">
+function month_show_day(day) {
+  for (i=1; i<=31; i++) {
+    $('#day_' + i).hide();
+  }
+  $('#day_' + day).show().find('li').show();
+  $('li.selected').removeClass('selected');
+  $('#box_' + day).addClass('selected');
+}
+
+function month_show_entry(day, entry) {
+  month_show_day(day);
+  $('#day_' + day + " li").hide();
+  $('.entry_' + entry).show();
+  $('li.selected').removeClass('selected');
+  $('#box_' + day).addClass('selected');
+}
+
+<% if options[:show_filters] %>
+
+var regions_list = <%= regions_list %>;
+
+function set_subregions() {
+    var selection = $('#rid').val();
+    if (selection==='0') {
+      op = "<option value='0'>All</option>";
+    }
+    else {
+      var regions = regions_list[selection];
+      if (regions) {
+        var op = '';
+        for (i=0; i<regions.length; i++) {
+          op = op + "<option value='" + regions[i][1] + "'>" + regions[i][0] + "</option>";
+        }
+      }
+    }
+
+    $('#srid').html(op);
+}
+
+<% else %>
+  function set_subregions() {
+
+  }
+
+  var regions_list = null;
+<% end %>
+
+$(document).ready(function() {
+  $('#rid').bind('change', function() {
+    set_subregions();
+  });
+  <%  if params[:rid] %>
+    $('#rid').val("<%= params[:rid] %>");
+  <% end %>
+  set_subregions();
+  <%  if params[:srid] %>
+    $('#srid').val("<%= params[:srid] %>");
+  <% end %>
+
+  $('.date_box').bind('click', function() {
+    month_show_day($(this).attr('rel'));
+  });
+});
+</script>
+

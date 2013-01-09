@@ -1,0 +1,45 @@
+%script(lang="text/javascript")
+  $(document).ready(function() {
+  $('#buy_tickets form').validate();
+  });
+  
+  
+  
+%h3= "#{@ticket_sale.quantity} tickets for #{@ticket_sale.sellable.name} @ #{pounds(@ticket_sale.unit_price * (1 + @ticket_sale.tax_rate))} each for a total of #{number_to_currency(@ticket_sale.quantity*@ticket_sale.unit_price * (1+@ticket_sale.tax_rate), :unit=>"&pound;")}".html_safe
+
+#buy_tickets
+  = form_for @order, :url=>"/order/pay_for_tickets", :method=>:post do |f|
+    
+    = hidden_field_tag :ticket_sale_id, @ticket_sale.id
+
+    %p
+      %label First Name:
+      = f.text_field :firstname, :class=>"required"
+
+    %p
+      %label Last Name:
+      = f.text_field :lastname, :class=>"required"
+
+    %p
+      %label Address (line 1):
+      = f.text_field :address1, :class=>"required"
+
+    %p
+      %label Address (line 2):
+      = f.text_field :address2
+
+    %p
+      %label Town/City
+      = f.text_field :town, :class=>"required"
+
+    %p
+      %label Postcode
+      = f.text_field :postcode, :class=>"required", :minlength=>5
+
+    %p
+      %label Email
+      = f.text_field :email, :class=>"required email"
+
+    %p
+      = f.submit "Submit"
+

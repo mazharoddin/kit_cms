@@ -1,0 +1,54 @@
+= js_form_validation("#experiments form")
+= date_picker(".datetime")
+
+#experiments.cms_form
+  = form_for [:admin, @experiment] do |f|
+    = f.error_messages
+    %ul
+      %li
+        = f.label :name
+        = f.text_field :name, :class=>"required"
+        .field_help
+          Used internally to refer this experiment
+
+      %li
+        = f.label :enabled
+        = f.check_box :enabled
+          
+      %li
+        = f.label "URL of the page with which to experiment"
+        = pref('host', true)
+        = f.text_field :url1, :class=>"required"
+        .field_help
+          The URL of the page which will vary.  For example: /system/contact-us
+
+      %li
+        = f.label "URL of the alternate version of this page"
+        = pref('host', true)
+        = f.text_field :url2, :class=>"required"
+        .field_help
+          The URL of the alternative version of this page.  For example: /system/contact-us2
+
+      %li
+        = f.label "Percentage of visitors who will see the experiment"
+        = f.select :percentage_visitors, options_for_select(["100", "75", "50", "25", "20", "10", "5", "2", "1", "0.5", "0.1"], @experiment.percentage_visitors), :class=>"required number"
+        = "%"
+        .field_help
+          What proportion of visitors will participate in the experiment.  For example, if you choose 50 then only half of all visitors will be considered for seeing the alternative page.  Note, that doesn't mean that 50% of all visitors will see the alternative page - if there is one alternative then a total of 25% of all visitors will see it (50% of 50%).
+
+      %li
+        = f.label "Goal"
+        = f.select :goal_id, options_from_collection_for_select(Goal.sys(_sid).order(:name).all, :id, :name, @experiment.goal_id), :class=>"required"
+        .field_help
+          Which goal should be used to measure success in this experiment?  
+
+      %li
+        = f.label :end_date
+        = f.text_field :end_date, :class=>"datetime"
+
+      %li
+        = f.label :notes
+        = f.text_area :notes
+
+      %li
+        = gnric_submit "Save"

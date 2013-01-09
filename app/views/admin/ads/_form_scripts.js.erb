@@ -1,0 +1,39 @@
+$(document).ready(function() {
+  $('.cms_form form').validate();
+  
+  $('#ad_start_date').datetimepicker({
+    showOn: "both",
+    dateFormat: "dd/mm/yy",
+  });
+
+  $('#ad_end_date').datetimepicker({
+    showOn: "both",
+    dateFormat: "dd/mm/yy",
+  });
+
+  $('#ad_paid_at').datetimepicker({
+    showOn: "both",
+    dateFormat: "dd/mm/yy",
+  });  
+
+  $('#email').autocomplete({
+    source: function(request,response) {
+      $.getJSON("/utility/user_email_to_ids", request, function(data) {
+        response(data);
+      });
+    },
+    select: function(event, ui) {
+      if (ui.item) {
+        $('#ad_user_id').val(ui.item.value);
+        $('#email').val(ui.item.label);
+      }
+      else {
+        $('#ad_user_id').val('');
+        $('#email').val('');
+      }
+      event.preventDefault();
+    }
+  });
+});
+  
+

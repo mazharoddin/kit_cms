@@ -1,0 +1,46 @@
+- if @mod 
+  - content_for :page_scripts do
+    = render :partial=>"topic_index", :formats=>[:js]
+
+#forums.clearfix
+
+  = render :partial=>"introduction"
+  #topic_title
+    %h2
+      = link_to t("forum.name"), "/forums", :class=>"breadcrumb"
+      &rarr;
+      = @topic.name
+
+  %div(class="introduction topic_introduction")
+    = @topic.description
+
+  - unless @topic.topic_comment.is_blank?
+    .topic_comment 
+      = @topic.topic_comment.html_safe
+
+  - if @mod
+    = link_to_function "Edit Topic Comment", "$('#add_topic_comment').slideDown();", :class=>"moderator_action edit_topic_comment"  
+    #add_topic_comment(style="display: none;")
+      = form_for :topic, :url=>"/forums/topic_comment/#{@topic.id}" do |f|
+        = f.text_area :topic_comment, {:size=>"80x8"}
+        = f.submit "Save"
+
+  - show_post_options = level_okay(@topic.write_access_level) 
+
+  #topic_options(class='clearfix')
+    - if show_post_options
+      - unless @post.body 
+        #new_thread_link
+          = link_to_function translate('forum.start_thread') , "show_post();", :class=>"action"
+    - else
+      - if ((@thread && @thread.topic.write_access_level==1) || (@topic.write_access_level==1)) && current_user==nil 
+        #new_thread_link
+          = link_to t("forum.login_to_start_thread"), "/users/sign_in", :class=>"action"
+
+    #reverse_link
+      = link_to "#{order_arrow(@thread_order)} #{t('forum.reverse_order')}".html_safe, "?reverse=1", :rel=>"nofollow", :class=>"action"
+
+  = render(:partial=>"add_post", :locals=>{:show_header=>false, :show=>false, :add_label=>t("forum.create_new_thread"), :topic=>@topic, :thread=>nil })
+
+  = render(partial:"thread_list", :locals=>{:threads=>@threads, :options=>{:show_post_options=>show_post_options, :show_topic=>false, :show_headings=>true,  :show_mod=>@mod, :paginate=>true, :show_meta=>true}})
+

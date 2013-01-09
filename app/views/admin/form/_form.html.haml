@@ -1,0 +1,156 @@
+.cms_form.validated
+  = form_for @form, :url=>"/admin/form/#{@form.id}" do |f|
+    = f.error_messages
+
+    %ul
+
+      %li
+        = f.label :title
+        = f.text_field :title, :class=>"required"
+        .field_help
+          The name by which this form will be known.  In some uses this will be displayed the user.
+
+      %li.advanced
+        = f.label :locked_for_delete
+        = f.check_box :locked_for_delete
+        .field_help
+          If this is checked the form cannot be deleted.
+
+      %li
+        = f.label :url
+        = f.text_field :url
+        .field_help
+          The URL at which this form will be accessed.  For example /system/contact-us.  This is not relevant when the form is rendered in a block, though it must be provided if the records are to be editable.
+
+      %li
+        = f.label :notify
+        = f.text_field :notify
+        .field_help
+          Which emails should be sent a notification when an entry is made to the form? Separate with a comma.
+
+      %li
+        = f.label :redirect_to
+        = f.text_field :redirect_to
+        .field_help
+          The URL to which the user should be sent after the form is submitted.
+
+      %li
+        = f.label :submit_label
+        = f.text_field :submit_label
+        .field_help
+          The label shown on the form's submit button.
+
+      %li.advanced
+        = f.label :visible_by_default
+        = f.check_box :visible_by_default
+        .field_help
+          Will records submitted be marked as visible by default?  If you require all records to be "moderated" by an administrator before being visible, uncheck this option.
+
+      %li.advanced
+        = f.label :log_activity
+        = f.check_box :log_activity
+        .field_help
+          Include new and updated entries in system activity log
+
+      %li.advanced
+        = f.label "Stylesheets"
+        = f.text_field :stylesheets
+        .field_help
+          Optional.  A comma separated list of stylesheets to include when showing this form.  'Application' is included by default if none are specified.  This is not included if the form is rendered as a block.
+
+      %li.advanced
+        = f.label "Class"
+        = f.text_field :klass
+        .field_help 
+          Optional.  The CSS class given to the DIV in which the form will be wrapped.
+
+      %li
+        = f.label "Before Form Text"
+        = f.text_area :body
+        .field_help
+          Additional text to be shown before the form.
+
+      %li.advanced
+        = f.label "After Form Text"
+        = f.text_area :body_after
+        .field_help
+          Additional text to be shown after the form.
+
+      %li.advanced
+        = f.label :html
+        = f.text_area :html
+        .field_help
+          Optionally, provide the HTML that will be used to render this form for data entry
+        = icon_to_function "Generate", "$('#form_html').load('/admin/form/#{@form.id}/generate_html');"
+
+      %li.advanced
+        = f.label :search_result_format
+        = f.text_area :search_result_format
+        .field_help
+          Optionally, provide an ERB template to render a single submission when found as the result of a search.  Typically this will be a link to the full record.  For example: &lt;%= link_to submission.name, "/data/entry/\#{submission.id}" %>
+
+      %li.advanced
+        = f.label :user_creatable
+        = f.check_box :user_creatable
+        .field_help
+          Can any signed-in user make form submissions?
+
+      %li.advanced
+        = f.label :public_creatable
+        = f.check_box :public_creatable
+        .field_help
+          Can any user make form submissions, even if they're not signed in?
+
+      %li.advanced
+        = f.label :owner_visible
+        = f.check_box :owner_visible
+        .field_help
+          Can the user who submitted this form see the submission later?
+
+      %li.advanced
+        = f.label :owner_editable
+        = f.check_box :owner_editable
+        .field_help
+          Can the user who submitted this form edit the submission later?
+
+      %li.advanced
+        = f.label :user_visible
+        = f.check_box :user_visible
+        .field_help
+          Can any signed-in user see this form submission?
+
+      %li.advanced
+        = f.label :user_editable
+        = f.check_box :user_editable
+        .field_help
+          Can any signed-in user edit this form submission?
+
+      %li.advanced
+        = f.label :public_visible
+        = f.check_box :public_visible
+        .field_help
+          Can any visitor (and search engine) see this form submission?
+
+      %li.advanced
+        = f.label :assignable
+        = f.check_box :assignable
+        .field_help
+          Can this form submission later be assigned to another user?
+
+      %li.advanced
+        = f.label :use_captcha_above_risk
+        = f.text_field :use_captcha_above_risk
+        .field_help
+          The risk of a user is looked up from the country they're from.  If the user has a higher risk value than this risk value a text-based captcha will be used to check they're human.  Set this to 100 or more to never use text captcha.
+
+      %li
+        = f.label "Current Fields"
+        To edit fields, Save this form, then "Edit Fields"
+      %table.loosen
+        - @form.form_fields.each do |field|
+          - next unless field.form_field_type
+          %tr(id="field_#{field.id}" style='margin-bottom: 10px;')
+            %td= "#{field.name} [#{field.form_field_type.name}]"
+
+      %li
+        = gnric_submit "Save"

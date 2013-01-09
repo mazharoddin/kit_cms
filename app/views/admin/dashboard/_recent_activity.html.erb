@@ -1,0 +1,13 @@
+
+  <h1 class="activity_wicon">Activity</h1>
+  <div style="margin-bottom: 10px;">
+    <%= link_to "Show More", "/admin/dashboard/activity", :class=>"right_action" %>
+  </div>
+  <% activities = Activity.sys(_sid).includes(:user).order("created_at desc").page(params[:activity_page]).per(5) %>
+  <ul>
+    <% activities.each do |activity| %>
+      <li><%= activity.name.html_safe %></li>
+       
+    <% end %>
+  </ul>
+

@@ -1,0 +1,12 @@
+$('#term_<%= params[:term_id] %>').fadeOut(500);
+
+<% if @old_term.page_template_term.can_repeat == 0 %>
+  $('#row_' + <%= @old_term.page_template_term.id %>).show().find('select').val('');
+<% end %>
+
+$('.box form input[type=text]').first().focus();
+
+if ($('.box form div.entry:visible').length>0) {
+    $('a#[name=add]').show();
+  }
+

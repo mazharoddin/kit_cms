@@ -1,0 +1,82 @@
+- content_for :main do
+
+  %h1.file_icon File '#{@asset.display_name(:medium)}'
+
+  .link(style="margin-bottom: 10px;")
+    = icon_to "All Files", "/assets"
+
+  - if @asset.image?
+    = image_tag @asset.url(:medium)
+    %br
+    %br
+    %div(style="float: left; width: 150px;")
+      View by Size: 
+    = icon_to "Original", @asset.url(:original), false, :target=>"_blank"
+    = icon_to "Large", @asset.url(:large), false, :class=>"fancybox"
+    = icon_to "Medium", @asset.url(:medium), false, :class=>"fancybox"
+    = icon_to "Small", @asset.url(:small), false, :class=>"fancybox"
+    = icon_to "Thumbnail", @asset.url(:thumb), false, :class=>"fancybox"
+    %br
+    %br
+    %div(style="float: left; width: 150px;")
+      Copy URL by Size:
+    = icon_to_function "Original", "copy_to_clipboard('#{@asset.url(:original)}');"
+    = icon_to_function "Large", "copy_to_clipboard('#{@asset.url(:large)}');"
+    = icon_to_function "Medium", "copy_to_clipboard('#{@asset.url(:medium)}');"
+    = icon_to_function "Small", "copy_to_clipboard('#{@asset.url(:small)}');"
+    = icon_to_function "Thumbnail", "copy_to_clipboard('#{@asset.url(:thumb)}');"
+
+    %br
+    %br
+  - else
+    %div(style="margin-bottom: 10px;")
+      Copy URL:
+      = icon_to_function "Original", "copy_to_clipboard('#{@asset.simple_url}');"
+
+  .download
+    = icon_to "Download", @asset.simple_url
+    %span.advanced
+      = icon_to "Create Alias", "/admin/mapping/new?target=#{@asset.simple_url}"
+
+  .cms_form
+    %ul
+      = form_for :asset, :url=>"/asset/#{@asset.id}", :multipart=>true, :method=>:put do |f|
+        %li
+          %label Replace File
+          = f.file_field :file
+          Note: if you upload a new file it will replace the old one
+        %li
+          %label Content Type
+          = @asset.file_content_type
+
+        - if @asset.image?
+          %li
+            %label Size
+            = @asset.width 
+            x
+            = @asset.height
+        %li
+          %label Created
+          = time_ago_in_words(@asset.created_at)
+          ago
+      
+        %li
+          %label Updated
+          = time_ago_in_words(@asset.updated_at)
+          ago
+
+        %li
+          %label(for="file_name") File Name 
+          = f.text_field :file_file_name, :style=>"width: 650px;"
+
+        %li
+          = f.label :tags
+          = f.text_area :tags
+
+        %li
+          %label Notes
+          = f.text_area :comment
+
+
+        = gnric_submit "Save"
+

@@ -1,0 +1,70 @@
+- content_for :main do 
+  %h1.experiments_icon Experiment '#{@experiment.name}'
+
+  .cms_form
+    %p
+      %label Name
+      = @experiment.name
+
+    %p
+      %label Enabled
+      = @experiment.enabled==1 ? "Yes" : "No"
+
+    %p
+      %label Started
+      = @experiment.created_at.to_s(:short)
+
+    %table.loosen
+      %tr
+        %th URL
+        %th Name
+        %th Impressions
+        %th Successful Goals
+        %th Success Rate
+      %tr
+        %td= link_to @experiment.url1, @experiment.url1
+        %td= @experiment.page_1.title rescue ''
+        %td(nowrap)= @experiment.impressions1
+        %td(nowrap)= @experiment.goals1
+        %td(nowrap)
+          = "%.1f" % (@experiment.goals1.to_f / @experiment.impressions1.to_f * 100)  unless @experiment.impressions1==0
+          &nbsp;
+      %tr
+        %td= link_to @experiment.url2, @experiment.url2
+        %td= @experiment.page_2.title rescue ''
+        %td(nowrap)= @experiment.impressions2
+        %td(nowrap)= @experiment.goals2
+        %td(nowrap)
+          = "%.1f" % (@experiment.goals2.to_f / @experiment.impressions2.to_f * 100) unless @experiment.impressions2==0
+          &nbsp;
+
+    %p
+      %label Percentage of Visitors
+      = @experiment.percentage_visitors
+
+    %p
+      %label End Date
+      = @experiment.end_date.to_s(:short)
+
+    %p
+      %label Goal
+      = link_to @experiment.goal.name, [:admin, @experiment.goal]
+
+    %p
+      %label Notes
+      = @experiment.notes
+
+    %p
+      %label Created By
+      = @experiment.user.email rescue 'n/a' 
+
+    %p
+      %label Created At
+      = @experiment.created_at.to_s(:short)
+
+    %p
+      = icon_to "Edit", edit_admin_experiment_path(@experiment)
+      = link_to "Destroy", [:admin, @experiment], :confirm => 'Are you sure?', :method => :delete, :class=>"action"
+      
+    %p
+      = icon_to "Experiments", admin_experiments_path

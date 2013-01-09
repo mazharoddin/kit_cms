@@ -1,0 +1,39 @@
+- content_for :main do 
+
+  %h1.analysis_icon Page '#{@page.title}' Analysis
+
+  = icon_to "Back to Page Info", "/page/#{@page.id}/info"
+  .clearfix
+    #table(style="float: left; width: 350px;")
+      %table(class="wider attributes")
+        %tr
+          %td &nbsp;
+          %td(align="right")
+            %b Count
+        %tr
+          %td Words
+          %td(align="right") 
+            #{@wordcount}
+        %tr
+          %td Sentences
+          %td(align="right")
+            #{@sentencecount}
+        %tr
+          %td(colspan="2")
+            &nbsp;
+        - @histogram.each do |h|
+          %tr
+            %td
+              = h[0]
+            %td(align="right")
+              = "<span class='percentage'>(#{'%.1f' % (h[1].to_f/@wordcount.to_f*100)}%)</span>".html_safe
+              &nbsp;
+              = h[1]
+    #words.clearfix(style="float: left; width: 320px;")
+      #cloud(style="width: 300px; height: 200px;")
+
+      #searches
+
+
+- content_for :page_scripts do
+  = render :partial=>"analyse", :formats=>[:js]

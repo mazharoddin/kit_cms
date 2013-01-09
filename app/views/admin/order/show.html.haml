@@ -1,0 +1,80 @@
+- content_for :main do
+
+  %h1.order_icon Order
+
+  = icon_to "Orders", "/admin/orders"
+
+  .cms_form
+    %p
+      %label Order
+      = @order.description
+
+    %p
+      %label Placed
+      = @order.created_at.to_formatted_s(:short)
+
+    %p
+      %label Status
+      = @order.status
+
+    %p
+      %label First Name
+      = @order.firstname
+
+    %p
+      %label Last Name
+      = @order.lastname
+
+    %p
+      %label Address
+      = @order.display_address
+
+    %p
+      %label Order EMail
+      = @order.email
+
+    %p
+      %label User EMail
+      = link_to @order.user.email, "/admin/user/#{@order.user_id}"
+
+
+    %p 
+      %label Order Items
+    %table.loosen
+      %tr
+        %th ID
+        %th Name
+        %th Quantity
+        %th Unit Price
+        %th Tax Rate
+        %th Total Price
+      - @order.order_items.each do |item|
+        %tr
+          %td= item.id
+          %td= link_to item.name, "/admin/calendar_entries/#{item.orderable.sellable_id}/sold?sales_id=#{item.orderable_id}"
+          %td= item.quantity
+          %td= item.unit_price
+          %td= item.tax_rate
+          %td= item.total_price
+          
+
+    %p 
+      %label Payments
+    %table.loosen(style="width: 100%")
+      %tr
+        %th ID
+        %th Type
+        %th Processed
+        %th Card Type
+        %th Card
+        %th Status
+      - @order.order_payments.each do |pay|
+        %tr
+          %td= link_to pay.id, "/admin/order/payment/#{pay.id}"
+          %td= pay.payment_type
+          %td= pay.processed_at.to_formatted_s(:short) rescue ''
+          %td= pay.card_type
+          %td= pay.card_identifier
+          %td= pay.status
+
+

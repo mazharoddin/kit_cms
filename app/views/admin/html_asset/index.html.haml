@@ -1,0 +1,34 @@
+- content_for :main do
+
+  %h1.stylesheets_icon HTML Assets (css & js)
+
+  %div(style="margin-bottom: 10px;")
+    = icon_to_function "New", "$('#new').slideDown(); $('#new_link').hide();", false, :id=>"new_link"
+
+  #new(style="display: none; margin-top: 10px;" class="cms_form")
+    = form_for @asset, :url=>"/admin/html_asset", :method=>:put do |f|
+
+      = f.text_field :name
+      = f.select :file_type, options_for_select([["Stylesheet","css"], ["Javascript", "js"]], @asset.file_type)
+      = gnric_submit "Create"
+  
+  = paginate @assets
+
+  %table#stylesheets.loosen
+    %tr
+      %th
+        Name
+      %th
+        Type
+      %th
+        Last Edited
+    - @assets.each do |asset|
+      %tr
+        %td
+          = link_to asset.name.titleize, "/admin/html_asset/#{asset.id}"
+        %td
+          = asset.file_type
+        %td
+          = time_ago_in_words(asset.updated_at)
+          ago
+

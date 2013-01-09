@@ -1,0 +1,44 @@
+- content_for :main do 
+  %h1.analytics_icon Google Analytics Setup
+
+  .dehighlight
+    To use Google Analytics you must first sign up for a Google Account, then create a profile for your site.  Once you do that you will be given a profile ID which you must enter below.
+
+  #analytics.cms_form
+    = form_for "analytics", :url=>"/db/analytics/setup", :method=>:post do
+      %label
+        Analytics Account ID
+      = text_field_tag :google_analytics_id, get(:google_analytics_id)
+      .field_help
+        The profile ID will look something like this:
+        %br
+        UA-XXXXX-X
+
+      %p.dehighlight
+        To display Analytics information in the dashboard you must also enter the following.
+
+      %label
+        API Browser Key
+      = text_field_tag :google_api_browser_key, get(:google_api_browser_key)
+      .field_help
+        The API browser key is available from the <a href="https://code.google.com/apis/console">Google API console</a>.  Shoud look like this: 
+        %br
+        XXXXXXXXXXXXXXXXXXXX
+
+      %label
+        API Client ID
+      = text_field_tag :google_api_client_id, get(:google_api_client_id)
+      .field_help
+        The OAuth 2.0 client ID from the <a href="https://code.google.com/apis/console">Google API console</a>. Should look like this: 
+        %br
+        XXXXXXXXXXXX.apps.googleusercontent.com
+
+      %label
+        Analytics Profile ID
+      = text_field_tag :google_analytics_profile_id, get(:google_analytics_profile_id)
+      .field_help
+        The profile ID for the dataset in Google Analytics.  Login to <a href="http://www.google.com/analytics">Google Analytics</a> and navigate to the profile then take profile ID from the URL - it's the digits after the "p" near the end preceded by 'ga:'.  It should look something like this:
+        %br
+        ga:XXXXXX
+
+      = submit_tag "Submit"

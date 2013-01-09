@@ -1,0 +1,20 @@
+- content_for :main do 
+  %h1.ads_icon Ad Units
+
+  %table.loosen
+    %tr
+      %th Name
+      %th Updated
+      %th Width
+      %th Height
+
+    - for ad_unit in @ad_units
+      %tr
+        %td= link_to ad_unit.name, [:admin, ad_unit]
+        %td= "#{time_ago_in_words(ad_unit.updated_at)} ago"
+        %td= ad_unit.width
+        %td= ad_unit.height
+
+  %p
+    = icon_to "New Ad Unit", new_admin_ad_unit_path
+    = icon_to "Advertisments Dashboard", "/admin/advertisments"

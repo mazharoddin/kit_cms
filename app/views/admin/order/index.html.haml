@@ -1,0 +1,122 @@
+- content_for :main do 
+
+  %h1.order_icon Orders
+
+  = paginate @orders
+
+  - bg = '#CCC'
+
+  #orders
+    #search(style=' margin-bottom: 10px;')
+      = form_tag "/admin/orders", :method=>:get do
+        %p
+          %div Order ID: 
+          kit-
+          = text_field_tag :order_id, params[:order_id], :style=>"width: 50px;"
+          \-xxxxxx-x
+
+        %p
+          %div Description:
+          = text_field_tag :description, params[:description]
+
+        %p
+          %div User:
+          = text_field_tag :user, params[:user]
+          First or last name, part of email address
+
+        %p 
+          %div Postcode:
+          = text_field_tag :postcode, params[:postcode]
+          Full Postcode
+
+        %p 
+          %div Card Number
+          = text_field_tag :card_identifier, params[:card_identifier]
+          Last 4 digits only
+
+        %p
+          %div Payment Reference
+          = text_field_tag :tx_id, params[:tx_id]
+          For SagePay this looks like: {B811C8FC-6CA9-DD69-0151-93127EE1056C}
+
+        %p
+          = icon_to_function "Search", "$('#orders form').submit();"
+          = icon_to "Reset", "/admin/orders"
+
+    %table.loosen(style="width: 100%")
+
+      - @orders.each do |order|
+        - bg = bg=='#CCC' ? '#EEE' : '#CCC'
+        %tr(style='background-color: #{bg}')
+          %td(colspan='6')
+            &nbsp;
+        %tr(style='background-color: #{bg}')
+          %td
+            %label Order ID
+            = link_to order.id, "/admin/order/#{order.id}"
+          %td
+            %label Date/Time
+            = order.created_at.to_formatted_s(:short)
+          %td
+            %label Description
+            = order.description
+          %td
+            %label User
+            = truncate(order.email, :length=>20)
+          %td
+            %label Name
+            = order.firstname
+            = order.lastname
+          %td
+            %label Status
+            = order.status
+
+        %tr.items(style='background-color: #{bg}')
+          %td(colspan='6')
+            %table.loosen(style="width: 100%")
+              %tr
+                %th Item ID
+                %th Quantity
+                %th Item
+                %th Unit Price
+                %th Tax Rate
+                %th Total Price
+              - order.order_items.each do |item|
+                %tr
+                  %td
+                    - if item.orderable_type=='TicketSale'
+                      = link_to item.id, "/admin/calendar_entries/#{item.orderable.sellable_id}/sold?sales_id=#{item.orderable_id}"
+                    - else
+                      = item.id
+                  %td= item.quantity
+                  %td= item.name
+                  %td= item.unit_price
+                  %td= item.tax_rate
+                  %td= item.total_price
+        %tr.items(style='background-color: #{bg}')
+          %td(colspan='6')
+            %table.loosen(style="width: 100%")
+              %tr
+                %th Pay ID
+                %th Type
+                %th Processed
+                %th Card Type
+                %th Card
+                %th Status
+              - pay = order.order_payments.first
+              - if pay
+                %tr
+                  %td= link_to pay.id, "/admin/order/payment/#{pay.id}"
+                  %td= pay.payment_type
+                  %td= pay.processed_at.to_formatted_s(:short) rescue ''
+                  %td= pay.card_type
+                  %td= pay.card_identifier
+                  %td= pay.status
+
+
+        %tr(style='background-color: #{bg}')
+          %td(colspan='6')
+            &nbsp;
+
+    = paginate @orders
+          

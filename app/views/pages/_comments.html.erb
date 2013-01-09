@@ -1,0 +1,18 @@
+
+	<% @page.page_comments.reverse.each do |pc| %>
+	<li style="margin-bottom: 10px; border-bottom: thin solid #EEE;"><%= pc.user.email %> @ <%= pc.created_at %>: <%= pc.body %></li>
+	<% end %>
+	
+	
+	<li><%= icon_to_function "Add note", "$('#add_comment').slideDown(); $('#body').focus();"%>
+		
+		<div style='display: none' id='add_comment'>
+			<%= form_tag("/page/#{@page.id}/add_note", :remote=>true) do %>
+                        <%= text_area_tag :body, '', {:size=>"40x5"} %>
+                        <br/>
+				<%= gnric_submit "Save" %>
+			<% end %>
+		</div>
+		
+	</li>
+

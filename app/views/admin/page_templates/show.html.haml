@@ -1,0 +1,92 @@
+- content_for :main do
+  
+  %h1.pagetemplate_icon Page Template
+
+  %p
+    %strong Name:
+    = @page_template.name
+  %p
+    %strong Updated:
+    = time_ago_in_words(@page_template.updated_at) 
+    ago
+
+  %p
+    %strong Hidden:
+    = @page_template.hidden? ? "Yes" : "No"
+
+  - if feature?('comments')
+    %p
+      %strong Anonymous Comments by Default:
+      = @page_template.allow_anonymous_comments? ? "Yes" : "No"
+
+    %p
+      %strong Logged-in User Comments by Default:
+      = @page_template.allow_user_comments? ? "Yes" : "No"
+
+
+  - if feature?("mobile_templates")
+    %p
+      %strong Mobile:
+      = @page_template.is_mobile? ? "Yes" : "No"
+
+    - if @page_template.mobile_version
+      %p
+        %strong Mobile Version:
+        = link_to @page_template.mobile_version.name, [:admin, @page_template.mobile_version]
+
+    - if @page_template.is_mobile?
+      - master = PageTemplate.sys(_sid).where(:mobile_version_id=>@page_template.id).first
+      - if master
+        %p
+          %strong Version For Which This Is The Mobile Version:
+          = link_to master.name, [:admin, master]
+
+  - if @page_template.is_default?
+    %p
+      This is the default page template
+
+  %p
+    %strong Layout:
+    = link_to @page_template.layout.name, "/admin/layouts/#{@page_template.layout.id}"
+
+  %p
+    %strong Pages Using This Template:
+    - cnt = @page_template.pages.count
+    = link_to_if cnt>0, cnt, "/admin/page_templates/#{@page_template.id}/pages"
+    - if cnt>0
+      This template can't be deleted whilst pages are using it
+
+  %p
+    %strong Stylesheets
+    %br
+    Layout:
+    = show_html_assets(@page_template.layout.stylesheets, "css")
+    %br
+    Template:
+    = show_html_assets(@page_template.stylesheets, "css")
+
+  %p
+    %strong Javascripts
+    %br
+    Layout:
+    = show_html_assets(@page_template.layout.javascripts, "js")
+    %br
+    Template:
+    = show_html_assets(@page_template.javascripts, "js")
+
+  %p
+    %strong= icon_to "Terms: ", "/admin/page_template_terms?page_template_id=#{@page_template.id}", false, :style=>"margin-right: 20px;"
+    = @page_template.page_template_terms.all.collect { |t| t.name }.join(', ')
+    
+  %p
+    %strong Body
+    %pre(style="overflow: auto; width: 725px; border: thin #AAA solid; padding: 10px; ")
+      = @page_template.body
+
+  %p
+    = render :partial=>"utility/design_history", :locals=>{:object=>@page_template}
+  
+  %p
+    = icon_to "Edit", edit_admin_page_template_path(@page_template)
+    = icon_to "Destroy", [:admin, @page_template], false,  :confirm => 'Are you sure?', :method => :delete if cnt==0
+    = icon_to "List Page Templates", admin_page_templates_path

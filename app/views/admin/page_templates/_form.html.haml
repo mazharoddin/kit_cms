@@ -1,0 +1,69 @@
+.cms_form
+  = form_for [:admin, @page_template] do |f|
+    = f.error_messages
+    %p
+      = f.label :name
+      = f.text_field :name
+    %p
+      = f.label :template_type
+      = f.select :template_type, options_for_select(["haml", "erb"], @page_template.template_type)
+    %p 
+      = f.label :layout_id
+      = f.select :layout_id, options_from_collection_for_select(Layout.sys(_sid).order(:name).all, :id, :name, @page_template.layout_id)
+
+    - if feature?('comments')
+      %p 
+        = f.label "Allow Anonymous Comments by default"
+        = f.check_box :allow_anonymous_comments
+        .field_help
+          This can be overriden on each page which uses this template, but this will set the default
+
+      %p 
+        = f.label "Allow Comments from logged in users by default"
+        = f.check_box :allow_user_comments
+        .field_help
+          This can be overriden on each page which uses this template, but this will set the default
+
+    %p
+      = f.label :hidden
+      = f.check_box :hidden
+      .field_help
+        Select to not show with in lists that users select from
+
+    - if feature?("mobile_templates")
+      %p
+        = f.label :is_mobile, "For mobile devices"
+        = f.check_box :is_mobile
+        .field_help
+          Tick this box if the template is designed for mobile devices - this implies that elsewhere on another template this one will be selected in the "Mobile version to go with this template" box below.
+      %p
+        = f.label :mobile_version_id, "Mobile version to go with this template"
+        = f.select :mobile_version_id, options_from_collection_for_select(PageTemplate.sys(_sid).order(:name).where(:is_mobile=>true).all, :id, :name), :include_blank=>true
+        .field_help
+          If this template has an equivalent version for mobile devices, select it here.  As such, practically this is mutually exclusive with the "For mobile devices" option above.
+    %p
+      = f.label :body
+      = ace_editor('html', :page_template, :body, f)
+      .field_help
+        The content of the template.  
+    %p
+      = f.label :stylesheets
+      = f.text_field :stylesheets
+      %br
+      Existing stylesheets:
+      = HtmlAsset.sys(_sid).order(:name).where(:file_type=>"css").all.collect {|s| s.name}.join(", ")
+      .field_help
+        Comma separated list of stylesheets to include.  If left blank it will default to the standard 'application'. Do not use a file extension.
+
+    %p
+      = f.label :javascripts
+      = f.text_field :javascripts
+      %br
+      Existing javascripts:
+      = HtmlAsset.sys(_sid).order(:name).where(:file_type=>"js").all.collect {|s| s.name}.join(", ")
+      .field_help
+        Comma separated list of javascripts to include.  If left blank it will default to none. Do not use a file extension.
+
+
+    %p
+      = gnric_submit "Save"

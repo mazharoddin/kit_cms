@@ -1,0 +1,387 @@
+<% content_for :page_scripts do %>
+function open_content_dialog(type, content_id) {
+var $this = $(this);
+var outputHolder = $("<div id='.uimodal-output'>Please wait whilst content is loaded</div>");
+$("body").append(outputHolder);
+outputHolder.load("/page/<%= @page.id %>/content/" + content_id + "/" + type, null, function() {
+outputHolder.dialog({modal: true, height: 600, width: 600});
+});
+return false;
+}  
+<% end %>
+
+<% right_column %>
+<% content_for :main do %>
+<div id="info">
+
+  <h1 class="<%= @page.is_stub? ? 'stub' : 'page' %>_icon">Page '<%= @page.title %>'</h1>
+  <div id="favourite" style="margin-bottom: 5px;">
+    <%# TODO: render(:partial=>"favourite_link", :locals=>{:page_url=>@page.full_path }) %>
+  </div>
+
+  <div class="clearfix">
+    <%= icon_to "View", @page.full_path, false, :method=>:get %> <%= icon_to("Edit", @page.full_path+"?edit=1") unless @page.is_stub? || @page.locked? %>
+  </div>
+  <h1 class="summary_icon" style="margin-top: 20px;">Summary</h1>
+  <div class="clearfix">
+    <%= icon_to "Edit Info", "/page/#{@page.id}/edit"  unless @page.locked? %> 
+    <% if @page.status.is_published==0 %>
+    <%= link_to "Publish", "/page/#{@page.id}/info?publish=1", {:method=>:post, :class=>"action"} unless @page.is_stub? || @page.locked? %>  
+    <% end %>
+    <% if @page.is_deleted==0 %>
+    <%= link_to "Delete", "/page/#{@page.id}", {:confirm=>"Are you sure?", :method=>:delete, :disable_with=>"Deleting", :class=>"action"} unless @page.locked? %>
+    <% else %>
+    <%= link_to "UnDelete", "/page/#{@page.id}/undelete", {:method=>:delete, :disable_with=>"Undeleting", :class=>"action"} %>
+    <%= link_to "Destroy", "/pages/#{@page.id}?destroy=1", {:confirm=>"Are you sure? If you go ahead with this the page will be gone forever and cannot be recovered.", :method=>:delete, :disable_with=>"Destroying", :class=>"action advanced"} %>
+    <% end %>
+    <%= icon_to "Copy", "/page/#{@page.id}/copy", false, :method=>:post unless @page.is_stub? %>
+  </div>
+  <table class="attributes">
+    <tr>
+      <td>Title</td>
+      <td colspan='2'><%= @page.title %></td>
+    </tr>
+
+    <% if @page.is_deleted==1 %>
+    <tr>
+      <td colspan='3'><span style="color: red">This page is currently deleted</span> - it won't be visible to users</td>
+    </tr>
+    <% end %>
+    <% if @page.is_stub? %>
+    <tr>
+      <td colspan='3'><span style="color: red">This page is only a stub page</span> - it can't be edited or published
+        <div class="field_help">
+          To make the page editable you should click "Edit Info" above, then choose a template and change the status to something other than "Stub".
+        </div>
+      </td>
+    </tr>
+    <% end %>
+    <tr>
+      <td>Status:</td>
+      <td colspan='2'><%= @page.status.name %></td>
+    </tr>
+    <tr class='advanced'>
+      <td>Locked:</td>
+      <td><%= @page.locked? ? "Yes" : "No" %></td>
+      <td><%= link_to @page.locked? ? "No" : "Yes", "/page/#{@page.id}/info?locked=#{!@page.locked?}", :class=>"action", :method=>:post %></td>
+    </tr>
+
+    
+    <tr>
+      <td>Path:</td>
+      <td colspan='2'><%= @page.full_path %></td>
+    </tr>
+    <tr>
+      <td>Template:</td>
+      <td colspan='2'><%= link_to(@page.page_template.name, "/admin/page_templates/#{@page.page_template_id}") rescue '' %></td>
+    </tr>
+
+    <% if @page.page_template && @page.page_template.has_mobile_version? && feature?("mobile_templates") %>
+    <tr class='advanced'>
+      <td>Use Mobile Version:</td>
+      <td><%= @page.mobile_dif==1 ? 'Yes' : 'No' %></td>
+      <td>
+        <%= link_to @page.mobile_dif==1 ? 'No' : 'Yes', "/page/#{@page.id}/info?mobile_dif=#{@page.mobile_dif==1 ? 0 : 1}", :class=>"action", :method=>:post %>
+      </td>
+    </tr>
+    <% end %>
+
+    <tr class='advanced'>
+      <td>Tags:</td>
+      <td colspan='2'><%= field_reveal(@page.tags, 200) %></td>
+    </tr>
+
+    <% first = true %>
+    <% if @page.page_template && @page.page_template.page_template_terms.count > 0 %>
+    <% if @page.terms.size > 0 %>
+    <% @page.terms.each do |term| %>
+    <tr class='advanced'>
+      <td><% if first %>Terms: <% else %>&nbsp;<% end %></td>
+      <td>
+        <% if term.page_template_term %>
+        <%= term.page_template_term.name %> : <%= term.value %> 
+        <% end %>
+      </td>
+      <td>
+        <% if first %>
+        <%= icon_to "Edit", "/page/#{@page.id}/terms", false, :style=>"margin-left: 10px;" %>
+        <% first = false %>
+        <% else %>
+        &nbsp;
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+    <% else %>
+      <tr class='advanced'>
+        <td>Terms:</td>
+        <td>&nbsp;</td>
+        <td><%= icon_to "Edit", "/page/#{@page.id}/terms", false, :style=>"margin-left: 10px;" %></td>
+      </tr>
+    <% end %>
+    <% end %>
+
+    <tr>
+      <td>Meta Description:</td>
+      <td colspan='2'><%= field_reveal(@page.meta_description, 80) %></td>
+    </tr>
+    <tr>
+      <td>Meta Keywords:</td>
+      <td colspan='2'><%= field_reveal(@page.meta_keywords, 80) %></td>
+    </tr>
+    <tr>
+      <td>Created:</td>
+      <td colspan='2'><%= time_ago_in_words(@page.created_at)  %> ago @ <%= @page.updated_at %></td>	
+    </tr>
+    <tr>
+      <td>Updated:</td>
+      <td colspan='2'><%= time_ago_in_words(@page.updated_at) %> ago @ <%= @page.updated_at %></td>	
+    </tr>
+    <tr>
+      <td>Published At:</td>
+      <td colspan='2'><% if @page.published_at %>
+        <%= time_ago_in_words(@page.published_at) %> ago @ <%= @page.published_at.to_s rescue '' %>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>Favourite:</td>
+      <% if @page.is_favourite?(current_user) %>
+      <td width="330px">Yes</td>
+      <td><%= link_to "Remove", "/pages/#{@page.id}/favourite", :method=>:delete, :class=>"action" %></td>
+      <% else %>
+      <td width="330px">No</td>
+      <td><%= link_to "Add", "/pages/#{@page.id}/favourite", :method=>:post, :class=>"action" %></td>
+      <% end %>
+    </tr>
+
+    <% if @being_edited_by.size>0 %>
+    <tr>
+      <td>Currently editing:</td>
+      <td><%= @being_edited_by.join(',') %></td>
+      <td><%= link_to "Clear", "/pages/notification/#{@page.id}/delete", {:method=>:post, :class=>"action"} %></td>
+    </tr>
+    <% end %> 
+
+    <tr>
+      <td>Home Page:</td>
+      <td> 
+        This page <%= @page.is_home_page? ? 'is' : 'is not' %> the home page.  
+      </td>
+      <td>
+        <% unless @page.is_home_page? %>
+        <%= link_to 'Make it the home page', "/page/#{@page.id}/make_home", :method=>:post, :class=>"action", :confirm=>"Are you sure you want to make this page the home page?" if @page.status==Status.published_status(_sid) && !@page.is_deleted?  %>
+        <% end %>
+        &nbsp;
+      </td>
+    </tr>
+
+    <% if Preference.get_cached(_sid, "show_include_in_sitemap")=="true" %>
+    <tr>
+      <td>Include in sitemap:</td>
+      <% if @page.in_sitemap? %>
+      <td>Yes</td><td><%= link_to "Don't Include", "/page/#{@page.id}/info?sitemap=0", :class=>"action", :style=>"margin-left: 10px;", :method=>:post, :class=>"action" %></td>
+      <% else %>
+      <td>No</td><td><%= link_to "Do Include", "/page/#{@page.id}/info?sitemap=1", :class=>"action", :style=>"margin-left: 10px;", :method=>:post, :class=>"action" %></td>
+      <% end %>
+      </td>
+    </tr>
+    <% end %>
+
+    <% if feature?('comments') %> 
+    <tr>
+      <td>Anon Comments</td>
+      <td><%= @page.allow_anonymous_comments? ? "Yes" : "No" %></td>
+      <td><%= link_to @page.allow_anonymous_comments? ? "No" : "Yes", "/page/#{@page.id}/info?anonymous_comments=#{!@page.allow_anonymous_comments?}", :class=>"action", :method=>:post %></td>
+    </tr>
+    <tr>
+      <td>User Comments</td>
+      <td><%= @page.allow_user_comments? ? "Yes" : "No" %></td>
+      <td><%= link_to @page.allow_user_comments? ? "No" : "Yes", "/page/#{@page.id}/info?user_comments=#{!@page.allow_user_comments?}", :class=>"action", :method=>:post %></td>
+    </tr>
+    <% end %>
+
+  <tr class="advanced">
+    <td colspan="3">
+      <p>Show: <%= icon_to "Page Analysis", "/db/content/analyse/#{@page.id}", false, :class=>"icon_stack advanced" %>
+      <%= icon_to "Content", "/page/#{@page.id}/contents", false, :class=>"advanced"  %>
+      <%= icon_to "Blocks Used On This Page", "/admin/block_instances?page_id=#{@page.id}", false, :class=>"advanced" %>
+      <%= icon_to_function "Access Permissions", "$('#access').slideDown(); $('#show_access_link').hide();",false, {:id=>'show_access_link', :class=>"icon_stack"} %>
+      </p>
+    </td>
+  </tr>
+
+</table>
+
+<div id='access' style='display: none;'>
+  <h1 class="access_icon">Access</h1>
+  <% if @page.category.is_root? %>
+  This page is in the top level category - it will always be publicly visible.
+  <% else %>
+  <div class="field_help">
+    Access to this page is dependent on the permission of the groups in which the page is located. This list shows you which groups can access the page. Click a group name to see its members.
+  </div>
+  <ul>
+    <% if @page.is_readable_anon? %>
+    This page is publicly visible.
+    <% else %>
+    <% groups = {} %>
+    <% Category.permission_cache(_sid)[@page.category_id][:read_groups].each do |group_id, group_name| %>
+    <% groups[group_id] = 'Read' %>
+    <% end %>
+    <% Category.permission_cache(_sid)[@page.category_id][:write_groups].each do |group_id, group_name| %>
+    <% groups[group_id] = 'Read and Write' %>
+    <% end %>
+
+    <% groups.each do |group_id, access| %>
+    <li><%= link_to Category.permission_cache(_sid)[@page.category_id][:read_groups][group_id], "/admin/users?group=#{group_id}" %> - <%= access %></li>
+    <% end %>
+    <% end %>
+    <li><%= icon_to "Change Permissions For This Category", "/category/#{@page.category_id}/permissions", false %></li>
+  </ul>
+  <% end %>
+</div>
+
+<h1 class="menu_icon">Menus</h1>
+
+<table class='attributes'>
+  <% on_menu = {} %>
+  <% @page.menu_items.each do |menu_item| %>
+  <tr>
+    <% on_menu[menu_item.menu_id] = 1 %>
+    <td>
+      Menu: 
+      <%= link_to menu_item.menu.name, "/menu/#{menu_item.menu_id}" %> 
+    </td>
+    <td width="330px">
+      Item:
+      <%= "#{menu_item.parent.name} &rarr;".html_safe if menu_item.parent_id != 0 && menu_item.parent %>
+      <%= menu_item.name %>
+    </td>
+    <td>
+      <div style="margin-bottom: 5px;">
+      <%= icon_to "Remove", "/menu/item/#{menu_item.id}", false, :method=>:delete %>
+      </div> 
+    </td>
+  </tr>
+  <% end %>
+
+  <% menus = Menu.sys(@page.system_id).order("name").all %>
+  <% c = 0 %>
+  <% menus.each { |menu| c += 1 unless on_menu[menu.id] || @page.is_deleted? } %>
+  <% if c>0 %>
+  <tr>
+    <td>Append to menu:</td>
+    <td colspan="2">
+      <% menus.each do |menu| %>
+      <% next if on_menu[menu.id] || @page.is_deleted? %>
+      <%= icon_to_function menu.name, "$('#parents_#{menu.id}').show();" %>
+      <% end %>
+      <br/>
+
+      <% menus.each do |menu| %>
+        <% next if on_menu[menu.id] || @page.is_deleted? %>
+        <ul id='parents_<%= menu.id %>' style='display: none;'>
+          <li>Menu '<%= menu.name %>'</li>
+          <li style="margin-bottom: 10px;"><%= link_to "Add to Top Level", "/page/#{@page.id}/menu/#{menu.id}?parent_id=0", :class=>"action" %></li>
+          <% menu.menu_items.where(:parent_id=>0).each do |parent| %>
+          <li style="margin-bottom: 10px;">
+          <%= link_to "Make child of '#{parent.name}'", "/page/#{@page.id}/menu/#{menu.id}?parent_id=#{parent.id}", :class=>"action" %>
+          </li>
+          <% end if menu.can_have_children==1 %> 
+        </ul>
+      <% end %>
+    </td>
+  </tr>
+  <% end %>
+  <tr>
+  </tr>
+</table> 
+
+<h1 style="margin-top: 10px;" class="notes_icon">Notes</h1>
+<div class="field_help">You can add any number of notes or comments to the page.  These are not visible to your users, only to people who are allowed to edit the page.  The notes can also be viewed whilst you're editing the page.
+</div>
+
+<ul id="comments">
+  <%= render(:partial=>"comments", :locals=>{:page=>@page}) %>
+</ul>
+
+<h1 class="revisions_icon">Revisions</h1>
+<div class="field_help">
+  This section shows details of the life of the page.  When the content is changed the older versions are kept and can be seen by clicking History and then View next to the version you want to see.  Once a page has been published you can create a draft and edit a draft revision.  Ordinarily when you edit the content on a published page your users would see those changes immediately, but if you edit a draft revision they won't see the changes you're making until you publish the draft.  Note that older versions of drafts are not recorded.
+</div>
+<ul>
+
+  <% if @page.published_at %>
+  <li>Published: <%= time_ago_in_words(@page.published_at) %> ago </li>
+  <% if @page.has_draft? && !@page.locked %>
+  <li>
+  <div class="actions clearfix advanced">
+    <div class="action_label">Unpublished Draft:</div>
+    <%= link_to("View", "#{@page.full_path}?draft=1") %>
+    <%= link_to("Edit", "#{@page.full_path}?draft=1&edit=1") %>
+    <%= link_to "Delete", "/page/#{@page.id}/draft", :method=>:delete, :confirm=>"Are you sure? This cannot be undone." %> 
+    <%= link_to "Publish", "/page/#{@page.id}/publish_draft", :method=>:post %> 
+  </div>
+  </li>
+
+  <% else %>
+  <li style="margin-bottom: 10px;"><%= link_to 'Create unpublished draft revision', "/page/#{@page.id}/make_draft", :method=>:post, :class=>"action advanced" unless @page.locked %> </li>
+  <% end %>
+  <% end %>
+
+  <li><%= icon_to_function "Show History", "$('#revisions').slideToggle();", false, :class=>"advanced"%></li>
+
+  <li>
+  <ul style="display: none; margin-top: 10px; margin-left: 20px;" id="revisions">
+    <% c = @page.page_histories.size %>
+    <% @page.page_histories.order("created_at desc").limit(12).each do |ph| %>
+    <li style="margin-bottom: 10px; border-bottom: thin solid #EEE;"> 
+    <%= ph.created_at.to_s(:db) %> <%= ph.activity %> by <%= ph.user.short_display rescue 'unknown' %>
+    <%= link_to_function "View", "open_content_dialog('field', #{ph.page_content_id});" if (ph.activity=='Updated content' || ph.activity=='Updated Draft content') %>
+    <%= link_to_function "View", "open_content_dialog('block', #{ph.block_instance_id});" if (ph.activity=='Updated block' || ph.activity=='Updated Draft block') %>
+    <br/>
+    <span style="margin-left: 20px; color: #AAA" id="history_<%= ph.id %>"><%= ph.details %></span>
+    </li>
+    <% end %>
+  </ul>
+  </li>
+</ul>
+  </div>
+
+  <% if @page.page_contents.where(:version=>-2).count>0 %>
+  <div class="advanced">
+    <h1 class="save_icon">Content Auto Saves</h1>
+    <div class="field_help">These are versions of the content that have been saved automatically by the editor.  When you explicitly save your content these are removed, so their presence suggests that the editor abandoned their changes either deliberately or because of a technical problem.  You can recover the autosaved versions by Viewing them and then pasting them in to the editor.</div>
+    <%= icon_to "Remove", "/page/#{@page.id}/auto_saves/contents", false, :confirm=>"Are you sure? This cannot be undone", :method=>:delete %>
+    <ul>
+      <% @page.page_contents.where(:version=>-2).each do |as| %>
+      <li><%= as.user.email %> at <%= as.updated_at %> <%= link_to_function "View", "open_content_dialog(#{as.id});"%>
+      <%= as.field_name.titleize %>
+      </li>
+      <% end %>
+    </ul>	
+  </div>
+  <% end %>
+
+  <% if @page.block_instances.where(:version=>-2).count>0 %>
+  <div class="advanced">
+  <h1 class="save_icon">Block Auto Saves</h1>
+  <div class="field_help">There are versions of blocks (with their options) that have been saved automatically by the editor. When you explicitly save your content these are removed, so their presence suggests that the editor abandoned their changes or there was a technical problem.  You can click each one to view its contents.</div>
+  <%= icon_to "Remove", "/page/#{@page.id}/auto_saves/blocks", false, :confirm=>"Are you sure? This cannot be undone", :method=>:delete %>
+
+  <ul>
+    <% seen_instance = {} %>
+    <% @page.block_instances.where(:version=>-2).each do |bi| %>
+    <% next if seen_instance[bi.instance_id] %>
+    <% seen_instance[bi.instance_id] = true %>
+    <li>
+    <%= bi.user.email %> at <%= bi.updated_at %>
+    Block: <%= bi.block.name %> <%= link_to "View", "/admin/block_instance/#{bi.id}" %>
+    </li>
+    <% end %>
+  </ul>
+</div>
+  <% end %>
+  <% end %>
+

@@ -1,0 +1,48 @@
+var page_name;
+var editing_page = <%= !@page.new_record? %>;
+
+$(document).ready(function() {
+  page_name = $('#page_name').val();
+  if ($('#page_name').data('default')==page_name  ) {
+    $('#page_submit').attr('disabled', 'disabled');
+  }
+  else {
+    $('#page_name').addClass("input_manual");
+  }
+
+$('input[data-focus=special]').focus();
+
+$('#page_title').bind("keyup", function () {
+  titleChanged();	
+});
+
+$('#page_name').bind("keyup", function () {
+  nameChanged();	
+});
+
+$('input#page_title').change(function() {
+  if ($(this).val()!=auto_name && !$(this).hasClass('input_manual') && $(this).val()!='') {
+    $(this).addClass('input_manual');
+  }
+  else {
+    $(this).removeClass('input_manual');
+  }
+});
+
+$('#category_filter').bind('keydown', function () {
+  if ($(this).val().length>0) {
+    $('#wait').show();
+    $.ajax({type:"POST", 
+      url:"/category/select_options", 
+      dataType:"script", 
+      success:function() {
+        $('#wait').hide();
+      },
+      data:"type=page&search="+$(this).val()});
+  }
+});
+
+$('#category_filter').focus();
+});
+
+

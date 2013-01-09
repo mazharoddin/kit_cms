@@ -1,0 +1,12 @@
+#links(class="mercury")
+  #browser
+
+- content_for :page_scripts do
+  $(document).ready(function() {
+  init_tree("popup", "#{params[:target_field]}");
+  $('#files').on('click', '.pagination a', function(event) {
+  event.preventDefault();
+  $.ajax({type: 'GET', url: $(this).attr('href')});
+  });
+  });
+  = render :partial=>"category/setup_filter", :formats=>[:js]

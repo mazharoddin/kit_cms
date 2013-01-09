@@ -1,0 +1,12 @@
+Gnric App event occurred.
+
+User: <%= @e.user.email if @e.user %>
+Name: <%= @e.name %>
+IP:   <%= @e.ip_address %>
+URL:  <%= @e.url %>
+Notes:<%= @e.notes %>
+At:   <%= @e.created_at %>
+
+http://<%= Preference.getCached(_sid, 'host') %>/sysadmin/event/<%= @e.id %>
+
+

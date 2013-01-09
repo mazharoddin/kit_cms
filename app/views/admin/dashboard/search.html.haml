@@ -1,0 +1,15 @@
+- content_for :main do
+  %h1.search_icon Search
+
+  = render :partial=>"search_form", :locals=>{:show_advanced=>true}
+
+  - if @results
+    %h1.search_icon(style="margin-top: 10px;") Results
+    = gnric_pagination @results 
+
+    %ul
+      - @results.each do |item|
+        %li 
+          = render :partial=>"admin/dashboard/search/#{item.class.name.tableize.singularize}", :locals=>{:item=>item}
+
+

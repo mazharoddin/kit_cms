@@ -1,0 +1,22 @@
+- content_for :main do
+
+  %h1.mapping_icon URL Mappings
+  .dehighlight URL Mappings allow you to map a source URL (what the user asks for) to a target URL (the page the user actually gets served).
+
+  %div(style="margin-top: 10px;")
+    = icon_to "Create New Mapping", "/admin/mapping/new"
+
+  = paginate @mappings
+
+  %ul#mappings(style="margin: 20px 0 10px 0px;")
+    - @mappings.each do |mapping|
+      %li(class="clearfix" style="margin-bottom: 10px;")
+        %div(style="float: left;" class="#{mapping.is_active==0} ? 'dehighlight' : ''}") 
+          = icon_to "Edit", "/admin/mapping/#{mapping.id}/edit"
+          = icon_to "Delete", "/admin/mapping/#{mapping.id}", false, :method=>:delete, :confirm=>"Are you sure?"
+        %div(style="float: left; margin-left: 20px;" class="#{mapping.is_active==0 ? 'dehighlight' : ''} ")
+          = link_to_if mapping.is_asset?, mapping.source_url, mapping.source_url
+          = "&rarr;".html_safe
+          = link_to mapping.target_url, mapping.target_url, :target=>"_blank"
+
+  = paginate @mappings

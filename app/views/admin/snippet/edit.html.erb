@@ -1,0 +1,27 @@
+<% content_for :main do %>
+  <h1 class="snippet_icon">Snippet</h1>
+  <span>Created <%= time_ago_in_words(@snippet.created_at) %> ago by <%= @snippet.user.email %></span>
+  <br/>
+  <div class="cms_form">
+  <%= form_for [:admin, @snippet] do |f| %>
+
+  <b>Name:</b><br/>
+  <%= f.text_field :name, {:style=>"width: 700px;"} %><br/><br/>
+  <b>Description:</b><br/>
+  <%= f.text_area :description, {:style=>"margin-top: 2px; height: 80px; width: 700px;"} %> <br/>
+
+  <div class="advanced">
+  <b>Show Editors:</b><br/>
+  <%= f.check_box :show_editors %><br/>
+  <div class="field_help">
+    Should this snippet appear in the editor's insert list?
+  </div>
+  </div>
+    <b>Content:</b><br/>
+    <%= ace_editor('html', :snippet, :body, f) %>
+
+
+    <%= gnric_submit "Save" %> or <%= link_to "Cancel", "/admin/snippet/#{@snippet.id}" %>
+  <% end %>
+  </div>
+<% end %>

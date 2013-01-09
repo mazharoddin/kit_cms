@@ -1,0 +1,20 @@
+- content_for :main do
+  %h1 Errors
+
+  %div(style="margin-bottom: 10px;")
+    = icon_to "Delete All", "/admin/dashboard/errors", false, :method=>:delete, :confirm=>"Are you sure?  This cannot be undone."
+
+  = paginate @events
+
+  %table.loosen
+    - @events.each do |e|
+      %tr
+        %td
+          = link_to e.name, "/admin/dashboard/error/#{e.id}"
+        %td
+          = e.created_at
+        %td
+          = e.reference
+
+  = paginate @events
+

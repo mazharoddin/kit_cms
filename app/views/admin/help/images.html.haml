@@ -1,0 +1,28 @@
+- content_for :main do
+
+  %h1 Help Images
+
+  .cms_form
+    %fieldset(style="padding-top: 5px; width: 700px;")
+      %legend Upload Image
+      = form_for :help_image, :url=>"/admin/help/upload", :method=>:post do |f|
+        = f.file_field :image
+
+        = gnric_submit "Upload"
+
+
+  .spacer(style="margin-top: 10px;")
+    = paginate @images
+
+  %ul
+    - @images.each do |image|
+      %li(style="margin-bottom: 10px;")
+        = image_tag(image.image.url(:thumb))
+
+        %span(style="margin-left: 20px;") 
+          URL: 
+        = text_field_tag "url", image.image.url, :style=>"width: 500px;"
+
+        = icon_to "Delete", "/admin/help/image/#{image.id}",false, :method=>:delete, :confirm=>"Are you sure?  This cannot be undone."
+
+  = paginate @images

@@ -1,0 +1,37 @@
+- need_browsers = {}
+= form_for 'options', { :html => { :style => 'width:800px; height: 800px;' } } do |f| 
+
+  .mercury-display-pane-container
+    .mercury-display-pane
+      - has_fields = false
+      %h2 Options for '#{@block.name}' Block
+
+      - @fields.each do |field|
+        - has_fields = true
+        - field_name,field_type,field_description = field.split(':')
+        %fieldset.inputs(id="fieldset_#{field_name}")
+          %ol
+            %li(class="string input optional stringish" id="options_#{field_name}_input")
+              %label.label
+                = field_description
+              - if field_type=='text'
+                = render :partial=>"option_text", :locals=>{:field_name=>field_name, :friendly=>false}
+              - elsif field_type=='friendly'
+                = render :partial=>"option_text", :locals=>{:field_name=>field_name, :friendly=>true}
+              - elsif field_type=='line'
+                = render :partial=>"option_line", :locals=>{:field_name=>field_name}
+              - elsif is_db_choice?(field_type)
+                = render :partial=>"option_db_choice", :locals=>{:field_name=>field_name, :field_type=>field_type}
+              - elsif field_type=="link"
+                = render :partial=>"option_link", :locals=>{:field_name=>field_name, :field_type=>field_type, :mode=>"editor"}
+              - elsif field_type=='image'
+                = render :partial=>"option_image", :locals=>{:field_name=>field_name, :field_type=>field_type, :mode=>"editor"}
+              
+      - unless has_fields
+        There are no parameters to set.  
+    
+  .mercury-display-controls
+    %fieldset.buttons
+      %ol
+        %li(class="commit button")
+          %input(class="submit" name="commit" type="submit" value="Insert")

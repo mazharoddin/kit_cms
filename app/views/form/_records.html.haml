@@ -1,0 +1,19 @@
+%h1= form.title
+
+= paginate records unless options[:no_top_paginate]==true
+
+%table
+  %tr.field_names
+    - form.form_fields.each do |field|
+      %th(class="#{field.name.urlise}")= field.name
+
+  - records.each do |record|
+    %tr.field_values
+      - field_index = 0
+      - record.fields.each do |field|
+        %td(class="#{form.form_fields[field_index].name.urlise}")
+          = link_to_if options[:link_field]==form.form_fields[field_index].code_name, field.value, "#{options[:link_url]}#{record.id}"
+        - field_index += 1
+
+= paginate records unless options[:no_bottom_paginate]==true
+

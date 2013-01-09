@@ -1,0 +1,22 @@
+
+<% content_for :main do %>
+  
+  <h1 class="mapping_icon">New Mapping</h1>
+
+  <%= form_for @mapping, :url=>"/admin/mapping", :method=>:post do |f| %>
+    <b>Source URL:</b><br/>
+    <%= f.text_field :source_url %><br/>
+    <span class="dehighlight">The URL that the user requests</span>
+    <br/>
+    <br/>
+    <b>Target URL:</b><br/>
+    <%= f.text_field :target_url %><br/>
+    <span class="dehighlight">The URL for the page the user ends up seeing. For internal pages, begin the URL with a slash ("/").  For exteranl links, use the full URL, e.g. "http://www.dsc.net"</span>
+    <br/>
+    <br/>
+    <%= f.hidden_field :is_asset %>
+    <%= gnric_submit "Save" %> <%= icon_to "Cancel", "/admin/mapping" %>
+  <% end %>
+
+<% end %>
+

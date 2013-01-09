@@ -1,0 +1,37 @@
+- content_for :main do
+
+  %h1.block_icon Block '#{@block.name}'
+
+  %p
+    %strong Name:
+    = @block.name
+
+  %p 
+    %strong Last Edited:
+    = time_ago_in_words(@block.updated_at) + " ago"
+
+  %p
+    %strong Description:
+    = @block.description
+
+  %p
+    %strong Page Template:
+    - if @block.all_templates==1
+      All
+    - else
+      = @block.page_templates.collect { |pt| link_to(pt.name, "/admin/page_templates/#{pt.id}") }.join(', ').html_safe
+
+  %p
+    %strong Body
+    %pre(style="overflow: auto; width: 725px; border: thin #AAA solid; padding: 10px; ")
+      = @block.body
+  
+  %p
+    = render :partial=>"utility/design_history", :locals=>{:object=>@block}
+
+  %p
+    = icon_to "Edit", edit_admin_block_path(@block)
+    = icon_to "Destroy", [:admin, @block], false, :confirm => 'Are you sure?', :method => :delete
+    = icon_to "Instances", "/admin/block_instances?block_id=#{@block.id}"
+    = icon_to "Create Instance", "/admin/block_instance/new/#{@block.id}"
+    = icon_to "Blocks", admin_blocks_path

@@ -1,0 +1,63 @@
+- content_for :main do
+
+  %h1.order_icon Order Payment
+
+  = icon_to "Orders", "/admin/orders"
+
+  .cms_form
+    %p
+      %label Order
+      = link_to @payment.order.description, "/admin/orders?order_id=#{@payment.order_id}"
+
+
+    %p
+      %label Status
+      = @payment.status
+
+    %p
+      %label Processed At
+      = @payment.processed_at.to_formatted_s(:short)
+
+    %p
+      %label User
+      = @payment.user.email
+
+    %p
+      %label Card Address
+      = @payment.order.display_address
+
+    %p
+      %label IP Address
+      = link_to @payment.ip_address, "http://www.ipchecking.com/?ip=#{@payment.ip_address}&check=Lookup", :target=>"_blank"
+
+    %p 
+      %label Type
+      = @payment.payment_type
+
+    %p
+      %label Gateway Transaction ID
+      = @payment.tx_id
+
+    %p
+      %label Card Type
+      = @payment.card_type
+
+    %p
+      %label Card Identifier (last 4 digits)
+      = @payment.card_identifier
+
+    %p 
+      %label Authorisation Code
+      = @payment.auth_code
+
+    %p
+      %label 3D Secure Status
+      = @payment.threed_secure_status
+
+    %p
+      %label Address Status
+      = @payment.address_status
+
+    %p
+      %label Postcode Status
+      = @payment.postcode_status

@@ -1,0 +1,16 @@
+- content_for :main do
+  %h1.calendar_icon Calendar
+  
+  = icon_to "New", new_admin_calendar_path
+
+  %table.loose
+    %tr
+      %th Name
+      %th Last Edited
+      %th Created By
+    - for calendar in @calendars
+      %tr
+        %td= link_to calendar.name, [:admin, calendar]
+        %td= time_ago_in_words(calendar.updated_at)
+        %td= truncate(calendar.user.email, :length=>40)
+

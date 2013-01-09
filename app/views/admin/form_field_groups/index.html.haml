@@ -1,0 +1,22 @@
+- content_for :main do
+  
+  %h1.forms_icon Field Groups for Form '#{@form.title}'
+
+  %table
+    %tr
+      %th Name
+      %th Display Order
+      %th Last Updated
+      %th &nbsp;
+
+    - for form_field_group in @form_field_groups
+      %tr
+        %td= form_field_group.name
+        %td= form_field_group.order_by
+        %td= form_field_group.updated_at.to_s(:short)
+        %td= icon_to "Show", "/admin/form_field_groups/#{form_field_group.id}"
+
+
+  .top_space
+    = icon_to "New Field Group", "/admin/form_field_groups/new?form_id=#{@form.id}"
+

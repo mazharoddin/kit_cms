@@ -1,0 +1,22 @@
+- content_for :main do
+  %h1.help_icon Edit Help '#{@help.name}'
+
+  .cms_form
+    = form_for @help, :url=>"/admin/help/#{@help.id}",:method=>:post do  |f|
+
+      %label Title
+      = f.text_field :name
+
+      %label Path
+      = f.text_field :path
+
+      %label Content
+      = ace_editor('html', :help, :body, f)
+      %br
+      = gnric_submit "Save"
+      or
+      = icon_to "Cancel", "/admin/helps"
+
+  .spacer(style="margin-top: 20px;")
+    = icon_to "Delete This Page", "/admin/help/#{@help.id}", false, :method=>:delete, :confirm=>"Are you sure?  This cannot be undone"
+

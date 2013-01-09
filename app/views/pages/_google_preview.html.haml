@@ -1,0 +1,31 @@
+#google
+  #host
+    = host_name
+  #entry
+    #headline.clearfix
+      #logo
+        = image_tag("google/logo.png")
+      #box
+        %input
+      #button
+        = image_tag("google/search_button.png")
+
+      
+    #title
+      #link
+        %a(href="http://www.dsc.net")
+          DSC: Java and Ruby on Rails Development and Hosting
+    #url
+      www.dsc.net
+
+    #description
+      DSC create, host and manage high quality web services. Using the best web development tools available we build high performance, scaleable, robust ...
+
+- content_for :page_scripts do 
+  var current_category = null;
+  $(document).ready(function() {
+  setup_google_preview();
+  });
+
+
+

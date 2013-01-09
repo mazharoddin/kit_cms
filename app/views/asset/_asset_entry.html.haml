@@ -1,0 +1,20 @@
+%tr
+  %td
+    = link_to image_tag(asset.url('thumb')), asset.url('original'), :class=>"fancybox" if asset.is_image?
+  %td 
+    - if mode=="editor"
+      = link_to asset.display_name(:medium), "/asset/#{asset.id}", :title=>asset.display_name
+    - else
+      = link_to_function asset.display_name(:medium), "window.parent.make_link_to('/asset/#{asset.code}', '#{params[:target_field]}');", :title=>asset.display_name
+  - if mode=="editor"
+    %td
+      = asset.nice_type
+    %td
+      = number_to_human_size(asset.file_file_size)
+    %td
+      = link_to "Delete", "/asset/#{asset.id}", :method=>:delete, :confirm=>"Are you sure?  This cannot be undone", :disable_with=>"Deleting..."
+  
+  %td
+    = best_in_place asset, :tags, :type=>:input, :path=>"/asset/#{asset.id}/tags"
+
+

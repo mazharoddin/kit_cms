@@ -1,0 +1,13 @@
+Mercury.Snippet.load({
+<% @page.block_instances.where(:version=>params[:draft] ? -1 : 0).select('distinct instance_id, block_id').each do |mercury_snippet| %>
+  <%= mercury_snippet.instance_id %>: {name: '<%= mercury_snippet.block_id %>', 
+                      options: {
+                      <% @page.block_instances.where(:instance_id=>mercury_snippet.instance_id).where(:version=>params[:draft] ? -1 : 0).each do |field| %>
+          'options[<%= field.field_name %>]': "<%= j field.field_value %>",
+  <% end %>
+  }},
+
+  <% end %>
+});  
+
+

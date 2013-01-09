@@ -1,0 +1,30 @@
+- if menu
+  - last_node = get_last_node(menu)
+  - menu_id = "menu_#{menu.id}"
+  %script(type='text/javascript')
+    $(document).ready(function(){
+    - if is_multilevel?(menu)
+      $('##{menu_id}').naviDropDown({
+      slideDownDuration: 150,
+      dropDownWidth: '200px'
+      });
+    markup_menu('#{menu_id}'); 
+    });
+
+  %div(id="container_menu_#{menu.id}")
+    %ul.menu(id="#{menu_id}" class="menu #{menu.name.urlise}")
+      - top_level_items = menu.menu_items.where(:parent_id=>0).order(:order_by).includes(:children)
+      - first = true
+      - top_level_items.each do |item|
+        %li(id="item_#{item.id}" class="#{item.has_children? ? 'node' : 'node_without_children'}")
+          = link_to item.name.html_safe, item.link_url, :title=>item.title, :class=>"navlink"
+          - if item.has_children?
+            .dropdown(style="position: absolute; display: none;")
+              - item.children.each do |subitem|
+                %p(id="item_#{subitem.id}" class="child")
+                  = link_to subitem.name, subitem.link_url, :class=>"navlink"
+              
+        - if menu.use_separator? && item!=last_node
+          %li(id="item_separator_#{item.id}" class="separator")
+            &nbsp;
+        - first = false

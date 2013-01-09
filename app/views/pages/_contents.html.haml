@@ -1,0 +1,22 @@
+- if contents
+  - contents.each do |content|
+
+    .cms_form
+      %hr
+      %label Field Name
+      = content.field_name
+
+      %label Field Value
+      %div(style="width: 700px; overflow: auto; margin-top: 10px;")
+        = h content.value
+
+      .div(style="margin-top: 10px;")
+        = icon_to "Edit", "/page/#{@page.id}/content/#{content.id}/edit"
+
+      %label Updated By
+      = content.user.email
+
+      %label Update At
+      = time_ago_in_words(content.updated_at)
+      ago
+

@@ -1,0 +1,62 @@
+- content_for :main do 
+
+  %h1.forms_icon Form '#{@form.title}' Record #{params[:page] || 1}
+
+  %div(style="margin: 0 0 10px 8px;")
+    = icon_to "List", "/admin/forms/#{@form.id}/list"
+    = icon_to "Form", "/admin/form/#{@form.id}"
+    = icon_to "Forms", "/admin/forms"
+
+  = paginate @subs
+
+  .cms_form
+    %ul
+      - @subs.each do |sub|
+        %ul(id="sub_#{sub.id}")
+          %li
+            %label ID:
+            = sub.id
+          %li
+            %label User:
+            = sub.user.email rescue 'n/a'
+          %li
+            %label Submitted:
+            = sub.created_at
+          %li
+            %label IP Address:
+            = sub.ip
+          
+          %li
+            %label Visibilty:
+            .is_visible
+              = sub.visible==1 ? "Visible" : "Invisible"
+            = icon_to_function "#{sub.visible==1 ? 'Invisible' : 'Visible'}", "visible_form_submission(#{sub.id});",false, :class=>"visible"
+            %div(class="visibled hidden")
+              = sub.visible==1 ? '0' : '1'
+            
+          %li
+            %label Marked:
+            .is_marked
+              = sub.marked==1 ? "Yes" : "No"
+            = icon_to_function "#{sub.marked==1 ? 'Unmark' : 'Mark'}", "mark_form_submission(#{sub.id});",false, :class=>"mark"
+            %div(class="marked hidden")
+              = sub.marked==1 ? '0' : '1'
+
+          %li
+            %ul
+              - sub.form_submission_fields.each do |field|
+                %li
+                  %label(style="background-color: #EEE;")
+                    = field.form_field.name + ":"
+                %li 
+                  = link_to_if field.field_type=='url', field.value, field.value 
+          
+          %li
+            = link_to_function "Destroy", "destroy_submission(#{sub.id});", :class=>"action", :confirm=>"Are you sure?  This is permanent and cannot be undone."
+            = icon_to "Edit", @form.url + "?edit=#{sub.id}"
+
+
+  = paginate @subs
+
+
+

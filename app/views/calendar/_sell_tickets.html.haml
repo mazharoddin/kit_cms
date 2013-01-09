@@ -1,0 +1,53 @@
+%script
+  $(document).ready(function() {
+  $('#selling_setup form').validate({
+  rules: {
+  quantity: {
+  required: true,
+  number: true
+  },
+  price: {
+  required: true,
+  number: true
+  },
+  confirmation: {
+  required: true
+  }
+  }
+  });
+  });
+
+#selling_setup
+  To sell <span class='selling_description'>#{description}</span> please confirm:
+
+  = form_tag "/calendar/sell_tickets_setup" do 
+    = hidden_field_tag :item_id, model.id
+    = hidden_field_tag :item_model, model.class.name
+    = hidden_field_tag :redirect, options[:redirect]
+    %ul
+
+      %li.quantity
+        %label(for="quantity") Quantity Available:
+        = text_field_tag :quantity, model.tickets_remaining
+
+      %li.price
+        %label(for="price") Price (exclusive)
+        = text_field_tag :price, model.ticket_price 
+
+      %li.tax_rate
+        %label(for='tax_rate') Tax Rate
+        = text_field_tag :tax_rate, model.tax_rate
+        .help
+          For example, for UK VAT the tax rate should be entered as 0.20
+
+      - if options[:terms_link]
+        %li.confirmation
+          %label(for="confirmation") 
+            Accept our 
+            = link_to "Terms and Conditions", options[:terms_link], :target=>"_blank"
+
+        = check_box_tag :confirmation
+
+    = submit_tag options[:submit]
+
+

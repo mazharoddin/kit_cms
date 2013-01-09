@@ -1,0 +1,11 @@
+- unless params[:mercury]
+  %h3
+    Other Potentially Related Content
+
+%ul.matches
+  - @pages.each do |item|
+    %li
+      - next if item.id.to_i == params[:id].to_i
+      = render :partial=>"admin/dashboard/search/#{item.class.name.tableize.singularize}", :locals=>{:item=>item}
+
+

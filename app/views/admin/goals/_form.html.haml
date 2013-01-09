@@ -1,0 +1,56 @@
+%script(type='text/javascript')
+  function change_type() {
+  if ($('#goal_goal_type').val()=='URL') {
+  $('.match').slideDown();
+  $('.session').slideUp();
+  }
+  else {
+  $('.match').slideUp();
+  $('.session').slideDown();
+  }
+  }
+  $(document).ready(function() {
+  change_type();
+  });
+  
+#goal.cms_form
+  = form_for [:admin, @goal] do |f|
+    = f.error_messages
+    
+    %ul
+      %li
+        = f.label :name
+        = f.text_field :name
+        .field_help
+          Used internally to refer this goal
+
+      %li
+        = f.label :goal_type
+        = f.select :goal_type, options_for_select(["URL", "Session Time"]), {},{ :onChange=>"change_type();"}
+        .field_help
+          The way the goal is achieved
+    
+      %li.match(style="display: none;")
+        = f.label :match_type
+        = f.select :match_type, options_for_select(["Exact Match", "Starts"])
+        .field_help
+          How should the match value be compared to the page's URL?
+
+      %li.match(style="display: none;")
+        = f.label :match_value
+        = f.text_field :match_value
+        .field_help
+          The value against which to match the page's URL. Do not use the host name or a slash ("/") at the beginning. For example, use "system/contact-us" not "http://www.mysite.com/system/contact-us".
+
+      %li.session(style="display: none;")
+        = f.label :session_minutes
+        = f.text_field :session_minutes, :class=>"number"
+        .field_help
+          The number of minutes long the session must be to consider this goal to have been reached
+
+      %li
+        = f.label :notes
+        = f.text_area :notes
+
+      %li
+        = gnric_submit "Save"

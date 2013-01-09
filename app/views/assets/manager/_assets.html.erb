@@ -1,0 +1,40 @@
+<div id="ab">
+  <% col=0 %>
+  <% cols_per_row = 7 %>
+<% if assets %>
+  <% assets.each do |asset| %>
+    <% if col==0 %>
+      
+    <% end %>
+    <% col += 1%>
+    <div class='asset_box'>
+      <%  if @mode!="full" %>
+        <%= link_to_function "Select", "select_asset(#{asset.id});" %>
+      <% end %>
+
+      <div class='field url hidden' id='path-<%= asset.id %>'>
+        <%= asset.url %>
+      </div>
+        
+        <span class='field select'><%= check_box_tag "select_#{asset.id}", "1", false, {:rel=>asset.id, :class=>"mass_select"} if @mode=="full" %></span>
+        <span class='field editable name' id='name-<%= asset.id %>'>
+          <%= asset.name.not_blank? ? asset.name : "Unnamed" %>
+        </span>
+        <div class='field image'><%= link_to(
+                    image_tag(asset.url('thumb'), {:id=>"image-#{asset.id}"}), 
+                    asset.url('original'), {:class=>"fancybox"}) if asset.image? %>
+        </div>
+        <div class='field editable tags' id='tags-<%= asset.id %>'>
+          <%= asset.tags.is_blank? ? "<span class='label_warn'>Untagged</span>".html_safe : asset.tags %>
+        </div>
+      </div>
+
+      <% if col==cols_per_row %>
+        <% col = 0 %>
+      <% end %>
+    <% end %>
+
+<%= paginate assets %>
+<% end %>
+
+</div>

@@ -1,0 +1,69 @@
+<% content_for :page_scripts do %>
+
+function insert(link) {
+	parent.insert_content(link);	
+	parent.close_assets('link');
+}
+
+function get_link(force_new_page) {
+		l = "<a ";
+		if (force_new_page || $('input[name=target]').is(':checked')) {
+			l += "target='_blank' ";
+		}
+		l += "href='";
+		u = $('input[name=url]').val();
+		if (u.indexOf('/')!=0) {
+			protocol_pos = u.indexOf('://');
+			if (protocol_pos<0) {
+				u = "http://" + u;
+			}
+		}
+		l += u;
+		l += "' ";
+		l += 'title="';
+		l += $('input[name=title]').val();
+		l += '" >';
+		l += $('input[name=link]').val();
+		l += "</a>";
+		return l;
+	}
+	
+	function insert_link() {
+		insert(get_link(false));
+	}
+	
+	$(document).ready(function() {
+		$('input[name=link],input[name=url],input[name=title]').observe_field(0.2, function() {
+			$('#selected_link').html(get_link(true));
+		});
+	});
+	
+<% end %>
+
+<div id="asset_link">
+	
+	<div>Link: <%= text_field_tag :link, "", {:style=>"width: 300px;"} %>
+		<div class="popup_hint">The text of the link (i.e. the words on which the user will click)</div>
+	</div>
+	
+	<div>URL: <%= text_field_tag :url, "", {:style=>"width: 300px;"} %>
+		<div class="popup_hint">A full URL such as http://www.google.com or a local path /info/contact-us</div>
+	</div>
+	
+	
+	<div>Open in new page: <%= check_box_tag :target, "_blank" %></div>
+	
+	<div>Title: <%= text_field_tag :title, "" %>
+			<div class="popup_hint">Text that will appear when a user hovers over the link</div>
+	</div>
+
+	<div>Test Link: <span id="selected_link"></span>
+		<div class="popup_hint">Will open in a new window</div>
+	</div>
+	
+		
+	<p><%= button_to_function "Insert", "insert_link();" %></p>
+	
+
+</div>
+

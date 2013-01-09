@@ -1,0 +1,9 @@
+- content_for :main do
+  
+  %h1.forms_icon Field Group for Form '#{@form.title}'
+
+  = render 'form'
+
+  %p
+    = icon_to "Field Groups", "/admin/form_field_groups?form_id=#{@form.id}"
+    = icon_to 'Form', admin_form_path(@form)

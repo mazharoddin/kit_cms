@@ -1,0 +1,14 @@
+- content_for :main do
+
+  %h1 Notice #{@notice.name}
+
+  %p
+    %strong Name:
+    = @notice.name
+
+  %p
+    = link_to "Edit", edit_admin_notice_path(@notice)
+    |
+    = link_to "Destroy", [:admin, @notice], :confirm => 'Are you sure?', :method => :delete
+    |
+    = link_to "View All", admin_notices_path

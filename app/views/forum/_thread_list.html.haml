@@ -1,0 +1,71 @@
+- defaults = { :show_post_options=>false, :show_topic=>false, :show_headings=>false, :show_mod=>false, :show_meta=>false, :paginate=>false, :truncate_length=>1000000} 
+- options = defaults.merge(options)
+
+#threads
+  .top(class="clearfix")
+    - if threads && options[:paginate]
+      .pagination(class="top_pagination")
+        = paginate threads 
+  - if options[:show_headings]
+    #header(class="clearfix")
+      #subject Subject
+      #replies Replies
+      #latest Latest
+
+  - if threads
+    - odd_even = true
+    - threads.each do |topic_thread|
+      - next unless @mod || (topic_thread.is_visible==1) 
+
+      %div(class="thread #{odd_even ? 'odd' : 'even'}" id="thread_#{topic_thread.id}")
+        - odd_even = !odd_even
+        .clearfix
+          .title(id="title-#{topic_thread.id}" class="#{'hidden_thread_title' unless topic_thread.is_visible?}")
+            - if options[:show_topic]
+              .thread_topic
+                = link_to t("forum.name"), "/forums"
+                - if pref("use_forum_topic_categories", true)=='true'
+                  &rarr;
+                  = link_to topic_thread.topic.topic_category.name, topic_thread.topic.topic_category.link
+                &rarr;
+                = link_to topic_thread.topic.name, topic_thread.topic.link
+
+            - if options[:show_watch]
+              .watch
+                = link_to_function t("forum.stop"), "favourite_thread(#{topic_thread.id}, " + current_user.id.to_s + ");", :rel=>"nofollow" if current_user
+
+            .post_title
+              - if options[:show_mod]
+                = link_to(best_in_place(topic_thread, :title, :path=>"/forums/thread/#{topic_thread.id}", :activator=>"#edit_title_#{topic_thread.id}"), topic_thread.link)
+              - else
+                = link_to truncate_html(topic_thread.title, :length=>options[:truncate_length], :separator=>' ', :omission=>'...'), topic_thread.link
+          - if options[:show_meta]
+            .posts
+              .count
+                = pluralize(topic_thread.post_count-1, t("forum.post_count"))
+              - if current_user
+                .link_last
+                  = link_to "Read New", topic_thread.link(true), :rel=>"nofollow"
+            .byline
+              .poster
+                = topic_thread.last_post_by_user_display_name 
+              .datetime
+                = format_date(topic_thread.last_post_at)
+
+          - if options[:show_mod]
+            .mod_actions
+              = link_to_function "Delete Thread", "delete_thread(#{topic_thread.id}, 0)", {:id=>"delete-thread-#{topic_thread.id}", :style=>topic_thread.is_visible? ? "" : "display:none;"} 
+              = link_to_function "UnDelete Thread", "delete_thread(#{topic_thread.id}, 1)", {:id=>"undelete-thread-#{topic_thread.id}", :style=>topic_thread.is_visible? ? "display:none;" : ""} 
+              %a(id="edit_title_#{topic_thread.id}")
+                Edit Title
+
+
+
+    .bottom(class="clearfix")
+      - if threads && options[:paginate]
+        .pagination(class="bottom_pagination")
+          = paginate threads 
+  - else
+    .none_found
+      = t("forum.no_threads")
+

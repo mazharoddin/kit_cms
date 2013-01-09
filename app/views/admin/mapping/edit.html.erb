@@ -1,0 +1,48 @@
+
+<% content_for :main do %>
+  
+  <h1 class="mapping_icon">Edit Mapping</h1>
+  <div class="cms_form">
+  <%= form_for [:admin, @mapping] do |f| %>
+    <b>Source URL:</b><br/>
+    <%= f.text_field :source_url %><br/>
+    <span class="dehighlight">The URL that the user requests. Wildcards can be used in the form of a '%' character (without the quotes).</span>
+    <br/>
+    <br/>
+    <b>Target URL:</b><br/>
+    <%= f.text_field :target_url %><br/>
+    <span class="dehighlight">The URL for the page the user ends up seeing. For internal pages, begin the URL with a slash ("/").  For external links, use the full URL, e.g. "http://www.dsc.net"</span>
+    <br/>
+    <br/>
+    <b>Parameter URL:</b><br/>
+    <%= f.text_field :params_url %><br/>
+    <span class="dehighlight">Optional: a pattern for the URL to determine parameter values.   Only used when "Target is a Page" is checked. For example, specify "/calendar/:id/:year" to insert an "id" parameter and a "year" parameter. </span>
+    <br/>
+    <br/>
+    <b>Status Code:</b><br/>
+    <%= f.text_field :status_code %><br/>
+    <span class="dehighlight">Unless you have reason to change it, leave this as the default value of 301. This is ignored if "Target is a Page" is checked below.</span>
+    <br/>
+    <br/>
+    <b>Active?</b><br/>
+    <%= f.check_box :is_active %>
+    <span class="dehighlight">If this box is not checked the mapping will not be activated</span>
+    <br/>
+    <br/>
+    <b>Target is a Page</b><br/>
+    <%= f.check_box :is_page %>
+    <span class="dehighlight">If this box is checked the user will not be redirected, they'll just be shown the page referenced in the Target URL</span>
+    <br/>
+    <br/>
+    <b>Target is an Asset</b><br/>
+    <%= f.check_box :is_asset %>
+    <span class="dehighlight">If this box is checked the user will not be redirected, they'll  be sent the asset to which the Target URL refers</span>
+    <br/>
+    <br/>
+    <%= gnric_submit "Save" %> <%= icon_to "Cancel", "/admin/mapping" %>
+
+  <% end %>
+  </div>
+<% end %>
+
+

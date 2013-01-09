@@ -1,0 +1,49 @@
+#buy_ad
+  %h1 Buy An Ad
+
+  = form_for @ad, :url=>"/ad/buy" do |f|
+
+    = hidden_field_tag :options, options.to_json
+
+    %label(for="name") 
+      Name
+      = f.text_field :name, :class=>"required"
+      .help
+        Enter a short name to help you identify the ad
+
+    %label(for="zone")
+      Zone
+      = select_tag :zones, options_from_collection_for_select(@zones, :id, :display_name_with_price, params[:zones]), {:class=>"required", :multiple=>true, :size=>@zones.size>5 ? 5 : @zones.size}
+      .help
+        Where your ad will appear
+
+    %label(for="start_date") 
+      Start 
+      = f.text_field :start_date, :class=>"required date"
+      .help
+        When the ad will start
+
+    %label(for="duration") 
+      Duration
+      = f.text_field :duration, :class=>"required number", :style=>"width: 60px;"
+      = @zones.first.period
+      .help
+        The number of #{@zones.first.period} you want the ad to run for
+
+    %label(for="creative") 
+      Content
+      = f.file_field :creative, :class=>"required"
+      .help
+        The content of your ad - a GIF, JPG or PNG file, no larger than 100Kb in size.  It will automatically be resized to fit but for best results you should resize it to #{@zones.first.width}px (width) by #{@zones.first.height}px (height) before uploading.
+
+    %label(for="link")
+      Link
+      = f.text_field :link, :class=>"url"
+      .help
+        The URL to which to send the user when they click the ad. For example: http://www.dsc.net
+
+    %label(for="submit")
+      = f.submit "Save"
+
+
+

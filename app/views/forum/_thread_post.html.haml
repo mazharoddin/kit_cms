@@ -1,0 +1,17 @@
+.inner_post
+  
+  .byline(class="clearfix")
+    .poster
+      = link_to_if pref("forum_users_profile_link",true)=='true', post.created_by_user_display_name, "/user/profile/#{post.created_by_user_id}"
+    .datetime 
+      = post.created_at.strftime(Preference.getCached(_sid, 'date_time_format'))
+    .add_post
+      = link_to t("forum.add_message"), current_user ? "#add_post" : "/users/sign_in" if !@thread.is_locked? || @mod
+    .report
+      = link_to t("forum.report"), "/forums/report/#{post.id}"
+
+  .body
+    %span(class="#{'hidden_thread_title' unless post.is_visible?}" id="body_#{post.id}")
+      = post.body.html_safe
+
+

@@ -1,0 +1,8 @@
+- content_for :main do 
+  
+  %h1.calendar_icon Edit Calendar
+
+  = render 'form'
+
+  %p
+    = icon_to "Show", [:admin, @calendar]

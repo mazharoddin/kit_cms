@@ -1,0 +1,4 @@
+%ul(class="topic_list category_#{category.id} category_#{category.name.urlise}")
+  - topics.each do |topic|
+    %li(class="topic topic_#{topic.id} topic_#{topic.name.urlise}")
+      = link_to topic.name, topic.link

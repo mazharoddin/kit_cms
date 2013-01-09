@@ -1,0 +1,49 @@
+#status
+  %h1.status_wicon 
+    - if Preference.get_cached(_sid, "down_for_maintenance_message")
+      %span(style="color: red;")
+        Status
+    - else
+      Status
+  %p
+    System time:
+    %br
+    %em= Time.now.to_formatted_s(:short)
+
+  %p 
+    System:
+    %br
+    %em= @gnric_system.name
+
+  - if can?(:access, :rails_admin)
+    %p
+      Database:
+      %br
+      %em= Preference.sys(_sid).where(:name=>"database_connection").pluck(:value).first rescue "[preference 'database_connection' not set]"
+    
+  %p
+    User:
+    %br
+    %em= current_user.email
+
+  %p
+    Roles:
+    %br
+    %em= current_user.roles.collect {|role| role.name}.join(', ')
+
+
+  %p
+    Stats:
+    %br
+    %em
+      = User.sys(_sid).count
+      Users
+      %br
+      = Page.sys(_sid).count
+      Pages
+      - if feature?('forums')
+        %br
+        = TopicPost.sys(_sid).count
+        Forum Posts
+
+

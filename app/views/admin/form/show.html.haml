@@ -1,0 +1,49 @@
+- content_for :main do
+  
+  %h1.forms_icon Form '#{@form.title}'
+
+  %p
+    %strong Notify:
+    = @form.notify
+
+  %p
+    %strong Redirect To:
+    = link_to @form.redirect_to, @form.redirect_to
+
+  %p
+    %strong Submit Label:
+    = @form.submit_label
+
+  %p
+    %strong URL:
+    = link_to @form.url, @form.url
+
+  %p 
+    %strong Body:
+    %pre(style="overflow: auto; width: 725px; border: thin #AAA solid; padding: 10px; ")
+      = @form.body
+
+  %p
+    %strong Permissions:
+    %br
+    = form_permissions(@form)
+
+  %p
+    %strong Fields:
+    %ul
+      - @form.form_fields.each do |field|
+        %li
+          - if field && field.form_field_type
+            = "#{field.name} [#{field.form_field_type.name}]"
+          - else
+            = "#{field.name} [no longer defined]"
+
+  %p
+    = icon_to "Edit Form", "/admin/form/#{@form.id}/edit"
+    = icon_to "Edit Fields", "/admin/form/#{@form.id}/fields"
+    = icon_to "View Submissions", "/admin/forms/#{@form.id}/list"
+    - if @form.locked_for_delete == 1
+      Cannot Delete (form is locked)
+    - else
+      = link_to "Delete", "/admin/form/#{@form.id}", :confirm => 'Are you sure? This will delete the form definition AND all the data that has been submitted using it', :method => :delete, :class=>"action"
+    = icon_to "List Forms", "/admin/form"

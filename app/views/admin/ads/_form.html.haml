@@ -1,0 +1,96 @@
+%script(type="text/javascript")
+  = render :partial=>"form_scripts.js.erb"
+
+.cms_form
+  = form_for [:admin, @ad], :html=>{:multipart=>true} do |f|
+    = f.error_messages
+    %ul
+      %li
+        = f.label :name
+        = f.text_field :name, :style=>"width: 660px;", :class=>"required"
+        .field_help
+          A name for the ad - not seen by the viewer of the ad
+
+      %li(style="margin-top: 10px;")
+        = icon_to_show('Show Advanced Options', 'extra')
+
+      #extra(style='display: none;')
+        %li
+          = f.label :is_house_ad
+          = f.check_box :is_house_ad
+          .field_help
+            If checked this ad will not count against the concurrency limit for the zone in which it appears. This effectively means that a user can buy an ad in a slot where otherwise this one would have appeared, but if nobody does this ad will be shown.
+
+        %li
+          = f.label :weighting
+          = f.select :weighting, options_for_select(["1","2","3","4","5","6","7","8","9","10"], @ad.weighting), :style=>"width: 200px;", :class=>"number required"
+          .field_help
+            The relative frequency this ad will appear compared to other possible ads.  Default is 5. An ad with a weighting of 10 will appear approximately twice as often as an ad with a weight of 10 or ten times as often as an ad with a weight of 1.  Put another way, if you had one ad with a weight of 2 and another ad with a weight of 8, the first ad with appear 20 times in 100 impressions, the second would appear 80 times in that same 100 impressions.
+
+        %li
+          = f.label :body
+          = f.text_area :body
+          .field_help
+            Only used if the ad is HTML or text based, otherwise, upload the creative file below
+
+      
+        %li
+          = f.label :allow_html
+          = f.check_box :allow_html
+          .field_help
+            Allow HTML to be used in the Body of the ad. Without this HTML will not be display.
+
+
+      %li
+        = f.label :ad_zones
+        = select_tag :ad_zones, options_from_collection_for_select(AdZone.sys(_sid).includes(:ad_unit).order(:name).all, :id, :display_name, @ad.ad_zones_ads.collect { |a| a.ad_zone_id} ),{:class=>"required", :multiple=>true, :size=>8}
+        .field_help
+          The zones in which this ad can appear. You must select at least one and they must all be the same size.  To select several with a mouse, hold down CTRL, or CMD on a Mac
+
+      %li
+        = f.label :start_date
+        = f.text_field :start_date, :style=>"width: 200px;", :class=>"required"
+        .field_help
+          The date the ad will start appearing
+
+      %li
+        = f.label :end_date
+        = f.text_field :end_date, :style=>"width: 200px;", :class=>"required"
+        .field_help
+          The date the ad will end appearing
+
+      %li
+        = f.label "User EMail"
+        = text_field_tag :email, @ad.user ? @ad.user.email : '', :style=>"width: 200px;", :class=>"required"
+        = f.hidden_field :user_id
+        .field_help
+          The owner of the ad.  Start typing part of their email address to see a list of matching users.
+
+      %li
+        = f.label :creative
+        = f.file_field :creative
+
+      %li
+        = f.label :link
+        = f.text_field :link
+        .field_help
+          Optional.  If present, should be a full URL, e.g. http://www.dsc.net or a relative URL to a page on this site, e.g. /about-us
+
+      %li
+        = f.label :price_paid
+        = f.text_field :price_paid, :style=>"width: 200px;", :class=>"number"
+        .field_help
+          The price of the ad
+
+      %li
+        = f.label :paid_at
+        = f.text_field :paid_at, :style=>"width: 200px;"
+        .field_help 
+          The date the ad was paid for, if it has been 
+
+      %li
+        = f.label :notes
+        = f.text_area :notes
+
+      %li
+        = gnric_submit "Save"

@@ -1,0 +1,7 @@
+page.replace_html('assets', render(:partial=>"/assets/manager/assets", :locals=>{:assets=>@assets, :selectable=>@selectable}))
+page << "set_fancybox();"
+logger.debug "Popup is #{@popup}"
+page << "set_massselect();" unless @popup.to_s=="1"
+page << "set_editable();"
+page << "hide_wait();"
+

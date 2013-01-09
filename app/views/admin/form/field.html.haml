@@ -1,0 +1,93 @@
+- content_for :page_scripts do
+  var location_fields = [ '#{FormFieldType.where("field_type='location'").pluck(:id).join("','")}' ];
+  function check_field_type() {
+  val = $('#form_field_form_field_type_id option:selected').val();
+  if (jQuery.inArray(val, location_fields)>=0) {
+  $('#geocode').slideDown();
+  }
+  else {
+  $('#geocode').slideUp();
+  }
+
+  return val;
+  }  
+
+  $(document).ready(function() {
+  check_field_type();
+  $('#form_field_form_field_type_id').bind('change', function() {
+  check_field_type();
+  });
+  });
+    
+- content_for :main do 
+
+  %h1.forms_icon Form '#{@form.title}' Field '#{@field.name}'
+
+  = icon_to "Show Form", "/admin/form/#{@form.id}"
+  = icon_to "Show Fields", "/admin/form/#{@form.id}/fields"
+
+  .cms_form
+    = form_for @field, {:url=>"/admin/form/#{@form.id}/field/#{@field.id}", :method=>:post} do |f|
+      %p= f.error_messages
+
+      %p
+        = f.label :name
+        = f.text_field :name
+        .field_help
+          The name of the field will be used as the label for the field.  It may contain spaces and other punctuation.
+
+      %p.advanced
+        = f.label :code_name
+        = f.text_field :code_name
+        .field_help
+          The name by which the field will be referenced.  Must contain only a-z, 0-9 or a hypen.  If left blank this will be automatically generated from the field's name.
+
+      %p
+        = f.label "Type"
+        = f.select :form_field_type_id, options_from_collection_for_select(FormFieldType.order(:name).where(:hidden=>0).all, :id, :name, @field.form_field_type_id)
+        .field_help
+          The type of field; this effects how the field is displayed when the user is creating or editing records
+
+      %p#geocode.advanced
+        = f.label "Fields to geocode"
+        = select_tag :fields_to_geocode, options_from_collection_for_select(@form.geo_codeable_fields, :id, :name, @field.geo_code_from_fields ? @field.geo_code_from_fields.split('|') : ''), {:multiple=>true, :size=>5, :style=>"width: 670px;"}
+
+
+      %p.advanced
+        = f.label "Description"
+        = f.text_area :description
+        .field_help
+          A description of the field's purpose, shown to the user, usually just underneath the field itself
+
+      %p.advanced
+        = f.label "Group"
+        = f.select :form_field_group_id, options_from_collection_for_select(@form.form_field_groups, :id, :name, @field.form_field_group_id), :include_blank=>true
+        = icon_to "New Group", "/admin/form_field_groups/new?form_id=#{@form.id}", false, :target=>"_blank"
+
+      %p.advanced
+        = f.label "Default Value"
+        = f.text_area :default_value
+        .field_help
+          The value to place in the field when the user is creating a new record.
+
+      %p.advanced
+        = f.label "Hidden"
+        = f.check_box :hidden
+        .field_help
+          Show this on forms.
+
+      %p
+        = f.label "Mandatory?"
+        = f.check_box :is_mandatory
+        .field_help
+          If a field is mandatory the user cannot submit the form until a value is entered in this field
+
+      %p
+        = f.label "Display Order"
+        = f.text_field :display_order
+
+      %p
+        = gnric_submit "Save"
+
+
+

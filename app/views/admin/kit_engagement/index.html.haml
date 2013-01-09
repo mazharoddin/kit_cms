@@ -1,0 +1,23 @@
+- content_for :main do
+
+  %h1.engage_icon Engagements
+
+  = paginate @engagements
+
+  %table.loosen
+    %tr
+      %th ID
+      %th User
+      %th Type
+      %th At
+      %th Value
+    - @engagements.each do |engagement|
+      %tr
+        %td= engagement.id
+        %td= (engagement.kit_session && engagement.kit_session.user) ? (link_to engagement.kit_session.user.email, "/admin/user/#{engagement.kit_session.user_id}") : "not logged in" 
+        %td= engagement.engage_type
+        %td= engagement.created_at.to_s(:short)
+        %td= link_to_if engagement.value.starts_with?('/'), engagement.value, engagement.value
+
+  = paginate @engagements
+

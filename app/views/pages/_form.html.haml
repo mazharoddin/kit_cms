@@ -1,0 +1,128 @@
+= js_form_validation("#pageinfo form")
+
+- content_for :page_scripts do
+  = render :partial=>"page_scripts.js"
+
+.field_help(style="margin-bottom: 10px;")
+  Information about the page.  There are several required fields on this form, but you only need to type in one - the title - then choose a template from the list of available ones and the rest will be be created automatically..
+
+- unless @page.new_record?
+  = icon_to "Cancel Changes", "/page/#{@page.id}/info", false, :style=>"display: inline-block; margin-bottom: 10px;"
+  and go back to Page Info
+
+#preview
+  #search_preview_link
+    = icon_to_function "Show Google Search Results Live Preview", "$('#google').slideDown(); $('#search_preview_link').hide();", false, {:style=>"margin-top: 5px; margin-botom: 20px; display:inline-block;"}
+    .field_help
+      Preview how this page might look when it appears in Google's search results.
+
+  = render :partial=>"google_preview"
+
+  - simple_mode = pref('advanced_mode')!='advanced'
+
+
+#pageinfo.cms_form(style="margin-bottom: 10px;")
+  = form_for @page do |f|
+    %ul
+      = error_messages_for :page
+
+      - has_cat = params[:cat_id]
+      
+      - if @page.copy_of
+        = f.hidden_field :copy_of
+
+      - if @page.new_record? 
+        - category_visible = !simple_mode || @page.category_id==nil || @page.errors[:name]
+        %li(class='select optional more_options' id='article_category_input' style="#{'display: none;' unless category_visible}")
+          %label(for='article_category_id') Category
+          = text_field_tag "category_filter", '', {"data-focus"=>has_cat ? '':'special'}
+          -  cat_options = page.category_id ?  "<option value='#{page.category.id}'>#{page.category.path}</option>" :  options_from_collection_for_select(Category.order('name').sys(_sid).all, :id, :name) 
+          = select_tag "page[category_id]", cat_options.html_safe
+          %br
+          .field_help
+            Enter any part of the name of the desired category
+          #category_warning
+      - else 
+        %script(type='text/javascript')
+          current_category = "#{j @page.category.path}";
+      %li
+        %label(for="page_title" class="required") Title
+        = f.text_field :title, {:class=>"wide", "data-focus"=>has_cat ? "special" : "", "data-default"=>"Browser title; mixed case, can contain any characters", "data-hintimage"=>"page_title", :class=>"required", :style=>"width: 650px;"}
+        .field_help
+          Required.  This appears in the browser as the title of the page.  It may appear in the page too, depending on the page template.  It is also used by search engines.  
+          = link_to "More help on choosing a good page title", "/db/help/seo-content"
+
+      - if (@page.new_record? || @page.page_contents.size==0) 
+        %li
+          %label(for="page_template" class="required") Template
+          - if @page.copy_of
+            = f.hidden_field :page_template_id
+            = @page.page_template.name
+          - else
+            = f.select :page_template_id, options_from_collection_for_select(PageTemplate.sys(_sid).where(:hidden=>0).where(:is_mobile=>0).order(:display_order).all, "id", "name", @page.page_template_id), {:include_blank=>true}, {:class=>"required"}
+            .field_help
+              The template selected determines what goes on the page - the layout of the page and the parts of it that you can edit
+   
+      - if simple_mode
+        .top_space
+          = icon_to_function("Show More Options", "$('.more_options').show();") 
+
+      .more_options(style="#{'display: none;' if simple_mode && !@page.errors[:name]}")
+        %li
+          %label(for="page_name" class="required") Name
+          = f.text_field :name, {:class=>"wide", "data-default" => "File name; letters, numbers and hyphens only", "data-hintimage"=>"page_title", :class=>"required"}
+          #page_name_value
+          .field_help
+            Required. This, together with the category, forms the URL for the page. The user will see this in the address bar of their browser. Search engines use this to help determine what the page is about.  It will be automatically created based on the page title, but you can change it if you wish.
+            = link_to "More help on choosing a good page name", "/db/help/seo-content"
+
+          #page_name_change_warning(style="display: none; border: thin red solid; margin-top: 10px; margin-right: 20px; padding: 10px;")
+            You have changed the page name.  Any links to the original page name will no longer work.  This could mean broken links and if third parties have linked to your page your Search Engine placements may be poorer.  If you wish you can create a redirection from the old pagename to the new one.
+            %br
+            %label(for="create_link") Create redirection from old page name to new
+            Create Redirection:
+            = check_box_tag "redirection"
+
+        
+      .more_options(style="#{'display: none;' if simple_mode}")
+        %li
+          %label(for="page_status_id" class='required') Status
+          - Status.sys(_sid).order(:order_by).each do |status|
+            %label(for="#{status.id}" class="radio")
+              = status.name.titleize
+            = f.radio_button :status_id, status.id
+
+        %li
+          %label(for="page_tags") Tags
+          = f.text_area :tags
+          .field_help
+            Optional. These tags are optional and free from any restrictions. Users do not see them, but they are indexed so editors can use them for searching.
+
+        %li		
+          %label(for="page_meta_description") Meta Description
+          = f.text_area :meta_description
+          .field_help
+            Optional. The user doesn't normally see this (they can, if they use the View Source function in their browser) but some search engines use it to display to the user in their search results.
+            = link_to "More help on writing a good meta description", "/db/help/seo-content"
+
+        %li
+          %label(for="page_keywords") Meta Keywords
+          = f.text_area :meta_keywords
+          .field_help
+            Optional. The user doesn't normally see this (they can, if they use the View Source function in their browser). In the past search engines used them but these days it is thought that none do.  Effort would be better spent on the other elements of the page, but you can enter them if you wish and they probably will do no harm.
+            = link_to "More help on meta keywords", "/db/help/seo-content"
+
+        %li.advanced
+          %label(for="page_header") Header HTML
+          = f.text_area :header
+          .field_help
+            Optional.  Anything included here will be inserted in the page's &lt;head&gt; section. Typical content might be styles or javascript.
+
+    = gnric_submit "Save"
+    - unless @page.new_record?
+      = icon_to "Cancel Changes", "/page/#{@page.id}/info" 
+      and go back to Page Info
+	
+	
+            
+

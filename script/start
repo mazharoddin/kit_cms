@@ -1,0 +1,10 @@
+#!/bin/sh
+
+osascript -e 'tell app "Terminal"
+    do script "~/dev/gnric/vendor/es/bin/elasticsearch -f"
+end tell'
+
+source "$HOME/.rvm/scripts/rvm"
+
+cd ~/dev/gnric_sites/$1
+rails s

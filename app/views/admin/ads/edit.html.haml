@@ -1,0 +1,9 @@
+- content_for :main do 
+  
+  %h1.ads_icon Edit Ad "#{@ad.name}"
+
+  = render 'form'
+
+  %p
+    = icon_to "Show", [:admin, @ad]
+    = icon_to "Ads", admin_ads_path

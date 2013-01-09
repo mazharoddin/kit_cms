@@ -1,0 +1,137 @@
+
+#menu
+  %ul#bar(style="display: none")
+    %li.none
+      %a(href="/")
+        = image_tag "/assets/gnric/icons/white/16/home_icon&16.png", :id=>"menu_home_img"
+    %li.first
+      %a(href='#') Content
+      #dropdown_one.dropdown
+        %p
+          %a.browse_wicon(href="/pages") Browse/Search Pages
+        %p
+          %a.new_doc_wicon(href='/pages/new') Create Page
+        - if feature?("analytics")
+          %p
+            - if Preference.get_cached(_sid, 'google_api_browser_key').not_blank?
+              %a.analytics_wicon(href='/db/analytics') Analytics
+            - else
+              %a.analytics_wicon(href='http://www.google.com/analytics') Analytics
+        - if feature?("experiments")
+          %p
+            %a.experiments_wicon(href="/admin/experiments") Experiments
+          %p
+            %a.goals_wicon(href="/admin/goals") Goals
+      
+    - if feature?("forums") || feature?("newsletters") || feature?("comments")
+      %li
+        %a(href="#") Community
+        .dropdown
+          - if feature?("forums")
+            %p
+              %a.forum_wicon(href="/forums") View Forums
+            %p
+              %a.forum_wicon(href="/forums/moderate") Moderate Forums
+            %p
+              %a.forum_wicon(href="/admin/forums") Create/Edit Topics
+          - if feature?("newsletters")
+            %p
+              %a.newsletter_wicon(href="/admin/newsletters") Newsletters
+          - if feature?("engagement")
+            %p
+              %a.engage_wicon(href="/admin/engagements") Engagements
+          - if feature?("comments")
+            %p
+              %a.user_wicon(href="/admin/dashboard/user_comments") User Comments
+          - if feature?('mail_chimp')
+            %p
+              %a.newsletter_wicon(href="/admin/mailchimp") Mailchimp
+
+    %li
+      %a(href="#") Users
+      .dropdown
+        %p
+          %a.user_wicon(href="/admin/users") Users
+        - if feature?("groups")
+          %p.advanced
+            %a.group_wicon(href="/admin/groups") Groups
+        - if feature?("user_attributes")
+          %p.advanced
+            %a.attributes_wicon(href="/admin/users/attributes") User Attributes
+    %li
+      %a(href="#") Modules
+      .dropdown
+        %p
+          %a.file_wicon(href="/assets") Files & Images
+        - if feature?("galleries")
+          %p
+            %a.gallery_wicon(href="/admin/galleries") Galleries
+        - if feature?("forms")
+          %p
+            %a.forms_wicon(href="/admin/forms") Forms
+        %p
+          %a.snippets_wicon(href="/admin/snippet") Reuseable Snippet
+        - if feature?("calendars")
+          %p
+            %a.calendar_wicon(href="/admin/calendars") Calendar/Events
+        %p.advanced
+          %a.block_wicon(href="/admin/block_instances") Block Instances
+        %p.advanced
+          %a(href="/admin/views") Views
+        - if feature?("orders")
+          %p
+            %a.order_wicon(href="/admin/orders") Orders
+        - if feature?("ads")
+          %p
+            %a.ads_wicon(href="/admin/advertisments") Advertisments
+        %p.advanced
+          %a.menu_wicon(href="/menus") Menus
+
+    - if can?(:use, :design) 
+      %li
+        %a(href="#") Design
+        .dropdown
+          %p
+            %a.layout_wicon(href="/admin/layouts") Layouts
+          %p
+            %a.pagetemplate_wicon(href="/admin/page_templates") Templates
+          %p
+            %a.stylesheets_wicon(href="/admin/html_assets") HTML Assets (js & css)
+          %p
+            %a.block_wicon(href="/admin/blocks") Blocks
+
+    %li
+      %a(href="#") System
+      .dropdown
+        %p.advanced
+          %a.mappings_wicon(href="/admin/mapping") Mappings (URLs)
+        %p
+          %a.activity_wicon(href="/admin/dashboard/activity") Activity
+        %p.advanced
+          %a.forms_wicon(href="/admin/form_field_types") Field Types
+        - if can?(:access, :sys_admin)
+          %p.advanced
+            %a(href="/admin/system") System Settings
+        %p
+          %a(href="http://clients.dsc.net") Issues
+        - if can?(:access, :sys_admin) 
+          %p 
+            %a(href="/admin/dashboard/errors") Errors
+          %p
+            %a(href="/admin/dashboard/logfile") Log File
+        %p
+          %a.help_wicon(href="/db/help") Help
+
+    %li
+      %a(href="#") Account
+      .dropdown
+        %p
+          %a.account_wicon(href="/users/edit") Your Account
+        %p
+          %a.preferences_wicon(href="/admin/preference") Dashboard Preferences
+        %p
+          %a(href="/users/sign_out") Sign Out
+
+    %li(style="text-align: right;")
+      %a(href="/db")
+        = image_tag "/assets/dsc.gif", :class=>'dsc'

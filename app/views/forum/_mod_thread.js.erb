@@ -1,0 +1,98 @@
+function lock_thread(lock) {
+  $.ajax({
+    url: "/forums/lock/<%= "#{@thread.id}/" %>" + lock,
+  dataType: "script",
+  type: "post"
+  });
+}
+
+function delete_post(thread_id, post_id, action, extra) {
+  $.ajax({
+    url: "/forums/post/" + post_id + "/" + action + "?" + extra,
+    dataType: "script",
+    type: "delete"
+  });
+}
+
+function done_delete(id, visible) {
+  if (visible==0) {
+    $('#delete_' + id).hide();
+    $('#undelete_' + id).show();
+    if (!$('#body_'+id).hasClass('hidden_thread_title')) {
+      $('#body_'+id).addClass('hidden_thread_title');
+    } 
+  }
+  else {
+    $('#delete_' + id).show();
+    $('#undelete_' + id).hide();
+    if ($('#body_'+id).hasClass('hidden_thread_title')) {
+      $('#body_'+id).removeClass('hidden_thread_title');
+    } 
+  }
+  $('#mod_comment_'+id).hide();
+  $('#mod_button_'+id).show();
+}
+
+var editing_id = null;
+
+function edit_post(thread_id, post_id) {
+  if (editing_id!=null) {
+    $('#popup_form').remove();
+  }
+  body = $('#body_'+post_id);
+  body.append('<div id="popup_form"></div>');
+  div = $('#popup_form');
+
+ div.append('Post: <textarea style="width:95%;" rows="18" id="topic_post_body_mod"></textarea>');
+  markdown_editor('#topic_post_body_mod');
+  div.append('Comment: <textarea style="width:95%;" rows="6" id="comment"></textarea>');
+  div.append('<br/><input type="button" onClick="save_edit();" value="Save"/>');
+  $('#topic_post_body_mod').load("/forums/post/"+post_id);
+
+  editing_id = post_id;
+}
+
+
+function save_edit() {
+  var id = editing_id;
+  var body = $('#topic_post_body_mod').val();
+  var comment = $('#comment').val();
+  $('#mod_button_'+id).show();
+  $('#mod_comment_'+id).hide();				
+  $('#popup_form').remove();
+  editing_id = null;
+
+  $.ajax({
+    type: 'put',
+    url: '/forums/post/' + id,
+    data: { body: body, comment: comment },
+    success: function(data) {
+      $('#body_'+id).html( data.bod );
+      $('#edits_'+id).html( data.edits );
+    }
+  });
+}
+
+function show_mod_comments(post_id) {
+  $('#mod_button_'+post_id).hide();
+  $('#mod_comment_'+post_id).load("/forums/comments/" + post_id);
+  $('#mod_comment_'+post_id).show();
+}
+
+
+var modding_post_id = null;
+
+function mod_spam(post_id) {
+  modding_post_id = post_id;
+  $('#mod_spam_popup').dialog('open');
+}
+
+function spam(thread_id, mode) {
+  $('#mod_spam_popup').dialog('close');
+  delete_post(thread_id, modding_post_id, 0, mode);
+}
+
+
+$(document).ready(function() {
+  $('#mod_spam_popup').dialog({autoOpen: false, modal:true});
+});

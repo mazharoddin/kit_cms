@@ -1,0 +1,24 @@
+- if current_user && current_user.admin?
+  .mod_options(style="margin-top: 20px;")
+    = link_to "Edit", record.form.url+"?edit=#{record.id}"
+    - if record.visible==0
+      HIDDEN
+      = link_to "Show This Entry", "/admin/form/submission/#{record.id}/showhide/1", :method=>:post
+    - else
+      = link_to "Hide This Entry", "/admin/form/submission/#{record.id}/showhide/0", :method=>:post
+    = link_to "Permanently Delete", "/admin/form/submission/#{record.id}?after=/", :method=>:delete, :confirm=>"Are you sure?  This cannot be undone."
+    = link_to "Permanently Delete and Block User", "/admin/form/submission/#{record.id}?block=1&after=/", :method=>:delete, :confirm=>"Are you sure?  This cannot be undone."
+
+.form_record(class="form_#{record.form.title.urlise} form_#{record.form.id} submission_id_#{record.id}")
+  - record.form.form_field_groups.each do |group|
+    - next if options[:skip_groups] && options[:skip_groups].include?(group.name)
+    .group(class="group_#{group.name.urlise}") 
+      .group_name= group.name
+      - group.form_fields.each do |field|
+        = render partial:"form/record_field", locals:{field:field, options:options, record:record}
+
+  .group(class="group_nogroup")
+    - record.form.form_fields.where(:form_field_group_id=>nil).each do |field|
+      = render partial:"form/record_field", locals:{field:field, options:options, record:record}
+
+

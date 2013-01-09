@@ -1,0 +1,12 @@
+Move Thread To:
+%ul
+  - TopicCategory.sys(_sid).order(:name).all.each do |category|
+    %li 
+      = category.name
+    %li
+      %ul
+        - category.topics.order(:name).all.each do |topic|
+          - next if topic.id == @thread.topic_id
+          %li
+            = link_to topic.name, "/forums/move_thread/#{@thread.id}/#{topic.id}", :confirm=>"Are you sure you want to move this thread to that topic?", :method=>:post
+

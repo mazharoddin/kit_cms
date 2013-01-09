@@ -1,0 +1,9 @@
+- content_for :main do
+
+  %h1.pagetemplate_icon Edit Page Template
+  
+  = render 'form'
+
+  %p
+    = icon_to "Show", [:admin, @page_template]
+    = icon_to "List", admin_page_templates_path

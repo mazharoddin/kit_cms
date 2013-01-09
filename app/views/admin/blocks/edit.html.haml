@@ -1,0 +1,9 @@
+- content_for :main do
+
+  %h1.block_icon Edit Block '#{@block.name}'
+
+  = render 'form'
+
+  %p
+    = icon_to "Show", [:admin, @block]
+    = icon_to "List", admin_blocks_path

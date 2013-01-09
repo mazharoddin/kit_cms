@@ -1,0 +1,10 @@
+- content_for :main do
+  
+  %h1.forms_icon Field Types
+
+  = render 'form'
+
+  %p
+    = icon_to "Show", "/admin/form_field_types/#{@form_field_type.id}"
+  
+    = icon_to "Field Types", "/admin/form_field_types"

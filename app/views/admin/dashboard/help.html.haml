@@ -1,0 +1,23 @@
+- content_for :main do
+  #db-page.help_page
+    %h1.help_icon
+      = link_to "Help", "/db/help"
+      
+      = @help.name
+
+    = form_tag "/db/help", :id=>"search_form", :method=>:get do 
+      Search Help: 
+      = text_field_tag :search
+      = icon_to_function "Search", "$('#search_form').submit();" 
+      = icon_to "Reset", "/admin/helps"
+
+    = render :inline=>@help.body.html_safe rescue ""
+
+    = link_to "Help Index", "/db/help"
+
+  - if can?(:manage, :help)
+    .spacer(style="margin-top: 20px;")
+      = icon_to "Edit", "/admin/help/#{@help.id}/edit"
+      = icon_to "Help Editor Index", "/admin/helps"
+
+

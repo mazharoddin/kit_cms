@@ -1,0 +1,9 @@
+%tr(id="term_#{term.id}")
+  %td
+    = term.page_template_term.name
+    = ":"
+  %td
+    = term.value
+  %td
+    = link_to "Delete", "/page/#{@page.id}/terms/#{term.id}", :method=>:delete, :class=>"action", :remote=>true
+

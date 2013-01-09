@@ -1,0 +1,36 @@
+- content_for :main do
+  
+  %h1.forms_icon Field Group '#{@form_field_group.name}' for Form '#{@form_field_group.form.title}'
+
+  .cms_form
+    %p
+      %label Name
+      = @form_field_group.name
+
+    %p
+      %label Top of group Text
+      = @form_field_group.intro
+
+    %p
+      %label Bottom of group Text
+      = @form_field_group.outro
+
+    %p
+      %label Class
+      = @form_field_group.klass
+
+    %p
+      %label Display Order
+      = @form_field_group.order_by
+
+    %p
+      %label Last Updated
+      = time_ago_in_words(@form_field_group.updated_at)
+
+  
+  %p
+    = icon_to "Edit", edit_admin_form_field_group_path(@form_field_group)
+    = link_to "Delete", [:admin, @form_field_group], :confirm => 'Are you sure?', :method => :delete, :class=>"action"
+    = icon_to "Form Groups", admin_form_field_groups_path + "?form_id=#{@form.id}"
+    = icon_to "Form", "/admin/form/#{@form.id}"
+    = icon_to "Form Fields", "/admin/form/#{@form.id}/fields"

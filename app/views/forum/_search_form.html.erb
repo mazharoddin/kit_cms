@@ -1,0 +1,11 @@
+<div style="margin: 20px 0;">
+  <%= form_for :search, :url=>"/forums/search", :method=>:get do |f| %>
+  <span id='enter_for'>
+    Search for: <%= text_field_tag :for, params[:for] %>
+  </span>
+  <span id='enter_display_name'>
+    By poster (optional): <%= text_field_tag :display_name, params[:display_name] %>
+  </span>
+	<%= submit_tag "Search" %>
+  <% end %>
+</div>

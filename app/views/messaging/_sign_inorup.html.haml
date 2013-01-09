@@ -1,0 +1,24 @@
+= form_tag "/users/sign_in" do
+  %ul
+    %li
+      %label(for="user[email]")
+        Email:
+      = text_field_tag "user[email]"
+    %li
+      %label(for="user[password]")
+        Password:
+      = password_field_tag "user[password]"
+    %li(class="hide_register")
+      = submit_tag "Sign In"
+    %li(class="hide_register")
+      = button_to_function "Need to register?", "need_to_register();"
+    %li(class="hidden enable_register")
+      Fill in your email address and pick a password above, then create a nickname below 
+    %li
+      %label(for="display_name" class="disabled enable_register")
+        Display Name:
+      = text_field_tag "display_name", params[:display_name], {:disabled=>true}
+      #display_name_message
+    %li(class="hidden enable_register")
+      = submit_tag "Register"
+

@@ -1,0 +1,4 @@
+<% data = render(:partial=>"/asset/asset_list", :locals=>{:mode=>"popup"}) %>
+
+$('#files').html("<%= j data %>");
+    

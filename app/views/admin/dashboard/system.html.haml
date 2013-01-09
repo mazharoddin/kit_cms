@@ -1,0 +1,65 @@
+- content_for :main do
+  %h1 System Settings
+
+  %ul.settings
+    %li
+      .cms_form
+        = form_tag "/admin/dashboard/maintenance" do
+          Down for maintenance message:
+          = text_area_tag :message, params[:message] || Preference.get_cached(_sid, "down_for_maintenance_message")
+          %br
+          = gnric_submit "Save"
+          %br
+          Note: Setting a message will cause the site to be "down for maintenance".  To bring the site back up, clear the message.
+
+    - if can?(:access, :rails_admin) 
+      %li(style="margin-bottom: 10px;")
+        Reindex content:
+        = icon_to "Reindex", "/admin/dashboard/reindex", false, :method=>:post, :confirm=>"Are you sure?  This can take a long time if there is lots of content and searching won't work properly whilst it's taking place."
+
+      %li
+        Integrity check:
+        = icon_to "Run", "/admin/integrity?system_id=#{_sid}"
+        = icon_to "Run with Forums", "/admin/integrity?system_id=#{_sid}&forums=1"
+      
+      %li(style="margin-top: 10px; margin-bottom: 20px;")
+        Create New System:
+        = icon_to "Create...", "/admin/dashboard/build_system"
+    
+    - if true #feature?('cookie_compliance')
+      %li
+        %span.action_label
+          %b
+            Cookie authorisation dropdown (EU Compliance): 
+
+          = bold_if link_to("Show", "/admin/system/eu_cookies/true", :method=>:post), sys_pref("eu_cookies")=="true"
+          |
+          = bold_if link_to("Don't Show", "/admin/system/eu_cookies/false", :method=>:post), sys_pref("eu_cookies")=="false"
+
+    - if feature?('mobile_templates')
+      %li
+        %span.action_label
+          %b Use Mobile Version of pages by default:
+          = bold_if link_to("Yes", "/admin/system/mobile_dif_by_default/true", :method=>:post), sys_pref("mobile_dif_by_default")=="true"
+          |
+          = bold_if link_to("No", "/admin/system/mobile_dif_by_default/false", :method=>:post), sys_pref("mobile_dif_by_default")=="false"
+
+
+  .clearfix
+
+  %h3 Preferences
+
+  %table.loosen
+    %tr
+      %th Name
+      %th Value
+      %th Updated
+    - @preferences.each do |pref|
+      %tr
+        %td(nowrap)= pref.name
+        %td
+          .top_space
+            = best_in_place pref, :value, :path=>"/admin/system/#{pref.name}"
+        %td(nowrap)= pref.updated_at.to_formatted_s(:short)
+
+

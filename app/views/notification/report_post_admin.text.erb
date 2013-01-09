@@ -1,0 +1,10 @@
+The following post has been reported by <%= @user %> whose email address is <%= @email %>.
+
+Thread Title:  <%= @post.topic_thread.title %>
+
+Post By: <%= @post.created_by_user.display_name %> <%= @post.created_by_user.email %>
+
+Post: 
+<%= @post.body %>
+
+Link to post: <%= Preference.getCached(@sid, "host") %><%= @post.link %>

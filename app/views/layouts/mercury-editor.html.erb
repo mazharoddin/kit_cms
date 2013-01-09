@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0">
+    <%= csrf_meta_tags %>
+    <title><%= @page.title %></title>
+    <script type="text/javascript">
+      var page_id = <%= @page.id %>;
+      var is_draft = <%= params[:draft] ? 'true' : 'false' %>;
+      </script>
+
+      <%= stylesheet_link_tag    'mercury', 'mercury_editor'  %>
+      <%= javascript_include_tag 'gnric/mercury-editor' %>
+      <%= javascript_include_tag 'gnric/utilities.js' %>
+      <%= javascript_include_tag 'gnric/application-edit' %>
+    </head>
+    <body>
+    <script type="text/javascript">
+        <% unless current_user %>
+        delete window.Mercury.config.toolbars.primary.dashboard;
+        delete window.Mercury.config.toolbars.primary.info;
+        delete window.Mercury.config.toolbars.primary.notesPanel;
+        delete window.Mercury.config.toolbars.primary.related;
+        <% end %>
+        parent.Mercury.on('ready', function() {
+          <%= render :partial=>"/pages/init_snippets" %>
+          editor_notify("edit"); 
+          start_timer();
+          setup_status_message();
+          set_status_message("Editor ready");
+          start_autosave();
+
+          });
+        parent.Mercury.on('unload', function() {
+          console.debug("Unloading notification...");
+          editor_notify("finished");
+            });
+
+        new Mercury.PageEditor(null, { saveStyle: null, saveMethod: 'POST', visible: true });
+      </script>
+
+    Editor Loading... if this message appears for longer than 30 seconds please refresh the page.  If it still won't load, verify that you are not stopping Javascript from being used.  If you're allowing Javascript and it still won't load, try disabling any plugins or extensions you are using. The editor usually works very well in Google Chrome, Firefox and Safari.  Internet Explorer is not supported. 
+
+  </body>
+</html>

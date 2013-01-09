@@ -1,0 +1,12 @@
+- right_column 
+
+- content_for :main do
+  %h1{:style=>"margin-bottom: 20px;"} Newsletters
+
+  = link_to "Back to Newsletters", "/admin/newsletters"
+  %h3 
+    Subject
+    = @newsletter.name
+
+  %h3 Body
+  = Mail.new(@newsletter.raw_mail).body

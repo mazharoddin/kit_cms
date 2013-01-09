@@ -1,0 +1,68 @@
+<% content_for :main do %>
+
+<h2>Users</h2>
+<div class="cms_form">
+  <form name="form" method="get" class="cr_submit">
+    <table>
+      <tr>
+        <td valign='top'>Email Address or name:</td>
+        <td><input type='text' name="for" id="search_for" value="<%= params[:for] %>" />
+          <div class="field_help">
+            Optional: A full or partial name or email address
+        </div>
+      </td>
+      </tr>
+      <tr>
+        <td valign='top'>ID:</td>
+        <td><input type='text' name="user_id" value="<%= params[:user_id] %>" />
+          <div class="field_help">
+            Optional: A user ID - if you enter this any other criteria are ignored
+        </div>
+      </td>
+    </tr>
+
+    <% if Preference.get_cached(_sid, 'show_groups')=='true' %>
+      <tr>
+        <td valign='top'>Group:</td>
+        <td>
+            <select name="grp_id">
+              <option></option>
+              <%= options_from_collection_for_select(Group.order(:name).all, "id", "name", params[:grp_id]) %>
+            </select>
+            <div class="field_help">
+              Optional: a group to which the user(s) belong(s)
+            </div>
+          </td> 
+        </tr>
+    <% end %>
+        <% if UserAttribute.sys(_sid).count > 0 && true %>
+      <tr><td valign='top'><%= select_tag "parameter", options_from_collection_for_select(UserAttribute.sys(_sid).all, 'id', 'name', params[:parameter]), :include_blank=>true %></td>
+        <td><%= text_field_tag "value", params[:value] %>
+          <div class="field_help">
+            Optional: the value for the selected attribute
+        </div></td>
+      </tr>
+      <% end %>
+  </table>
+    <%= gnric_submit "Search" %>
+    <%= gnric_submit "Export" %>
+  </form>
+
+
+  <% if @users != nil  %> 
+  <div style="margin-top: 10px;" id="user-list">
+    <%= paginate(@users) %>
+    <ul class='long_list'>
+      <% @users.each do |user| %>
+        <% next if user.id.to_i==1 %>
+        <li>
+        <%= link_to user.email, "/admin/user/#{user.id}" %> <%= user.display_name %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+
+  <% end %>
+</div>
+<% end %>

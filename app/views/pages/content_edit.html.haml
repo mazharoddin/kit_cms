@@ -1,0 +1,13 @@
+- content_for :main do 
+
+  %h1.page_icon Edit '#{@page_content.field_name}' on '#{@page.name}'
+
+  Note: No validation is performed on this input, nor is any history recorded.
+  .cms_form
+    = form_for @page_content, :url=>"/page/#{@page.id}/content/#{@page_content.id}", :method=>:post do |f|
+
+      = ace_editor('html', :page_content, :value, f)
+
+      .div
+        = gnric_submit "Save" 
+        = icon_to "Cancel", "/page/#{@page.id}/contents"

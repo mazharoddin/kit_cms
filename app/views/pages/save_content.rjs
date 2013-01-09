@@ -1,0 +1,2 @@
+page << "$('#edit_status').html('<span class=\"info\">Saved</span');"
+page << "$('#edit_status').show();"

@@ -1,0 +1,66 @@
+- content_for :page_scripts do
+  = render(partial: "page_scripts.js")
+  
+- content_for :main do 
+  %h1.forum_icon Topic '#{@topic.name}'
+
+  .spacer(style="margin-bottom: 10px;")
+    = icon_to "Topic List", "/admin/forums" 
+    = icon_to "Browse This Topic", @topic.link
+
+  %ul.settings
+    %li(class="actions clearfix")
+      %div(class="action_label")
+        <b>Visibility:</b> Topic is #{@topic.is_visible? ? "Visible" : "NOT visible"}
+      = link_to @topic.is_visible? ? "Make NOT Visible" : "Make Visible", "/admin/forums/topic/#{@topic.id}/visible/#{!@topic.is_visible?}", :class=>"action", :method=>:post
+    %li
+      .field_help A visible topic can be seen but a not visible topic cannot be viewed or posted to by any users other than administrators. 
+    %li(class="actions clearfix")
+      %div(class="action_label")
+        <b>Locked:</b> Topic is #{@topic.is_open? ? "Open" : "Closed"} to new posts     
+      = link_to @topic.is_open? ? "Close" : "Open", "/admin/forums/topic/#{@topic.id}/open/#{!@topic.is_open?}", :class=>"action", :method=>:post
+    %li
+      .field_help A closed topic will not accept new posts
+    %li
+      <b>Thread count:</b> 
+      - if @topic.thread_count
+        #{@topic.thread_count} 
+      - else
+        None yet
+    %li
+      <b>Last post:</b> 
+      - if @topic.last_post_at
+        #{time_ago_in_words(@topic.last_post_at)} ago at #{@topic.last_post_at}
+      - else
+        No posts yet
+    %li
+      <b>Description:</b> #{@topic.description}
+    %li
+      <b>Topic can be read by:</b> #{@topic.read_visibility}
+    %li
+      <b>Posts can be added by:</b> #{@topic.write_visibility}
+    %li
+      <b>Category:</b> #{@topic.topic_category.name}
+    %li
+      <b>Category can be seen by:</b> #{@topic.topic_category.read_visibility}
+      .field_help As well as permission levels on the topic itself you can also restrict who has access to the category which contains the topic.
+    %li
+      <b>Created:</b> #{time_ago_in_words(@topic.created_at)} ago at #{@topic.created_at}
+    %li
+      <b>Topic comment:</b> #{@topic.topic_comment}
+      .field_help The topic comment is shown to all users at the listing of posts within the topic.
+    %li
+      <b>Display order:</b> #{@topic.display_order}
+      .field_help The smaller the display order number the higher up the list of topics the topic will appear.  The higher the number the lower down the list.
+    %li
+      <b>URL:</b>
+      = link_to Preference.getCached(_sid, "host") + @topic.link, @topic.link
+    %li
+      = image_tag @topic.image.url(:thumb) if @topic.image_file_name.not_blank?
+
+  %div(class="clearfix")
+    = icon_to "Edit Topic", "/admin/forums/topic/#{@topic.id}/edit", "edit", :method=>:get
+    = icon_to "Delete Topic", "/admin/forums/topic/#{@topic.id}", "delete", :method=>:delete, :confirm=>"Are you sure? This will delete not just the topic but ALL the posts within it.  This cannot be undone."
+
+    
+

@@ -1,0 +1,28 @@
+- content_for :main do 
+
+  %h1.block_icon Blocks
+
+  .top_space
+    = icon_to "New", new_admin_block_path
+
+  #blocksearch.top_space
+    = form_tag "/admin/blocks", :method=>:get do 
+      = text_field_tag :for, params[:for]
+      = icon_to_function "Search", "$('#blocksearch form').submit();"
+      = icon_to "Reset", "/admin/blocks"
+  
+  .both_space
+    = paginate @blocks
+
+  %table.loosen
+    %tr
+      %th Name
+      %th Last Edited
+    - for block in @blocks
+      %tr
+        %td= link_to block.name, [:admin, block]
+        %td= time_ago_in_words(block.updated_at) + " ago"
+
+  .top_space
+    = paginate @blocks
+

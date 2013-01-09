@@ -1,0 +1,14 @@
+= icon_to_show("History", "history")
+
+#history(style='display: none;')
+  %strong
+    Previous Versions
+  - data = object.history.order("id desc").page(params[:page]).per(10)
+
+  = paginate data
+  %ul
+    - data.each do |dh|
+      %li
+        = link_to dh.updated_at, "/utility/design_history/#{dh.id}"
+        = dh.user.email rescue ''
+

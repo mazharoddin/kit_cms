@@ -1,0 +1,63 @@
+- content_for :main do 
+  #menus.cms_form
+    %h1.menu_icon Menu "#{@menu.name}"
+
+    %p(style="#{'display: none;' if (@menu_item.errors && @menu_item.errors.size>0) || params[:item_id]}")
+      = icon_to "Back to List", "/menus"
+      = icon_to_show "Add New Menu Item", "add_new"
+
+    #add_new(style="#{'display:none;' unless @menu_item.errors.size>0 || params[:item_id]}")
+      %h3 Add New Item
+      = form_for @menu_item, :url=>"/menu/#{@menu.id}/add?item_id=#{@menu_item.id}" do |f|
+        = f.error_messages
+        - if @menu.can_have_children==1
+          %label
+            Parent Item:
+          = f.select :parent_id, options_from_collection_for_select(MenuItem.where(:parent_id=>0).where(:menu_id=>@menu.id).order(:order_by), :id, :name, @menu_item.parent_id), :include_blank=>true
+          .field_help
+            If the new item is to be a sub-item of another, choose the parent item here.  Leave blank if this new item is to be a "top level" menu item.
+        %label
+          Label:
+        = f.text_field :name, :class=>:wide
+        .field_help
+          The text of the link that the user will see
+        %label
+          Link:
+        = f.text_field :link_url, :class=>:wide
+        .field_help
+          The URL the link points at
+        %label
+          Title:
+        = f.text_field :title, :class=>:wide
+        .field_help
+          The text the user sees when they hover over the link
+        %div(style="margin-top: 10px;")
+          = gnric_submit @menu_item.new_record? ? "Add" : "Save"
+
+    #browser
+
+    #modes(style="margin-top: 20px; margin-bottom: 20px;")
+      = icon_to_function "Edit", "toggle_editing();"
+      = icon_to_function "Reorder", "toggle_sorting(#{@menu.id});"
+      = icon_to_function "Delete", "toggle_delete();"
+
+    = icon_to "Done", "/menu/#{@menu.id}", false, :class=>"done_button hidden"
+
+    #message(style="margin-top: 10px; font-weight: bold; height: 20px;")
+      &nbsp;
+
+
+    %ul#menu_editor(style="margin-left: 0; margin-top: 20px;")
+      - @menu.menu_items.where(:parent_id=>0).order(:order_by).each do |item|
+        %li(id="i_#{item.id}")
+          = render(:partial=>"item", :locals=>{:item=>item})
+          - child = item.children
+          - if child.size==0 && @menu.can_have_children==1
+            %span.reorder(style="display: none;")
+              New Parent:
+              = select_tag("new_parent", options_from_collection_for_select(MenuItem.where(:parent_id=>0).where(:menu_id=>@menu.id).order(:order_by), :id, :name), :include_blank=>true, :class=>"new_parent", :style=>"font-size: 10px;")
+          %ul
+            - if child.size>0
+              - item.children.order(:order_by).each do |sub_item|
+                %li(id="i_#{sub_item.id}")
+                  = render(:partial=>"item", :locals=>{:item=>sub_item})

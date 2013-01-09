@@ -1,0 +1,5 @@
+<% if @category %>
+  $('li#<%= @category.id %> a').text("<%= j @category.name %>");
+<% end %>
+
+show_message('<%= j @message %>');

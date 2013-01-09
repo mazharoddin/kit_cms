@@ -1,0 +1,73 @@
+%script
+  $(document).ready(function() {
+  $('#buy_tickets form').validate({
+  rules: {
+  email: {
+  required: true,
+  email: true,
+  maxlength: 200
+  },
+  name: {
+  required: true,
+  maxlength: 200
+  },
+  terms: {
+  required: true
+  }
+  }
+  });
+  });
+
+
+#buy_tickets
+  = form_tag "/tickets/#{item.class.name}/#{item.id}" do
+
+    = hidden_field_tag :after_url, options[:after_url]
+
+    %p.description
+      - if options[:description]
+        = options[:description]
+
+    %p.quantity
+      %label(for="quantity") 
+        Quantity
+      = select_tag :quantity, options_for_select(options[:min_quantity]..options[:max_quantity], params[:quantity])
+
+      - if options[:show_ticket_warning]==true
+        .ticket_warning
+          There are only #{options[:max_quantity]} tickets remaining
+
+      - if options[:show_tickets_available_minimum] && item.tickets_remaining > options[:show_tickets_available_minimum].to_i
+        .ticket_info
+          = options[:show_tickets_available_message] 
+
+    %p.email
+      %label(for="email")
+        Your Email Address
+      = text_field_tag :email, params[:email]
+
+    %p.firstname
+      %label(for="firstname")
+        Your First Name
+      = text_field_tag :firstname, params[:firstname]
+
+    %p.lastname
+      %label(for="lastname")
+        Your Last Name
+      = text_field_tag :lastname, params[:lastname]
+
+    %p.telephone
+      %label(for="telephone")
+        Contact Telephone
+      = text_field_tag :telephone, params[:telephone]
+
+    - if options[:terms_url]
+      %p.terms
+        %label(for="terms")
+          Accept our 
+          = link_to "Terms and Conditions", options[:term_url], :target=>"_blank"
+        = check_box_tag :terms
+
+    
+    %p.buy_button
+      = submit_tag params[:buy_label] || "Buy Now"

@@ -1,0 +1,23 @@
+%ul#forum_links
+  %li
+    = link_to t("forum.topic_list"), "/forums", :class=>"button"
+  %li
+    = link_to t("forum.recent"), "/forums/recent", :class=>"button"
+  - if current_user
+    %li
+      = link_to t("forum.im_on"), "/forums/threads_im_on", :class=>"button"
+    %li
+      = link_to t("forum.favourites"), "/forums/favourites", :class=>"button"
+  - else
+    %li
+      = link_to t("forum.sign_in"), "/users/sign_in"
+      = t("forum.for_more_options").downcase.html_safe
+
+  - if @mod
+    %li.mod_actions
+      = link_to "Add/modify Categories/Topics", "/admin/forums", :class=>"button"
+  %li.forum_search
+    = form_for :search, :url=>"/forums/search", :method=>:get do |f| 
+      = text_field_tag :for, params[:for] 
+      = submit_tag "Search" 
+

@@ -1,0 +1,53 @@
+#user_preferences
+  
+  %h2 User Preferences
+
+  .profile_link
+    = link_to "View/Edit Profile", "/user/profile"
+
+  %fieldset
+    %legend Forums
+    = form_for @forum_user, :url=>'/user/preferences' do |f|
+      .threads_per_page
+        %label Threads per page
+        = f.select :threads_per_page, options_for_select([10,20,50], @forum_user.threads_per_page) 
+        .description
+          How many threads to show on each page listing threads
+      .posts_per_page
+        %label Posts per page
+        = f.select :posts_per_page, options_for_select([10,20,50], @forum_user.posts_per_page)
+        .description
+          How many posts to show on each page of a thread 
+      .thread_order
+        %label Thread Order
+        Newest First
+        = f.radio_button :thread_order, "desc"
+        Oldest First
+        = f.radio_button :thread_order, "asc"
+        .description
+          The order in which threads are displayed in lists
+
+      .post_order
+        %label Post Order
+        Newest First
+        = f.radio_button :post_order, "desc"
+        Oldest First
+        = f.radio_button :post_order, "asc"
+        .description
+          The order in which posts appear in a thread
+
+      .watch_notifications
+        %label Receive Watch Notifications
+        = f.check_box :receive_watch_notifications
+        .description
+          Do you want to receive an email notification whenever a new post is made on a thread you're watching?
+
+      .save
+        = f.submit "Save"
+
+    .actions
+      = link_to 'My Watched Threads', '/forums/favourites'
+
+
+
+

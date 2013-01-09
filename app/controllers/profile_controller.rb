@@ -1,0 +1,2 @@
+class ProfileController < GnricController
+end

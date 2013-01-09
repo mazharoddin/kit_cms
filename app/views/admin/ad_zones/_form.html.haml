@@ -1,0 +1,62 @@
+= doc_ready("$('.cms_form form').validate();")
+
+.cms_form
+  = form_for [:admin, @ad_zone] do |f|
+    = f.error_messages
+    %ul
+      %li
+        = f.label :name
+        = f.text_field :name, :class=>"required"
+
+      %li
+        = f.label :description
+        = f.text_area :description
+        .field_help
+          Optional description of how and where this zone is used
+
+      %li
+        = f.label "Ad Unit"
+        = f.select :ad_unit_id, options_from_collection_for_select(AdUnit.sys(_sid).order(:name).all, :id, :name, @ad_zone.ad_unit_id), :class=>"required"
+        .field_help
+          The size of the ad zone; to see the definitions, click 
+          = link_to "here", "/admin/ad_units", :target=>"_blank"
+
+      %li
+        = f.label :period
+        = f.select :period, options_for_select(["Hours","Days","Weeks","Months"], @ad_zone.period)
+        .field_help
+          In what unit of time should ads in this zone be sold?  
+
+      %li
+        = f.label :minimum_period_quantity
+        = f.text_field :minimum_period_quantity, :class=>"required number", :style=>"width: 50px;"
+        .field_help
+          What is the minimum number of periods for which an ad in this zone can be sold?  For example, if you select "Weeks" above and enter "2" here, the ad can be purhcased for a minimum of 2 weeks.
+
+      %li
+        = f.label :price_per_period
+        = f.text_field :price_per_period, :class=>"required number", :style=>"width: 50px;"
+        .field_help
+          The price, in pounds, of advertising in this zone for each period
+
+      %li
+        = f.label :concurrency_limit
+        = f.text_field :concurrency_limit, :class=>"required number", :style=>"width: 50px;"
+        .field_help
+          How many ads can be sold for display in this zone at one time? Enter '0' for no limit.
+
+      %li 
+        = f.label "URL Pattern"
+        = f.text_field :url_pattern
+        .field_help
+          Optional. Leave blank for no URL matching, If a block containing this zone appears on a page and the URL of that page matches this pattern then this zone will be displayed.  Use "*" as a wildcard, meaning it will match anything. For example, to match all forums pages, use "/forums/*"
+
+      %li
+        = f.label :priority
+        = f.text_field :priority
+        .field_help
+          Optional, unless using URL Pattern, then mandatory.  If this zone uses a URL pattern and other zones also have patterns that match the current URL, the zone with the highest priority figure will be used
+
+
+      %li
+        = gnric_submit "Save"

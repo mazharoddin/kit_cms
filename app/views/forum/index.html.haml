@@ -1,0 +1,44 @@
+#forums.clearfix
+
+  = render partial:"introduction"
+
+  %ul#categories
+    - @categories.each do |category|
+      - next unless @mod || category.is_open?
+      - next unless level_okay(category.read_access_level)
+      - topics = []
+      - category.topics.each do |topic|
+        - next unless @mod || (topic.is_open? && topic.is_visible? && level_okay(topic.read_access_level))
+        - topics << topic
+
+      - next if topics.size==0
+
+      %li.category(class="category_#{category.name.urlise} category_#{category.id}")
+        - if Preference.get_cached(_sid, "use_forum_topic_categories")!='false' && category.show_title?
+          %h3.name
+            = category.name
+          = category.description
+        %ul.topics
+          - topics.each do |topic|
+            %li.topic(class="topic_#{topic.name.urlise} topic_#{topic.id}")
+              .topic_name
+                = link_to topic.name, topic.link
+              .description
+                = topic.description
+              .thread_count
+                = pluralize(topic.thread_count, t("forum.thread_count"))
+              .post_count
+                = pluralize(topic.post_count, t("forum.topic_post_count"))
+              - if topic.last_post
+                .last_label
+                  = t("forum.last_post")
+                .last_post
+                  = link_to truncate_html(topic.last_post.topic_thread.title, :length=>60, :omission=>'...'), topic.last_post.topic_thread.link_for_post(topic.last_post_id, @user_options, @mod)  if topic.last_post_id
+                .last_poster
+                  = link_to_if pref('forum_users_profile_link', true)=='true', topic.last_post.created_by_user.display_name, "/user/profile/#{topic.last_post.created_by_user_id}" if topic.last_thread
+                  = time_ago_in_words(topic.last_post_at) if topic.last_post_at
+                  ago
+              .image
+                = image_tag topic.image.url(:thumb) if topic.image_file_name 
+
+

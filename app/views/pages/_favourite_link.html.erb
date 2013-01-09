@@ -1,0 +1,7 @@
+<% if current_user %>
+<% if page_url.is_favourite?(current_user) %>
+	FAVOURITE <%= link_to "DELETE", "/pages/favourite/#{page_url.id}/del", {:remote=>true, :method=>:post} %>
+        <% else %>
+          <%= link_to "ADD TO FAVOURITES", "/pages/favourite/#{page_url.id}/add", {:remote=>true, :method=>:post} %>
+<% end %>
+<% end %>

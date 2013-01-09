@@ -1,0 +1,17 @@
+%div(style='background-color: white; margin-top: 10px; padding: 10px;')
+  %h1 Log File
+
+  = form_tag "/admin/dashboard/logfile", :method=>:get do
+    = text_field_tag "grep", params[:grep]
+    = gnric_submit "Grep"
+    = icon_to "Reset", "/admin/dashboard/logfile"
+
+  %pre(style="overflow: auto; line-height: 12px; font-size: 12px; ")
+    - if @output
+      = @output.gsub(/\[\dm(?:.\[\d\dm)?/,'')
+
+    - else
+      - @file.each do |line|
+        = line.gsub(/\[\dm(?:.\[\d\dm)?/,'')
+
+  = icon_to "More", "/admin/dashboard/logfile?lines=#{(params[:lines] || '500').to_i + 500}"

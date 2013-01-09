@@ -1,0 +1,10 @@
+[
+- @category.children.each do |child|
+  {
+  label: "#{child.name}",
+  children: [
+  - child.documents.each do |doc|
+    { label: "#{doc.name}" },
+  ]
+  },
+]

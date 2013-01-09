@@ -1,0 +1,4 @@
+- help = Preference.getCached(_sid, 'show_help', current_user.id)!="false" 
+#gnric_help_link(style="margin-top: 18px; margin-left: 4px;" class="clearfix")
+  = icon_to_function "", "toggle_gnric_help(true);", "help", {"data-showing"=>help, :class=>"field_show_more"}
+  = icon_to "Help", "/db/help", false, :class=>"help", :style=>"margin-left: 18px; float: right;"

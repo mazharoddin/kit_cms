@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  page_template_id: 1
+  form_field_type_id: 1
+  created_by: 1
+  name: MyString
+  system_id: 1
+
+two:
+  page_template_id: 1
+  form_field_type_id: 1
+  created_by: 1
+  name: MyString
+  system_id: 1

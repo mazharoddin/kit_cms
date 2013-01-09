@@ -1,0 +1,127 @@
+$(document).ready(function() {
+  $('#new_topic_post').submit(function() {
+    return validate_post();
+  })
+
+  $("#user_display_name").keyup(function(){
+   if(typeof(window.delayer) != 'undefined')
+      clearTimeout(window.delayer);
+   window.delayer = setTimeout(check_display_name, 250);
+  });
+
+
+  <% if @page_id %>
+    show_post();
+  <% end %>
+
+  markdown_editor('#topic_post_body');
+});
+
+var editing_id = null;
+
+function user_edit_post(post_id) {
+  if (editing_id!=null) {
+    $('#popup_form').remove();
+  }
+  var bod = $('#body_'+post_id);
+  bod.append('<div id="popup_form"></div>');
+  div = $('#popup_form');
+
+  div.append('Post: <textarea style="width:95%;" rows="18" id="topic_post_body_edit"></textarea>');
+  div.append('<br/><input type="button" onClick="user_save_edit();" value="Save"/>');
+  $('#topic_post_body_edit').load("/forums/post/"+post_id);
+  markdown_editor('#topic_post_body_edit');
+  editing_id = post_id;
+}
+
+
+function user_save_edit() {
+  var id = editing_id;
+  var bod = $('#topic_post_body_edit').val();
+  $('#popup_form').remove();
+  editing_id = null;
+
+  $.ajax({
+    type: 'put',
+    url: '/forums/post/' + id,
+    data: {body: bod}, 
+    success: function(data) {
+      $('#body_'+id).html( data.bod );
+      $('#edits_'+id).html( data.edits );
+    }
+  });
+}
+
+function check_display_name() {
+  var name = $('#user_display_name').val();
+
+  if (name!='') {
+    $.post("/user/check_display_name", { "name" : name }, function(data) {
+      if (data==='') {
+        
+      } 
+      else {
+        $('#display_name_message').html(data); 
+      }
+    });
+  }
+}
+
+
+function preview_post() {
+  var bod = $('#topic_post_body').val();
+  $.post('/forum/post/preview', { body : bod }, function(data) {
+    $('#preview').html(data);
+    $('#preview').slideDown();
+  });
+}
+function send_this_form() {
+  $('.this_post_form').submit();
+}
+
+function show_post() {
+  $('#set_display_name').slideDown();
+  $('#add_post').slideDown(); 
+  $('#new_thread_link').hide();
+  $('#topic_post_body').focus();	
+  $('#topic_post_title').focus();
+}
+
+function validate_post() {
+  var msgbody = $('#topic_post_body').val();
+  if (msgbody.length<2) {
+    alert("You must write something!");
+    return false;
+  }
+  <% if thread==nil %>
+    var titl = $('#topic_post_title');
+    if (titl) {
+      if (titl.val().length<2) {
+        alert("You must give your post a title");
+        return false;
+      }
+      if (titl.val().length>200) {
+        alert("Your post title cannot exceed 200 characters");
+        return false;
+      }
+    }
+  <% end %>	
+  $('#topic_post_submit').val('Saving...');
+  $('#topic_post_submit').attr('disabled', true);
+  $('#topic_post_body').focus();
+  return true;
+}
+
+function favourite_thread(thread_id, user_id) {
+  $.post('/forums/thread/' + thread_id + '/favourite', null, function(result) {
+    $('#favourite_link a').text(result);
+  });
+}
+
+function rating_done(post_id) {
+  $('#post_' + post_id + " .right .rate").html("Rated.  Thanks!");
+}
+
+function rating_dupe(post_id) {
+  $('#post_' + post_id + " .right .rate").html("Already rated");
+}

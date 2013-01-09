@@ -1,0 +1,11 @@
+- onclick = Preference.getCached(_sid, 'page_click', current_user.id)=='info'
+#recent
+  %h1.pages_wicon Recent
+
+  %ul
+    - pages = Page.sys(_sid).order("updated_at desc").limit(5).all
+    - pages.each do |page|
+      %li(class="#{'last' if pages.last == page }")
+        = link_to list_name(page,25,true), onclick ? page.link('info', true) : "#{page.full_path}?edit=1", {:title=>page.title}
+
+

@@ -1,0 +1,39 @@
+var API_KEY = "<%= Preference.getCached(_sid, 'google_api_browser_key') %>";
+var CLIENT_ID = "<%= Preference.getCached(_sid, 'google_api_client_id') %>";
+var TABLE_ID = "<%= Preference.getCached(_sid, 'google_analytics_profile_id') %>";
+
+gadash.configKeys({
+  'apiKey': API_KEY,
+  'clientId': CLIENT_ID
+});
+
+var chart = new gadash.Chart({
+    'type': 'LineChart',
+    'divContainer': 'chart_container',
+    'last-n-days':30,
+    'query': {
+      'ids': TABLE_ID,
+      'metrics': 'ga:pageViews',
+      'dimensions': 'ga:date'
+    },
+    'chartOptions': {
+      height: 400,
+      hAxis: {title:'Date'},
+      curveType: 'function'
+    }
+});
+
+$(document).ready(function() {
+  chart.render();
+});
+
+function update_chart_options() {
+  chart.set({
+    'last-n-days' : $('#days').val(),
+    'query' : { 
+      'metrics' : 'ga:' + $('#metric').val()
+    },
+    'chartOptions' : {
+    }
+  }).render();
+}

@@ -1,0 +1,30 @@
+- content_for :main do
+
+  %h1.layout_icon Layouts
+
+  %div(style="margin-bottom: 10px;")
+    = icon_to_function "New", "$('#new').slideDown(); $('#new_link').hide();", false, :id=>"new_link"
+
+  #new(style="display: none; margin-top: 10px;" class="cms_form")
+    = form_for @layout, :url=>"/admin/layouts", :method=>:post do |f|
+
+      = f.text_field :name
+      = gnric_submit "Create"
+  
+  = paginate @layouts
+
+  %table#layouts.loosen
+    %tr
+      %th
+        Name
+      %th
+        Last Edited
+    - @layouts.each do |layout|
+      %tr
+        %td
+          = link_to layout.name.titleize, "/admin/layouts/#{layout.id}"
+        %td
+          = time_ago_in_words(layout.updated_at)
+          ago
+
+

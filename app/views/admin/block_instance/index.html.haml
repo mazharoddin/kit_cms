@@ -1,0 +1,39 @@
+- content_for :main do
+
+  %h1.block_icon 
+    Block Instances 
+    = "For Page '#{@page.name}'" if @page
+    = "For Block '#{@block.name}'" if @block
+
+  - if @page
+    .spacer(style='margin-bottom: 10px;')
+      - if params[:showall]
+        = icon_to "Current Versions", "/admin/block_instances?page_id=#{@page.id}"
+      - else
+        = icon_to "All Versions", "/admin/block_instances?page_id=#{@page.id}&showall=1"
+
+
+  %table(style="margin-bottom: 10px;")
+    %tr
+      %th Block Name
+      %th Instance Name
+      %th Version
+      - if @block
+        %th Page Name
+    - last_instance_id_and_version = ''
+    - @blocks.each do |block|
+      - next if "#{block.instance_id}-#{block.version}" == last_instance_id_and_version
+      - last_instance_id_and_version = "#{block.instance_id}-#{block.version}"
+      %tr
+        %td
+          = block.block.name rescue "Block definition no longer exists"
+        %td
+          = link_to block.instance_id, "/admin/block_instance/#{block.id}#{('?page_id='+@page.id.to_s)+('&version=' + block.version.to_s) if @page}"
+        %td
+          = block.display_version
+        - if @block && block.page
+          %td
+            = link_to block.page.name, "/page/#{block.page.id}/info"
+
+  - if last_instance_id_and_version==''
+    No blocks 

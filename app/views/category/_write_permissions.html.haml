@@ -1,0 +1,22 @@
+%ul(style="float: left; width: 340px; margin-right: 10px;")
+  %li.header Yes
+  - some = false
+  - @permissions[:write_groups].each do |group_id, name|
+    %li
+      - @write_groups.delete(group_id)
+      - some = true
+      = link_to_function name, "category_permission(#{@category_id}, #{group_id}, 'write', false);"
+  - if some
+    %li 
+      = link_to_function "Remove editability for above groups", "category_permission(#{@category_id}, 0, 'write', false);", :class=>"action"
+%ul(style="float: left; width: 340px; ")
+  %li.header No
+  - some = false
+  - @write_groups.each do |group_id, name|
+    - some = true
+    %li
+      = link_to_function name, "category_permission(#{@category_id}, #{group_id}, 'write', true);"
+  - if some
+    %li 
+      = link_to_function "Make editable by above groups".html_safe, "category_permission(#{@category_id}, 0, 'write', true);", :class=>"action"
+

@@ -1,0 +1,42 @@
+- content_for :main do 
+
+  %h1.stylesheets_icon #{@html_asset.full_type} HTML Asset '#{@html_asset.name}' 
+
+  .cms_form
+    = form_for @html_asset, :url=>"/admin/html_asset/#{@html_asset.id}", :method=>:post do |f|
+      = f.error_messages
+      %ul
+        %li
+          %label Name:
+          = f.text_field :name
+
+        %li
+          %label Type:
+          = f.select :file_type, options_for_select([["Stylesheet","css"], ["Javascript", "js"]], @html_asset.file_type)
+
+        %li 
+          %label Used By:
+          = (Layout.sys(_sid).where("(stylesheets='' and '#{@html_asset.name}'='application' and '#{@html_asset.file_type}'='css') or stylesheets like '%#{@html_asset.name}%' or javascripts like '%#{@html_asset.name}%'")+ PageTemplate.sys(_sid).where("(stylesheets='' and '#{@html_asset.name}'='application' ) or stylesheets like '%#{@html_asset.name}%' or javascripts like '%#{@html_asset.name}%'")).collect { |i| link_to "'#{i.name}' #{i.class.name.titleize}", "/admin/#{i.class.name.tableize}/#{i.id}" }.join(', ').html_safe
+        %li
+          %label Last Updated By:
+          = @html_asset.user.email rescue ''
+        %li
+          %label Created:
+          = @html_asset.created_at
+        %li
+          %label Updated:
+          = @html_asset.updated_at
+      - if flash[:notice]
+        #error_explanation
+          = flash[:notice]
+
+      %a(name='editor')
+      = ace_editor(@html_asset.file_type == 'css' ? 'scss' : 'javascript', :html_asset, :body, f, "html_asset_body")
+
+      %p
+        = render :partial=>"utility/design_history", :locals=>{:object=>@html_asset}
+      
+      = gnric_submit "Save"
+      = gnric_submit "Save and Edit Again"
+      = link_to "Delete", "/admin/html_asset/#{@html_asset.id}", :method=>:delete, :class=>"action", :confirm=>"Are you sure you want to delete this asset?  It cannot be undone."
+      = icon_to "Cancel", "/admin/html_assets"

@@ -1,0 +1,510 @@
+div#forums {
+  width: 900px;
+  margin: 10px;
+  background-color: white;
+  padding: 10px;
+}
+
+
+div#forums h1 {
+  font-size: 35px !important;
+}
+
+div#forums a.moderator_action {
+  display: block;
+}
+
+div#forums ul {
+  list-style-type: none;
+}
+
+div#forums ul#categories {
+
+}
+
+div#forums ul#forum_links li {
+  display: inline; 
+  margin-right: 10px;
+}
+
+div#forums ul#categories li.category {
+  margin-bottom: 10px; 
+  border: thin #DDD solid;
+  padding: 10px;
+   border-radius: 5px;
+}
+
+div#forums ul#categories li.category h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  background-color: #EEE;
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 0px;
+}
+
+div#forums ul#categories li.category ul.topics {
+
+}
+
+div#forums ul#categories li.category ul.topics li.topic {
+
+}
+
+div#forums div.introduction {
+  border: thin #888 solid;
+  padding: 10px;
+  background-color: #DDD;
+  margin-bottom: 10px;
+
+}
+
+div#forums ul#categories div.thread_count {
+  display:inline;
+}
+
+div#forums ul#categories div.image {
+  display: inline;
+}
+
+div#forums div#threads div.thread div.mod_options {
+
+  text-align: right;
+}
+
+div#forums div#threads div.top div.pagination {
+  margin-bottom: 5px;
+  float: right;
+}
+
+div#forums div#threads div.bottom div.pagination {
+  margin-top: 5px;
+  text-align: right;
+}
+
+div#forums div#posts div.thread_info {
+  margin: 5px 0;
+}
+
+div#forums div#posts div.thread_info div.post_count {
+  float: left;
+}
+
+div#forums div#posts div.thread_info div.pagination {
+  float: right;
+}
+
+div#forums div.forum_introduction {
+}
+
+div#forums div.topic_introduction {
+
+}
+
+div#forums div#topic_title h2 {
+
+}
+
+div#forums div#topic_title a.breadcrumb {
+
+}
+
+div#forums span {
+  display: inline;
+}
+
+
+div#forums div#threads {
+  border: thin #DDD solid;
+  padding: 5px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+div#forums div#threads div#header {
+  font-weight: bold;
+  background-color: #E5E5E5;
+  padding: 5px 10px;
+}
+
+ div#forums div#posts div.odd {
+  background-color: #ffffff;
+}
+div#forums div#threads div.even, div#forums div#posts div.even {
+  background-color: #f2f2f2;
+}
+
+div#forums div#threads div#header div#subject {
+  width: 620px;
+  float: left;
+}
+div#forums div#threads div#header div#replies {
+  width: 56px;
+  float: left;
+}
+div#forums div#threads div#header div#latest {
+  width: 200px;
+  float: left;
+  text-align: right;
+}
+
+div#forums div#threads div.thread {
+  padding: 2px 0;
+}
+
+
+div#forums div#threads div.thread div.title {
+  float: left;
+  margin-left: 10px;
+  width: 610px;
+}
+
+div#forums div.thread div.posts {
+  float: left;
+  width: 65px;
+  text-align: center;
+}
+
+div#forums div.thread div.byline {
+  float: left;
+  text-align: right;
+  width: 200px;
+}
+
+div#forums div.thread div.title {
+  width: 400px;
+}
+
+div#forums a.action {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+	background-color:#ededed;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	color:#222;
+	font-family:arial;
+	font-size:15px;
+	padding:4px 8px;
+	text-decoration:none;
+ }
+
+div#forums div#add_post {
+  margin: 10px 0;
+}
+
+div#forums div#add_post label {
+  font-weight: bold;
+  display: block;
+}
+
+div#forums div#add_post div#title input, div#forums div#add_post div#body textarea {
+  width: 790px;
+}
+
+div#forums div#add_post .display_name {
+  display: inline;
+  margin-left: 10px;
+}
+
+div#forums div#post_form {
+  width: 810px;
+}
+
+div#forums div#formatting_help {
+  width: 820px;
+}
+
+div#forums div#add_post div#title {
+  margin-bottom: 10px;
+}
+
+div#forums div#posts {
+  border: thin #ddd solid;
+  padding: 5px;
+  margin-top: 10px;
+  border-radius: 5px;
+  width: 900px;
+}
+
+div#forums div#posts div.post {
+  border: thin #eee solid;
+  padding: 5px;
+  margin-bottom: 10px;
+  width: 890px;
+}
+
+div#forums div#posts div.opening_post {
+}
+
+div#forums div#posts div#thread_title {
+  display: none;
+ border: thin #888 solid;
+  padding: 10px;
+  background-color: #DDD;
+  margin-bottom: 10px;
+
+
+  font-size: 18px;
+}
+
+div#forums div#posts div.byline {
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+div#forums div#posts div.byline div.poster {
+  float: left;
+  margin-right: 10px;
+  font-weight: bold;
+}
+div#forums div#posts div.byline div.datetime {
+  float: left;
+}
+div#forums div#posts div.byline div.post_number {
+  float: right;
+}
+
+
+div#forums div#posts div.byline div.add_post {
+}
+div#forums div#posts div.byline div.report {
+  float: right;
+  margin-right: 10px;
+}
+
+div#forums div#new_thread_link {
+  float: left;
+}
+
+div#forums div#topic_options {
+  width: 906px;
+}
+
+div#forums a.edit_topic_comment {
+  margin-bottom: 5px;
+}
+
+div#forums div#latest_link {
+  float: right;
+  margin-right: 10px;
+}
+
+div#forums div#reverse_link {
+  float: right;
+  margin-right: 10px;
+}
+
+div#forums div#favourite_link {
+  float: right;
+  margin-right: 10px;
+}
+
+div#forums div.titles div#thread_title {
+  margin: 10px 0;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 26px;
+}
+
+div#forums div.titles div#thread_title input {
+  width: 500px;
+  font-size: 24px;
+}
+
+div#forums div.post_title .best_in_place, div#forums div#thread_title .best_in_place {
+  padding-left: 0 !important;
+}
+
+div#forums div.post_title input {
+  width: 400px;  
+  font-size: 14px;
+}
+
+div#forums div#post_preamble div#guidelines_link, div#forums div#post_preamble div#getting_started_link {
+  display: inline;
+  margin-right: 20px;
+}
+
+div#forums div.none_found {
+  margin: 20px;
+  font-weight: bold;
+}
+
+div#forums div.topic_comment, div#forums div.thread_comment, div#forums div.moderation_comment {
+  border: thin #ddd solid;
+  padding: 5px;
+  margin-bottom: 10px;
+
+}
+
+div#forums div.thread_comment {
+  margin-top: 10px;
+}
+div#forums div.moderation_comment {
+  margin-top: 10px;
+  color: #888;
+}
+
+div#forums .hidden_thread_title {
+  text-decoration:  line-through;
+}
+
+div#forums div.mod_thread {
+  display: block;
+}
+
+div#forums .mod_actions a {
+  margin-right: 10px; 
+  font-size: 12px;
+  color:  #BD8181;
+}
+
+div#forums .mod_actions .ip {
+  font-size:12px;
+  color: #AAA; 
+  display: inline;
+}
+
+div#forums div#threads div.thread div.mod_actions {
+}
+
+
+div#forums .admin_warning {
+  color: red;
+}
+
+div#forums #locked_warning {
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+div#forums div#set_display_name input[type=text] {
+  display: inline;
+}
+
+div#forums div#set_display_name form {
+  padding-top: 10px;
+}
+
+div#forums div#set_display_name {
+  margin: 10px 0;
+}
+
+.ui-dialog-titlebar {
+  background-color: black !important;
+}
+
+div#mod_spam_popup {
+  width: 400px;
+}
+
+div#mod_spam_popup ul.moderation_options li {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+div#forums div.body h1, div#forums div.body h2, div#forums div.body h3 {
+  font-size: 14px !important;
+}
+
+div#forums div.mod_comment {
+  padding: 10px;
+  background-color: white;
+}
+
+div#forums li.forum_search form {
+  display: inline;
+}
+
+div#forums span.red {
+  color: red;
+}
+
+div#forums span.orange {
+  color: yellow;
+}
+
+div#forums span.black {
+  color: #333;
+}
+
+
+div#add_post div#post_form {
+  margin-bottom: 10px;
+}
+
+div#add_post div.post_preview {
+  width: 790px;
+}
+
+div#add_post iframe.markItUpPreviewFrame {
+  margin-left: 5px;
+}
+
+div#user_preferences div.profile_link a {
+
+}
+
+div#user_preferences fieldset {
+  border: thin #888 solid;
+  border-radius: 5px;
+  background-color: #eee;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 15px;
+  line-height: 1.2em;
+}
+
+div#user_preferences select {
+  font-size: 1.4em;
+}
+
+div#user_preferences legend {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+div#user_preferences input[type=radio] {
+  margin:  0 14px;
+}
+
+div#user_preferences fieldset label {
+  float: left;
+  width: 320px;
+  font-size: 20px;
+}
+
+div#user_preferences form > div {
+  margin-bottom: 20px;
+}
+
+div#user_preferences div.description {
+  margin-left: 320px;
+  font-size: 0.8em;
+  color: #888;
+}
+
+div#user_preferences input[type=submit] {
+  font-size: 1.4em;
+}
+
+div#forums div.watch a {
+  font-size: 0.8em;
+  border: thin #AAA solid;
+  background-color: #DDD;
+  padding: 0 4px;
+  float: left;
+  margin-right: 10px;
+}
+
+div#forums div#threads div.mod_actions {
+  width: 600px;
+}

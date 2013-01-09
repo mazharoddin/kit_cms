@@ -1,0 +1,6 @@
+.message_list
+  %ul(id="conversation_#{@conversation.id}")
+
+.message_send
+  = text_area_tag "message_#{@conversation.id}"
+  = button_to_function "Send", "send_message(#{@conversation.id});"

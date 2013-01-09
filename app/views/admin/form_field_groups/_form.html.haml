@@ -1,0 +1,35 @@
+.cms_form.validated
+  = form_for [:admin, @form_field_group] do |f|
+    = f.error_messages
+    = f.hidden_field :form_id
+
+    %p
+      = f.label :name
+      = f.text_field :name, :class=>"required"
+
+    %p
+      = f.label "Top of group Text"
+      = f.text_area :intro
+      .field_help
+        This text appears at the top of the group, above any fields it contains
+
+    %p
+      = f.label "Bottom of group Text"
+      = f.text_area :outro
+      .field_help
+        This text appears at the bottom of the group, below any fields it contains
+
+    %p
+      = f.label "Class"
+      = f.text_field :klass
+      .field_help
+        CSS class name(s) to attach to the fieldset used to render this group
+
+    %p
+      = f.label "Display Order"
+      = f.text_field :order_by, :class=>"number"
+      .field_help
+        A numeric value indicating the relative position of this group - lower numbered groups are shown first, higher numbered groups last
+
+    %p
+      = gnric_submit "Save"

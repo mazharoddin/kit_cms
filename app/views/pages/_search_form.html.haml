@@ -1,0 +1,4 @@
+#search
+  = form_for "pages", {:url=>"/pages/search", :method=>:post} do |f| 
+    = text_field_tag "search", @searched_for
+    = submit_tag "Search" 

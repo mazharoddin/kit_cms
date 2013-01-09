@@ -1,0 +1,39 @@
+- unless (field.hidden==1) || (options[:skip_fields] && options[:skip_fields].include?(field.code_name))
+  - value = record.send(field.code_name) rescue ""
+
+  - unless options[:show_blanks] || value.is_blank?
+    .field(class="field_#{field.code_name} field_#{field.id}")
+      .name
+        - name = (options[:labels] && options[:labels][field.code_name.to_sym]) ? options[:labels][field.code_name.to_sym] : field.name
+        = "#{name}#{':' if options[:show_colon]}"
+        
+      .value
+        - if ['multiselect','select','hierarchy','radio','multicheckbox'].include?(field.form_field_type.field_type)
+          - values = value.split('|')
+        - else
+          - values = [ value ]
+
+        - values.each do |val|
+          - next unless val
+          - sep = values.last==val ? '' : (options[:multivalue_separator] || ',') 
+          - if options[:field_link] && options[:field_link].keys.include?(field.code_name.to_sym)
+            = link_to val+sep, "#{options[:field_link][field.code_name.to_sym]}#{val}"
+          - elsif field.form_field_type.field_type=='url' && options[:as_image] && options[:as_image].include?(field.code_name.to_sym)
+            = image_tag val, :style=>"width: 120px;"
+          - elsif field.form_field_type.field_type=='imageurl' && options[:dont_render_image_urls]!=true
+            .image(style="display: none;")
+              = image_tag val, :size=>"120x120", :onload=>"this.parentNode.style.display = 'block';" if val.not_blank?
+          - elsif field.form_field_type.field_type=='url' && options[:dont_link_urls]!=true
+            = link_to val, val
+          - elsif field.form_field_type.field_type=='email' 
+            = obscure_email(val).html_safe + sep
+          - elsif field.form_field_type.field_type=='radio'
+            - if val=='0'
+              No
+            - elsif val=='1'
+              Yes
+            - elsif val!=nil
+              = val
+          - else
+            = (val+sep)
+          

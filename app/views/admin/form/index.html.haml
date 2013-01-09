@@ -1,0 +1,24 @@
+- content_for :main do 
+  %h1.forms_icon Forms
+
+  %table.loosen_more
+    %tr
+      %th Name
+      %th URL
+      %th Entries
+      %th Last Entry
+      %th &nbsp;
+      %th &nbsp;
+
+    - @forms.each do |form|
+      %tr
+        %td= form.title
+        %td= link_to form.url, form.url if form.url
+        %td= form.form_submissions.count
+        %td= "#{time_ago_in_words(form.form_submissions.last.created_at)} ago" rescue "&nbsp;".html_safe
+        %td= icon_to 'Submissions', "/admin/forms/#{form.id}/list"
+        %td= icon_to 'Edit Form', "/admin/form/#{form.id}"
+      
+
+  .space(style="margin-top: 30px;")
+    = icon_to "New Form", "/admin/form/new"

@@ -1,0 +1,50 @@
+- content_for :page_scripts do
+  = render(partial: "page_scripts.js")
+  
+- content_for :main do 
+  %h1.forum_icon Edit Topic '#{@topic.name}'
+
+  %div.cms_form
+    = form_for @topic, :url=>"/admin/forums/topic/#{@topic.id}", :html=>{:multipart=>true} do |f|
+      = error_messages_for @topic
+      %ul
+        %li
+          %label Name:
+          = f.text_field :name
+          .field_help Use a short, descriptive name.  The name must be unique within the topic category.
+        %li
+          %label Description:
+          = f.text_area :description
+          .field_help Describe to your users the kind of things that are discussed within this topic.
+        %li
+          %label Category:
+          = f.select :topic_category_id, options_from_collection_for_select(TopicCategory.sys(_sid).order(:display_order).all, "id", "name", @topic.topic_category_id)
+          .field_help Change this to move the topic from one category to another.
+        %li
+          %label Topic can be seen by:
+          = f.select :read_access_level, access_list(@topic.read_access_level)
+          .field_help This controls who can see the topic.
+        %li
+          %label Topic can be posted to by:
+          = f.select :write_access_level, access_list(@topic.write_access_level, include_anyone:false)
+          .field_help This controls who can add posts to the topic.
+        %li
+          %label Topic comment:
+          = f.text_area :topic_comment
+          .field_help This comment is shown at the topic of the thread list within the topic.  It can also be edited by administrators whilst they browse the topics.
+        %li
+          %label Display order:
+          = f.text_field :display_order
+          .field_help The smaller the display order number the higher up the list of topics the topic will appear.  The higher the number the lower down the list.
+        %li
+          %label Image:
+          = f.file_field :image
+          .field_help A small icon or other image which will appear next to the topic in topic lists.
+
+      = gnric_submit "Save", :class=>"save_wicon action_icon"
+      or 
+      = icon_to "Cancel", "/admin/forums/topic/#{@topic.id}"
+
+
+
+

@@ -1,0 +1,10 @@
+= form_tag "/forums/test" do |f|
+
+
+  = text_area_tag :test, ""
+
+  %script
+    $(document).ready(function() {
+    markdown_editor("#test");
+    $('#test').focus();
+    });

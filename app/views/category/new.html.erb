@@ -1,0 +1,10 @@
+<h1>New Category</h1>
+
+<h2>Create a sub-category of '<%= @category.parent.path %>'</h2>
+
+<%= form_for :category, :url=>"/category", :method => :post do |f| %>
+		<%= f.text_field :name %>
+		<%= f.hidden_field :parent_id %>
+		<%= gnric_submit "Save" %>
+	<% end %>
+<% end %>

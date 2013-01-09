@@ -1,0 +1,47 @@
+
+<% content_for :right do %>
+<%= render :partial=>"/admin/shared/help_switch" %>
+
+  <div id='search' class="side_box">
+    <%= render :partial=>"utility/search_form" %>
+  </div>
+
+  <% links_box = Preference.getCached(_sid, 'show_links_box',current_user.id)!="false" %>
+  <% if links_box && (sections==nil || sections.include?(:links)) %>
+  <div id="links" class="side_box box_close">
+    <%= render :partial=>"/admin/shared/links" %>
+  </div>
+  <% end %>
+
+  <% recent_box = Preference.getCached(_sid, 'show_recent_pages_box', current_user.id)!='false' %>
+  <% if recent_box && (sections==nil || sections.include?(:recent)) %>
+    <div id="recent" class="side_box box_close">
+      <%= render :partial=>"/admin/shared/recent" %>
+    </div>
+  <% end %>
+
+  <% todo_box = Preference.getCached(_sid, 'show_todo_box', current_user.id)!="false"  %>
+
+  <% if todo_box && (sections==nil || sections.include?(:todo)) %>
+    <div id="todo" class="side_box box_close">
+      <%= render :partial=>"/admin/todo/sidebar" %>
+    </div>
+  <% end %>
+  
+  <% activity_box = Preference.getCached(_sid, 'show_activity_box', current_user.id)!="false"  %>
+  
+  <% if activity_box && (sections==nil || sections.include?(:activity)) %>
+    <div id="activity" class="side_box box_close">
+      <%= render :partial=>"/admin/dashboard/recent_activity" %>
+    </div>
+    <% end %>
+    
+  <% status_box = Preference.getCached(_sid, 'show_status_box', current_user.id)!="false"  %>
+
+  <% if status_box && (sections==nil || sections.include?(:status)) %>
+    <div id="status" class="side_box box_close">
+      <%= render :partial=>"/admin/dashboard/status" %>
+    </div>
+  <% end %>
+<% end %>
+

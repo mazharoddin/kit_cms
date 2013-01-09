@@ -1,0 +1,40 @@
+- content_for :page_scripts do 
+  $(document).ready(function() {
+  setup_messaging();
+  - unless current_user
+    setup_register();
+  });
+- content_for :head do 
+  = javascript_include_tag "gnric/messaging"
+
+#home.clearfix
+  #left
+    - if current_user
+      #welcome
+        = render :partial=>"welcome"
+      #game(style="margin: 10px 0;")
+        #message 
+          Select a game above to find an opponent for that game
+        #suggest
+          = form_tag "/convo/suggest_game", :remote=>true do |f|
+            Or suggest a new game:
+            = text_field_tag "suggestion_name"
+            = submit_tag "Suggest"
+        #details(class="hidden")
+          %h3(id="name")
+          #opponents
+            %ul(id="opponent_list")
+              %li
+                <a class="opponent" href="#" data-gameid="{{:game_id}}" data-userid="{{:user_id}}">{{:user_name}}</a>
+
+    - else
+      #signin
+        = render :partial=>"sign_inorup"
+
+  #right
+    #conversations.clearfix
+      #conv_list
+        %ul(id="conversation_list" class="hidden")
+          %li
+            <a class="conversation" href="#" data-conversationid="{{:id}}" data-conversationname="{{:name}}">{{:name}} {{:messages_waiting}}</a>
+      #convs

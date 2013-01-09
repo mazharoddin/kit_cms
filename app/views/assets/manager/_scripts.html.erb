@@ -1,0 +1,144 @@
+<% content_for :page_scripts do %>
+// assets/manager/_scripts
+
+var selected_height;
+var selected_width;
+var portrait;
+var path;
+
+var jimage = null;  // the image HTML with which we were opened
+var jlink_input = null;
+
+function prepare_preview() {
+	$('input[name=size]').click(function () {
+		redraw_image();
+	});
+	
+	$('#custom_size').click(function () {
+		if ($('#custom_size').is(':checked')) {
+			$('#custom_sizes').show();
+		}
+		else {
+			$('#custom_sizes').hide();
+		}
+	})
+	
+	$('input[id=custom_height],input[id=custom_width],#spacing,#position').change(function () {
+		redraw_image();
+	});
+	
+	$('#asset_preview_tab').show();
+	$('#asset_tabs-preview').show();
+	$('#asset_tabs').tabs('select', '#asset_tabs-preview');
+
+}
+
+function redraw_image() {
+	v = $('input[name=size]:checked').val();
+	h = 0;
+	w = 0;
+	
+	if (v=='original') {
+		if (portrait) {
+			h = selected_height;
+		}
+		else {
+			w = selected_width;
+		}  
+	} else if (v=='custom') {
+		h = parseInt($('#custom_height').val());
+		w = parseInt($('#custom_width').val());
+	}
+	else {
+		n = parseInt(v);
+		if (portrait) {
+				h = n;
+			}
+			else {
+				w = n;
+			}
+	}
+
+	if (h>0) {
+		$('#image_preview').height(h);
+	} else if (h==0) {
+		$('#image_preview').height('auto');
+	}
+	if (w>0) {
+		$('#image_preview').width(w);
+	}
+	else if (w==0) {
+		$('#image_preview').width('auto');
+	}
+	
+	padding = $('#spacing').val();
+	if (padding=='') {
+		padding = "0";
+	}
+	else {
+		padding = padding + "px";
+	}
+
+	$('#image_preview').css('padding', padding);
+	p = $('#position').val();
+	$('#image_preview').css("float", p);
+}
+
+	function do_asset_search(url, none) {
+		if (url==null) { url = "/assets/search"; }
+		
+		show_wait();
+                $.ajax({url:url, data:"popup=<%= @popup %>&mode=<%= @mode %>&search="+$('input[name=search]').val() + ( none ? '&none=1' : ''), dataType:"script", type:"post"})
+	}
+	
+	function set_fancybox() {
+		$('a.fancybox').fancybox({padding: 10, zoomOpacity: true, zoomSpeedIn: 200, zoomSpeedOut:200, 'transitionIn'	:	'elastic',
+				'transitionOut'	:	'elastic',
+				'speedIn'	 :	200, 
+				'speedOut' :	200});
+	}
+
+	function hide_wait() {
+		$('#wait').hide();
+	}
+	
+	function show_wait() {
+		$('#wait').show();
+	}
+	
+        function set_editable() {
+		$('.editable').editable('/assets/update_inline', {
+			data: function(value, settings) {
+                        if (value.indexOf('Untagged')>0 ) {
+                        return '';
+                        }
+                          else {
+                          return retval;
+                          }
+		    },
+			callback : function(value, settings) {
+			     }
+     	});
+	}
+
+	$(document).ready( function() {
+		$('.pagination a').live('click',function (){  
+			            do_asset_search(this.href, false);
+			            return false;  
+	    });
+		
+		// the upload div will only exist if this is the whole page version of the asset browser, but this will just silently do nothing if it's the popup, which is what we want
+		$('#upload').dialog({autoOpen: false, modal:true, draggable:true, resizable:false, height:400, width:500, title:"Upload" });
+		
+		$('input[name=search]').observe_field(1, function () {
+			do_asset_search(null, false);
+		});
+		
+		$('#save_button').click(function() {
+			submit_mass('tags');
+		});
+		
+		set_editable();
+		set_fancybox();
+	});
+<% end %>

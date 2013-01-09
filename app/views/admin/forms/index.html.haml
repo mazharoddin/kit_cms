@@ -1,0 +1,13 @@
+- title "Admin/Forms"
+
+%table
+  %tr
+    %th Name
+  - for form in @forms
+    %tr
+      %td= form.name
+      %td= link_to 'Show', form
+      %td= link_to 'Edit', edit_admin_form_path(form)
+      %td= link_to 'Destroy', form, :confirm => 'Are you sure?', :method => :delete
+
+%p= link_to "New Admin/Form", new_admin_form_path

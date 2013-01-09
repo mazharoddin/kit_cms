@@ -1,0 +1,91 @@
+#calendar_entry
+  %h1
+    = entry.name
+  - if entry.has_image?
+    .image
+      %p(style="text-align: center;")
+        = image_tag entry.image.url
+  .dates
+    %p
+      %label.dates
+        Date: 
+      = entry.start_date.to_formatted_s(:rfc822)
+      - unless entry.start_date == entry.end_date
+        = "- #{entry.end_date.to_formatted_s(:rfc822)}" rescue ''
+
+    - unless entry.no_days
+      %p
+        %label.days
+        = entry.list_days(', ')
+
+    %p
+      %label.time
+        Time:
+      = entry.start_time.to_formatted_s(:time) rescue ''
+      = "- #{entry.end_time.to_formatted_s(:time)}" rescue ''
+
+  - if entry.sell_tickets==1 && entry.in_future?
+    .tickets
+      - if entry.tickets_remaining==0
+        No longer available to buy online
+      - else
+        .cost
+          %label.cost
+            Cost: 
+          = number_to_currency(entry.ticket_price * (1 + entry.tax_rate), :unit=>"&pound;")
+
+        = link_to options[:buy_label] || "Buy Now", options[:buy_url], :method=>:get, :rel=>"nofollow"
+  .venue
+    %p
+      %label.venue
+        Venue:
+      - if entry.location.is_web?
+      Web
+      - else
+        .address1= entry.location.address1 unless entry.location.address1.is_blank?
+        .address2= entry.location.address2 unless entry.location.address2.is_blank?
+        .city= entry.location.city unless entry.location.city.is_blank?
+        .postcode= entry.location.postcode unless entry.location.postcode.is_blank?
+        .country= entry.location.country unless entry.location.country.is_blank?
+  %p
+    %label.contact
+      Contact:
+    =entry.contact
+      
+  %p
+    %label.telephone
+      Telephone:
+    = entry.telephone
+
+  - if entry.email.not_blank?
+    %p
+      %label.email
+        Email:
+      = entry.email
+
+  - if entry.website.not_blank?
+    %p
+      %label.website
+        Website:
+      = link_to entry.website, entry.website
+      
+  .description
+  %p
+    %label.description
+      Description:
+    = entry.description.gsub("\n","<br/>").html_safe rescue ""
+
+
+  - if options[:list_sold_url] && entry.sell_tickets==1 && current_user && ((entry.seller_id == current_user.id) || current_user.admin?)
+    .owner_options(style="margin-top: 10px;")
+      Owner options: 
+      = link_to options[:list_sold_label] || "Show Sold Tickets", options[:list_sold_url]
+
+  - if options[:sell_tickets_setup_url] && entry.sell_tickets==0 && ( (current_user && entry.user_id == current_user.id ) || current_user.admin?)
+    = link_to options[:sell_tickets_setup_label] || "Sell Tickets For This Online", options[:sell_tickets_setup_url]
+
+
+
+    
+
+

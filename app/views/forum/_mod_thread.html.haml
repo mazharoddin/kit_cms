@@ -1,0 +1,32 @@
+- if @mod
+  .mod_thread(class="clearfix")
+    .admin_warning(style='#{"display:none;" if @thread.is_visible?}')
+      Thread is invisible to users
+    
+    .mod_actions
+
+      - if @thread.is_visible? 
+        = link_to "Delete Thread", "/forums/thread/#{@thread.id}", {:method=>:delete} 
+      - else
+        = link_to "UnDelete Thread", "/forums/thread/#{@thread.id}?undelete=1", :method=>:delete 
+
+      %span(class="unlocked" style='#{hide_if @thread.is_locked?}')
+        = link_to_function "Lock Thread", "lock_thread(1)", :method=>:post 
+            
+      %span(class="locked" style='#{hide_unless @thread.is_locked?}')
+        = link_to_function "UnLock Thread", "lock_thread(0)", :method=>:post 
+
+      %span(class="move")
+        = link_to_function "Move Thread", "$('#move_thread').load('/forums/category_topic_list/#{@thread.topic_id}').slideDown();"
+      
+      #move_thread(style="display:none;")
+
+      - if show_edit_form 
+        %span
+          = link_to_function "Edit Thread Comment", "$('#edit_thread_comment').slideDown();" 
+            
+      - if show_edit_form
+        #edit_thread_comment(style="display:none;")
+          = form_for :thread, :url=>"/forums/thread_comment/#{@thread.id}" do |f| 
+            = f.text_area :thread_comment, {:size=>"80x8"} 
+            = f.submit "Save" 

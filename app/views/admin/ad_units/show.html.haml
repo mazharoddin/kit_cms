@@ -1,0 +1,32 @@
+- content_for :main do 
+  %h1.ads_icon '#{@ad_unit.name}' Ad Unit
+
+  .cms_form
+    %p
+      %label Name:
+      = @ad_unit.name
+
+    %p
+      %label Width:
+      = @ad_unit.width
+      px
+
+    %p
+      %label Height:
+      = @ad_unit.height
+      px
+
+
+  %p
+    = icon_to "Edit", edit_admin_ad_unit_path(@ad_unit), false, :style=>"margin-right: 10px;"
+    
+    - if @ad_unit.ad_zones.count>0
+      Cannot delete whilst Ad Zones are using this Ad Unit
+    - else
+      = link_to "Destroy", [:admin, @ad_unit], :confirm => 'Are you sure? This cannot be undone', :method => :delete, :class=>"action" 
+    
+    = link_to "Create Block For This Ad Unit", "/admin/ad_unit/#{@ad_unit.id}/create_block", :class=>"action", :method=>:post
+
+  %p
+    = icon_to "Ad Units", admin_ad_units_path
+    = icon_to "Ad Zones using this Ad Unit", "/admin/ad_zones?ad_unit=#{@ad_unit.id}"

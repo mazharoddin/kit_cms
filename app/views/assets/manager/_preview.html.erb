@@ -1,0 +1,61 @@
+<div class="clearfix" id="asset_preview">
+
+<% @asset = @assets.first if @assets %>
+
+<div id="left" class="clearfix">
+<% @preview = params[:id].not_blank? && @asset!=nil %>
+
+<div id="context_preview">
+	
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+	<p id="selected_image"></p>
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+</div>
+
+<div id="selected_path"></div>
+
+
+</div>
+
+<div id="right">
+
+<%= button_to_function "Insert", "insert();"%>
+
+<div id="sizes">
+	<h2 class="plain">Size</h2>
+	<ul>
+		<li>Small (100 max): <input type='radio' name='size' value='100' /></li>
+		<li>Medium (300 max): <input type='radio' name='size' value='300' /></li>
+		<li>Large (500 max): <input type='radio' name='size' value='500' checked /></li>
+		<li>Very Large (800 max): <input type='radio' name='size' value='800' /></li>
+		<li id="original_size">Original  (<span id="selected_size">
+			</span>)
+			<input type='radio' name='size' value='original' /></li>
+		<li>Custom: <input id="custom_size" type='radio' name='size' value='custom' /> 
+		<span style="display:none;" id="custom_sizes" />Width: <input id='custom_width' name='width' style="width: 20px"  /> Height: <input name='height' id='custom_height' style="width: 20px" /></span> </li>
+
+	</ul>
+</div>
+
+<div >
+		Spacing: <input id="spacing" name="spacing" value="0" />
+</div>
+
+<div> 
+	Wrap Text: <select id="position" name="position"><option value='none'>Neither</option><option value='right'>Left</option><option value='left'>Right</option></select>
+</div>
+
+</div>
+
+<br style="clear: both;" />
+
+<% if params[:id] %>
+<script>
+$(document).ready( function() {
+	
+	select_asset(<%= params[:id] %>);
+
+	
+});
+</script>
+<% end %>

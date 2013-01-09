@@ -1,0 +1,25 @@
+- content_for :main do
+  
+  %h1.ads_icon Ad Zones
+
+  = paginate @ad_zones
+
+  %table
+    %tr
+      %th Name
+      %th Updated
+      %th Unit
+      %th URL
+    - for ad_zone in @ad_zones
+      %tr
+        %td= link_to ad_zone.name, [:admin, ad_zone]
+        %td= "#{time_ago_in_words(ad_zone.updated_at)} ago"
+        %td= ad_zone.ad_unit.name
+        %td= ad_zone.url_pattern
+
+  = paginate @ad_zones
+
+  %p
+    = icon_to "New Ad Zone", new_admin_ad_zone_path
+    = icon_to "Advertisments Dashboard", "/admin/advertisments"
+

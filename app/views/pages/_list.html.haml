@@ -1,0 +1,7 @@
+%ul.page_list
+  - pages.each do |page|
+    %li.page
+      = render :inline=>template, :locals=>{:page=>page}
+
+
+

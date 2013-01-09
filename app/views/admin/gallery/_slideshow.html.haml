@@ -1,0 +1,14 @@
+- gallery_id = "gallery_#{gallery.id}_#{rand(100000)}"
+
+.gallery(style=" overflow: hidden;" class='#{gallery.name.urlise}' id='#{gallery_id}')
+  - assets.each do |asset|
+    - img = image_tag(asset.asset.best_url(gallery.width, gallery.height), :style=>"padding: 20px; ")
+    = link_to img, asset.asset.url('original'), :class=>"fancybox" 
+  .pagination
+    = paginate assets
+
+%script
+  $(document).ready(function() {
+  init_fancybox();
+  });
+

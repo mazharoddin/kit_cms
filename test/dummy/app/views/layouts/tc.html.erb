@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv = "Content-Type" content = "text/html; charset=utf-8">
+    <!-- layout: ap -->
+    <title><%= page_title %></title>
+
+    <%= render :partial=>'/layouts/cms-common', :locals=>{:include_menu=>@page && @page.editable} %>
+
+    <%= csrf_meta_tag %>
+
+    <%= page_meta %>
+
+    <%= yield :head %>
+
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-22147190-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+       })();
+
+     </script>
+
+   </head>
+   <body>
+     <% if @page && @page.editable %>
+     <%= render :partial=>'/utility/menu' %>
+     <% end %>
+
+     <div id="wrapper" class="clearfix <%= wrapper_class %>">
+       <div class="clearfix" id="top" >
+         <%= link_to image_tag("/images/tc/logo-top.png", :alt=>"Talking Cranes", :style=>"position: absolute; top: 0; left: 0;"), can?(:moderate,:all) ? "/db" : "/" %>
+         <div class="home_hover"><%= link_to image_tag("/images/tc/logo-bottom.png", :alt=>"Talking Cranes", :style=>"position: absolute; top: 120px; left: 0;"), "/" %></div>
+         <% if current_user %>
+         <%= link_to image_tag("/images/tc/layout/myaccount.png", :alt=>"My Account", :style=>"position: absolute; top: 0; left: 832px;"), "/users/edit" %>
+         <% else %>
+         <%= link_to image_tag("/images/tc/layout/login.png", :alt=>"Login", :style=>"position: absolute; top: 0; left: 832px;"), "/users/sign_in" %>
+         <%= link_to image_tag("/images/tc/layout/join.png", :alt=>"Join", :style=>"position: absolute; top: 0; left: 927px;"), "/users/sign_up" %>
+         <% end %>
+         <div id="leaderboard">
+           &nbsp
+         </div> <!-- leaderboard -->
+
+         <%= link_to "ABOUT TC", "/about/index", :style=>"position: absolute; top: 95px; left: 850px; text-decoration:none;" %>
+         <%= link_to image_tag("/images/tc/layout/email.png", :alt=>"Email", :style=>"position: absolute; top: 90px; left: 930px;"), "mailto:contactus@talkingcranes.com" %>
+         <div class="clearfix" id="navbar">
+
+           <div id="home_link" <%= "class='selected'" if request.fullpath=='/' %>>
+             <%= link_to "HOME", "/", :style=>"margin-left:20px" %>
+           </div>
+           <div <%= selected_item('forum') %>>
+             <%= link_to "TALK", "/forums" %>
+           </div>
+           <div <%= selected_item('lifestyle') %>>
+             <%= link_to "LIFESTYLE", "/lifestyle/index" %>
+           </div>
+           <div <%= selected_item('getaway') %>>
+             <%= link_to "GETAWAY", "/getaway/index" %>
+           </div>
+           <div  <%= selected_item('learning') %>>
+             <%= link_to "LEARNING", "/learning/index" %>
+           </div>
+           <div <%= selected_item('art-culture') %>>
+             <%= link_to "ART & CULTURE", "/art-culture/index" %>
+           </div>
+           <div  <%= selected_item('books-films') %>>
+             <%= link_to "BOOKS & FILMS", "/books-films/index" %>
+           </div>
+           <div <%= selected_item('food') %>>
+             <%= link_to "FOOD", "/food/index" %>
+           </div>
+         </div> <!-- navbar -->
+       </div> <!-- top -->
+
+       <div style="position: relative;" id="main" >
+
+         <% if flash[:notice]  %>
+         <div class="notice">
+           <%= flash[:notice] %> 
+         </div>
+         <% end %>
+
+         <%= yield %>
+       </div> <!-- main -->
+
+       <div id="footer-divider">
+         <br/>
+       </div>
+       <form id="footer_search" action="/pages/search" method="post">
+         <div id="footer" class="clearfix">
+           <div style="float: left;">
+             <%= link_to "About Us", "/about/index" %>
+             <%= link_to "Terms and Conditions", "/about/terms-and-conditions" %>
+             <%= link_to "Privacy", "/about/privacy" %>
+             <%= link_to "Our Writers", "/about/our-writers" %>
+             <%= link_to "Contact Us", "/about/contact-us" %>
+             <%= link_to "Logout", "/users/sign_out" if current_user %>
+             <%= link_to "Login", "/users/sign_in" unless current_user %>
+             <%= link_to "Join", "/users/sign_up" unless current_user %>
+           </div>
+           <div style="float: right; margin-right: 30px;">
+             <input id="footer_search_form" class="shadow" name="search" type="text" />
+             <%= link_to_function "SEARCH", "$('#footer_search').submit();" %>
+           </div>
+           <%= link_to image_tag("/images/tc/dsc-logo.png"), "http://www.dsc.net", :style=>"position: absolute; left: 450px; top: 40px; " %>
+           <br/>
+           <%= link_to "Design by Noleen Burke", "mailto: noleenburke@gmail.com", :style=>"position: relative; top: 40px;" %>
+         </div>
+       </form>
+
+     </div> <!-- wrapper -->
+   </body>
+ </html>
+
+

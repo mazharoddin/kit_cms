@@ -1,0 +1,17 @@
+.mercury-snippet-panel.snippet_list
+
+  .filter
+    %input(class="filter" type="text" onkeyup='snippet_filter_key();')
+
+  %ul
+    - seen = {}
+    - @snippets.each do |snippet|
+      - next if seen[snippet.id]
+      - seen[snippet.id] = true
+      %li(data-filter="#{snippet.name.downcase} #{snippet.description.downcase}")
+        %img(alt="Block Name" data-snippet="#{snippet.id}" src="/assets/mercury/default-snippet.png")
+        .link
+          = link_to_function snippet.name, "insert_snippet(#{snippet.id});"
+        .description
+          = snippet.description
+

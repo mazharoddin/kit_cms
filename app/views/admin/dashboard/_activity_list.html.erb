@@ -1,0 +1,11 @@
+   <%= paginate @activity, {:style=>"margin-bottom: 10px;" } unless @no_pagination %>
+  <ul>
+    <% @activity.each do |act|  %>
+      <li><%= link_to act.category, "/admin/dashboard/activity?cat=#{act.category}" %>: <%= act.name.html_safe %><br/>
+      <span class="dehighlight" style="margin-left: 10px;">
+        <%= time_ago_in_words(act.updated_at) %> ago by <%= act.user.email rescue 'unknown user'%> 
+      </li> 
+    <% end %>
+  </ul>
+  <%= paginate @activity, {:style=>"margin-top: 10px;"} unless @no_pagination %>
+

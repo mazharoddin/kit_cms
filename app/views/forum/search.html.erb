@@ -1,0 +1,59 @@
+<div id="forums">
+
+  <h1><%= link_to "Forums", "/forums" %> &rarr; Search</h1>
+
+  <%= render(:partial=>"search_form") %>
+
+  <% if @results %>
+  <%= paginate @results %>
+  <% seen = Hash.new %>
+  <ul>
+    <% @results.each do |result| %>
+    <% result = result.load %>
+    <% if result.instance_of?(TopicThread) %>
+
+      <% next unless @mod || result.is_visible==1 %>
+      <% next unless level_okay(result.topic.read_access_level) %>
+
+        <% thread = result %>
+        <li>
+        <%= link_to "Forums", "/forums" %> &rarr; 
+        <%= link_to thread.topic.topic_category.name, thread.topic.topic_category.link %> &rarr; 
+
+        <%= link_to thread.title, thread.link %>
+        <br/>
+
+        <%= truncate_html(thread.topic_posts.first.display_body, :length=>200, :ommission=>"...").html_safe %>
+        by  <span class='display_name'><%= thread.topic_posts.first.created_by_user_display_name %></span> <%= time_ago_in_words thread.topic_posts.first.created_at %> ago
+
+
+        </li>
+      <% else %>
+      <% post = result  %>
+      <% next unless post && post.topic_thread %>
+        <% next unless @mod || (post.is_visible==1 && post.topic_thread.is_visible==1) %>
+        <% next unless level_okay(post.topic_thread.topic.read_access_level) %>
+        <% next if seen[post.topic_thread_id] %>
+        <% seen[post.topic_thread_id] = 1 %>
+        <li>
+        <div id="post">
+          <%= link_to "Forums", "/forums" %> &rarr; 
+          <%= link_to post.topic_thread.topic.topic_category.name, post.topic_thread.topic.topic_category.link %> &rarr; 
+          <%= link_to post.topic_thread.topic.name, post.topic_thread.topic.link %>
+          &rarr; 
+          <%= link_to truncate(post.topic_thread.title, :length=>80, :ommission=>'...'), post.topic_thread.link %>
+
+          <br/>
+          <%= truncate(ActionView::Helpers::SanitizeHelper::strip_tags(post.raw_body), :length=>200, :ommission=>"...") %><br/>
+          by  <%= post.created_by_user_display_name %> <%= time_ago_in_words post.created_at %> ago
+
+        </div>
+        </li>
+
+      <% end %>
+    <% end %>
+  </ul>
+
+  <%= paginate @results %>
+  <% end %>
+</div>

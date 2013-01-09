@@ -1,0 +1,26 @@
+- content_for :main do
+  
+  %h1.goals_icon Goals
+
+  %table.loosen
+    %tr
+      %th Name
+      %th Type
+      %th URL
+      %th Value
+
+    - for goal in @goals
+      %tr
+        %td= link_to goal.name, [:admin, goal]
+        %td= goal.goal_type
+        %td= goal.match_type
+        %td
+          - if goal.goal_type=="URL"
+            = goal.match_value
+          -  else
+            = goal.session_minutes
+
+
+  %p
+    = icon_to "New Goal", new_admin_goal_path
+    = icon_to "Experiments", admin_experiments_path

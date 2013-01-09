@@ -1,0 +1,79 @@
+<%= render :partial=>"/assets/manager/scripts" %>
+
+<% content_for :page_scripts do %>
+	
+	function set_massselect() {
+		$('input.mass_select').click(check_mass);
+	}
+	
+	function check_mass(e) {
+		any_selected = false;
+		$('input.mass_select').each(function() {
+			if ($(this).is(":checked")) {
+				any_selected = true;
+			}
+		});
+		if (any_selected) {
+			$('#mass_options').slideDown();
+		}
+		else {
+			$('#mass_options').slideUp();
+		}
+	}
+	
+	function mass_ids() {
+		ids = "0"
+		$('input.mass_select').each(function() {
+			if ($(this).is(":checked")) {
+				ids = ids + "," + $(this).attr('rel');
+			}
+		});
+		return ids;
+	}
+
+	function submit_mass(mode) {
+		$('#mode').val(mode);
+		$('#ids').val(mass_ids());
+		$('#mass_form').submit();
+	}
+	
+	function select_all(sel) {
+		$('input.mass_select').each(function() {
+			$(this).attr('checked', sel);
+		})
+		check_mass(null);
+	}
+	
+	$(document).ready(function() {
+		set_massselect();
+	})
+	
+<% end %>
+
+<% content_for :main do %>
+<div id="asset_manager" class='clearfix'>
+	
+<h1>Resources</h1>
+	<%= link_to_function "Upload", "$('#upload').dialog('open');"%>
+	
+	<%= render :partial=>"/assets/manager/asset_search" %>
+	
+	<%= render :partial=>"/assets/manager/mass" %>
+	
+	<div style="float: left;" id="assets">
+		<%= render :partial=>"/assets/manager/assets", :locals=>{:assets=>@assets, :selectable=>true} %>
+	</div>
+</div>
+
+<div id="upload">
+	<% @asset = Asset.new %>
+	<%= render :partial=>"/assets/manager/form" %> 
+</div>
+      <% end %>
+
+      <% content_for :right do %>
+        <%= render(:partial=>"/admin/shared/name") %>
+	<h1>Recent Uploads</h1>
+	<%= render(:partial=>"/assets/manager/simple", :locals=>{:assets=>@recent})%>
+      <% end %>
+

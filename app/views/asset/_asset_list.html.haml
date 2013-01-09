@@ -1,0 +1,14 @@
+= paginate @assets
+
+%table.loosen(style="margin-top: 5px;")
+  %tr(class="title_row")
+    %th Preview
+    %th Filename
+    - if mode=="editor"
+      %th Type
+      %th Size
+      %th Delete
+    %th Tags (click to edit)
+  - @assets.each do |asset|
+    = render :partial=>"asset_entry", :locals=>{:asset=>asset, :mode=>"editor"}
+

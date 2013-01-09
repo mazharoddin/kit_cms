@@ -1,0 +1,4 @@
+<p>
+<b>Search:</b> <%= text_field_tag "search" %> <%= link_to_function "Reset", "$('input[name=search]').val('');" %> <%= link_to_function "All", "do_asset_search('/assets/search', false);" %> <%= link_to_function "Untagged", "do_asset_search('/assets/search', true);" %>
+<span style="display: none" id="wait"><%= image_tag "/images/wait.gif" %></span>
+</p>

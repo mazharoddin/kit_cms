@@ -1,0 +1,69 @@
+%script
+  function check_field_type() {
+  val = $('#form_field_type_field_type option:selected').val();
+  if (val=='multiselect' || val=='select' || val=='hierarchy' || val=='radio' || val=='multicheckbox') {
+  $('#options').slideDown();
+  }
+  else {
+  $('#options').slideUp();
+  }
+  }  
+
+  $(document).ready(function() {
+  check_field_type();
+  $('#form_field_type_field_type').bind('change', function() {
+  check_field_type();
+  });
+  });
+
+.cms_form
+  = form_for @form_field_type, :url=>"/admin/form_field_types/#{@form_field_type.id}" do |f|
+    = f.error_messages
+    %p
+      = f.label :name
+      %br
+      = f.text_field :name
+
+    %p
+      = f.label :description
+      %br
+      = f.text_field :description
+
+    %p
+      = f.label :field_type
+      %br
+      = f.select :field_type, options_for_select([ ["Single Line", "line"], ["Email Address", "email"], [ "Paragraph of Text", "paragraph"], ["Checkbox", "checkbox"], ["Multiple Checkboxes", "multicheckbox"], ["Radio Buttons", "radio"],  ["Select box", "select"], ["Multiple Select Box", "multiselect"], ["Pair of select boxes with Parent->Child", "hierarchy"], [ "Image file", "image"], [ "Any file", "file"], ["URL","url"], ["Image URL","imageurl"], ["Words with autocomplete", "terms"], ["Location", "location"]], @form_field_type.field_type)
+
+    #options
+      = f.label :options
+      %br
+      - if @form_field_type.field_type == 'hierarchy'
+        = show_tree(@form_field_type.options)
+      - else
+        = @form_field_type.options.split('|').join(', ').html_safe rescue ''
+      .field_help
+        To edit these options, save this form and then click "Option Editor"
+
+    %p
+      = f.label :html_options
+      %br
+      = f.text_area :html_options
+      .field_help
+        A list of options which will be passed to the input/select tag when the field is used.  Separate multiple ones with the pipe or bar "|".  For example, to set the size of a text area, use "rows=5|cols=50".  To set the font size, use "style='font-size: 24px;'".
+
+    %p
+      = f.label :allow_blank
+      %br
+      = f.check_box :allow_blank
+      .field_help
+        Can this entry be left blank?
+
+    %p
+      = f.label :hidden
+      %br
+      = f.check_box :hidden
+      .field_help
+        Hide this type from lists from which the user selects types.
+
+    %p
+      = gnric_submit "Save"

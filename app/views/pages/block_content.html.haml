@@ -1,0 +1,12 @@
+%div(style="padding: 10px;")
+  %h1.block_icon
+    = "Block '#{@block_instance.block.name}'"
+
+  %div(style="height: 500px; width: 500px; overflow: auto; margin-top: 20px;")
+    %ul
+      - @block_contents.each do |bc|
+        %li
+          %em= bc.prompt
+          = ":"
+          %br
+          = h bc.field_value

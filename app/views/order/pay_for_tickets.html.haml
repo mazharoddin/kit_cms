@@ -1,0 +1,20 @@
+= form_tag Preference.get_cached(_sid, "sage_pay_post_url"), :method=>:post, :id=>"pay" do |f|
+  
+  = hidden_field_tag "VPSProtocol", "2.23"
+  = hidden_field_tag "TxType", "PAYMENT"
+  = hidden_field_tag "Vendor", Preference.get_cached(_sid, "sage_pay_vendor")
+  = hidden_field_tag "Crypt", @sagepay_crypt
+
+  .hidden(style="display: none;")
+    = submit_tag "Pay Now"
+
+  .message
+    Please wait while you're redirected to our payment processor.  If you're not redirected please 
+    = link_to_function "click here", "$('form#pay').submit();"
+
+
+%script(type='text/javascript')
+  $(document).ready(function() {
+  $('form#pay').submit();
+  });
+

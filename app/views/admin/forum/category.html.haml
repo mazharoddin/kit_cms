@@ -1,0 +1,26 @@
+- content_for :main do 
+
+  %h1.forum_icon Category '#{@category.name}'
+
+  .cms_form
+    = form_for @category, :url=>"/admin/forums/category/#{@category.id}", :method=>:post do |f|
+
+      %label Name
+      = f.text_field :name
+
+      %label Description
+      = f.text_area :description
+
+      %label Show Title
+      = f.check_box :show_title
+      .field_help
+        If this is unticked the category won't be displayed (the topics it contains will still be shown)
+
+      .div(style="margin-top: 20px;")
+        = gnric_submit "Save"
+        or 
+        = icon_to "Categories and Topics", "/admin/forums"
+
+  %p
+    = link_to "Delete Category", "/admin/forums/category/#{@category.id}/delete", :class=>:action, :confirm=>"Are you sure?  This cannot be undone.", :method=>:post
+      

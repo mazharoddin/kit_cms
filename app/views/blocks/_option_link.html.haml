@@ -1,0 +1,6 @@
+%input(id="options_#{field_name}" name="options[#{field_name}]" type="text" value="#{params[:options] ? params[:options][field_name] : ''}")
+%label(class="label") &nbsp;
+.open_browser_links
+  %a(href="#" class="mercury-button icon no_icon" style="margin-top: 5px;" id='page_browser_link' onClick="show_page_browser_for_block('options_#{field_name}', 'fieldset_#{field_name}', '#{mode}' );") Show Page Browser
+  %a(href="#" class="mercury-button icon no_icon" style="margin-top: 5px;" id='file_browser_link' onClick="show_file_browser_for_block('options_#{field_name}', 'fieldset_#{field_name}', '#{mode}' );") Show File Browser
+

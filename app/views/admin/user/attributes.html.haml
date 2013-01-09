@@ -1,0 +1,43 @@
+- content_for :page_scripts do 
+  $(document).ready(function() {
+  $('#add_new_attribute').slideDown();
+  });
+
+- content_for :main do 
+
+  %h1 User Attributes
+  .field_help
+    Arbitrary number of additional attributes that can be applied to each user account. Click one below to see more details.
+
+  %ul(class="long_list")
+    - @attributes.each do |attr|
+      %li(style="margin-bottom: 10px;")
+        %div.clearfix
+          %div(style="width: 400px; float: left;")
+            = link_to attr.name,  "/admin/users/attribute/#{attr.id}"
+
+  %h3 Add New Attribute
+  = render partial: "add_attribute_form"
+
+  - if current_user.designer?
+    .advanced.cms_form(style="margin-top: 20px;")
+      = form_tag "/admin/users/attributes", :method=>:post do
+        %label Edit Profile Form  HTML
+        = text_area_tag :edit_html, @edit_html
+        .field_help
+          If present, this HTML will be used to generate the form which the user will see to edit their profile. If this field is empty the system will generate the standard form.  You can use any HTML code you wish but as it will be processed in a standardised way it's important that it follows the conventions of the existing form. In particular, don't change the form parameters, or the names/IDs of the input elements.  To add new fields you must edit the attributes above first, you cannot simple add them to the HTML of the form.  The best way to create your own form is to <a target="_blank" href='/admin/user/profile/html/edit'>generate the standard one</a>, edit it and paste the result back in to this field.
+
+        %label Display Profile HTML
+        = text_area_tag :view_html, @view_html
+        .field_help
+          If present, this HTML will be used to generate the display of user profiles.  If this field is empty the system will generate the standard form.  You can use any HTML code you wish but to display the user's attributes they should be specified in a standardised way - the easiest method of doing this is to <a href="/admin/user/profile/html/view" target="_blank">generate the HTML</a>, edit it and paste the result back in to this field. <span style="color: red">Important</span>: if you include a field in your HTML it will be shown regardless of the permissions of that field.
+
+
+        %label Owner Profile HTML
+        = text_area_tag :owner_html, @owner_html
+        .field_help
+          If present, this HTML will be used to generate the display of the user's own profile.  If this field is empty the system will generate the standard form.  You can use any HTML code you wish but to display the user's attributes they should be specified in a standardised way - the easiest method of doing this is to <a href="/admin/user/profile/html/owner" target="_blank">generate the HTML</a>, edit it and paste the result back in to this field. <span style="color: red">Important</span>: if you include a field in your HTML it will be shown regardless of the permissions of that field.
+
+
+        = gnric_submit "Save"
+      

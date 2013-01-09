@@ -1,0 +1,31 @@
+- content_for :main do 
+
+  %h1.menu_icon Menu
+
+  .cms_form
+    = form_for @menu, :url=>"/menu", :method=>:put do |f|
+
+      %label Name
+      = f.text_field :name
+      .field_help 
+        The name by which your menu will be referenced
+
+      %label Description
+      = f.text_area :description
+      .field_help
+        A brief description to explain what the menu is for and/or where it will be used
+
+      .advanced
+        %label Can Have Sub Items
+        = f.check_box :can_have_children 
+        .field_help
+          Is it permissible to add items to this menu as sub items of existing items?
+
+        %label Show Separator?
+        = f.check_box :use_separator
+        .field_help
+          Add a ListItem tag &lt;li&gt; between each top level menu item when rendering the menu
+      = f.hidden_field :is_system_menu
+      
+      %div(style="margin-top: 10px;")
+        = gnric_submit "Save"

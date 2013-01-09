@@ -1,0 +1,50 @@
+- content_for :page_scripts do 
+  var page_id = 0;
+  
+- content_for :main do
+
+  %h1.block_icon Edit Block Instance Options
+
+  %div(style="margin-bottom: 20px;")
+    = icon_to "Show Block Instance", "/admin/block_instance/#{@instance.id}"
+
+  - need_browsers = {}
+
+  .cms_form
+    = form_for 'options', :html=>{:id=>"options"} do |f| 
+      %label
+        Instance ID
+      = text_field_tag :instance_name, @instance.instance_id
+      = hidden_field_tag :version, @instance.version
+      = hidden_field_tag :page_id, @instance.page_id
+      - has_fields = false
+
+      - @fields.each do |field|
+        - has_fields = true
+        - field_name,field_type,field_description = field.split(':')
+        %fieldset.inputs(id="fieldset_#{field_name}" style="width: 700px;")
+          %legend= field_description
+          %ul
+            %li(class="string input optional stringish" id="options_#{field_name}_input")
+              - if field_type=='text'
+                = render :partial=>"/blocks/option_text", :locals=>{:field_name=>field_name, :friendly=>false}
+              - elsif field_type=='friendly'
+                = render :partial=>"/blocks/option_text", :locals=>{:field_name=>field_name, :friendly=>true}
+              - elsif field_type=='line'
+                = render :partial=>"/blocks/option_line", :locals=>{:field_name=>field_name}
+              - elsif is_db_choice?(field_type)
+                = render :partial=>"/blocks/option_db_choice", :locals=>{:field_name=>field_name, :field_type=>field_type}
+              - elsif field_type=="link"
+                = render :partial=>"/blocks/option_link", :locals=>{:field_name=>field_name, :field_type=>field_type, :mode=>"db"}
+              - elsif field_type=='image'
+                = render :partial=>"/blocks/option_image", :locals=>{:field_name=>field_name, :field_type=>field_type, :mode=>"db"}
+              
+      - unless has_fields
+        %p
+          There are no parameters to set.  
+      %p
+        = gnric_submit "Save" 
+
+  %script(type="text/javascript")
+    $(document).ready(function() {
+    });

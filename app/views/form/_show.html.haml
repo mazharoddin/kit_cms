@@ -1,0 +1,74 @@
+- content_for :page_scripts do 
+  $(document).ready(function() {
+
+  - form.form_fields.each do |field|
+    - next unless field.form_field_type.html_options.not_blank?
+    - field.form_field_type.html_options.split('|').each do |hh|
+      $('#field_#{field.id}').attr('#{hh.split('=')[0]}', #{hh.split('=')[1]});
+  $('#form_#{form.id}').validate();
+  $('#field_#{form.form_fields.first.id}').focus();
+  });
+
+%div(class="#{form.klass}")
+  - if show_title
+    .form-title
+      = form.title
+
+  - if show_body
+    .body
+      = form.body.html_safe
+
+  = form_tag "/form/#{form.id}", {:honeypot=>true, :method=>"post",  :class=>form.title.urlise,  :id=>"form_#{form.id}"} do
+    = form_check_code
+    
+    - if @sub
+      = hidden_field_tag :submission_id, @sub.id
+    - if params[:edit]
+      = hidden_field_tag :edit, params[:edit]
+    %ul.groups
+      - form.form_field_groups.each do |group|
+        %li.group
+          %fieldset(class="#{group.name.urlise} #{group.klass}" )
+            %legend= group.name
+            
+            .group-intro
+              = group.intro if group.intro.not_blank?
+
+            %ul.group_fields
+              - group.form_fields.each do |field|
+                - next if field.hidden==1
+                - value = current_value(@sub, field)
+                = render :partial=>"/form/field", :locals=>{:field=>field, :value=>value}
+
+            .group-outro
+              = group.outro if group.outro.not_blank?
+
+      - other_fields = form.form_fields.includes(:form_field_type).where(:form_field_group_id=>nil).all
+      - if other_fields.size>0
+        %li
+          %ul
+            - other_fields.each do |field|
+              - next if field.hidden==1
+              - value = current_value(@sub, field)
+              = render :partial=>"/form/field", :locals=>{:field=>field, :value=>value}
+
+      - if form.use_text_captcha?(request, current_user)
+        %li.group.captcha
+          %fieldset
+            %legend Are you human?
+            .explanation
+              We want to check that you're a human not a machine filling in this form.  Sorry, we know it's a nuisance.  Please answer the question below.
+            %ul.group_fields
+              - question, answers = text_captcha_qa
+              %li.group_field
+                %label
+                  = question
+                = text_field_tag :q_a, "", :class=>"field required"
+                = hidden_field_tag :q_q, answers
+
+
+    
+    .submit(class="#{true ? 'new' : 'edit'}")
+      = submit_tag form.submit_label  
+
+

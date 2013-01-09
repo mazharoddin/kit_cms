@@ -1,0 +1,23 @@
+= doc_ready("$('.cms_form form').validate();")
+
+= link_to "IAB Display Advertising Guidelines", "http://www.iab.net/guidelines/508676/508767/displayguidelines", :target=>"_blank"
+
+.cms_form
+  = form_for [:admin, @ad_unit] do |f|
+    = f.error_messages
+    %p
+      = f.label :name
+      = f.text_field :name, :class=>"required"
+
+    %p 
+      = f.label :width
+      = f.text_field :width, :class=>"required number", :style=>"width: 50px;"
+      px
+
+    %p
+      = f.label :height
+      = f.text_field :height, :class=>"required number", :style=>"width: 50px;"
+      px
+
+    %p
+      = gnric_submit "Save"

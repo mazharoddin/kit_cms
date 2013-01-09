@@ -1,0 +1,113 @@
+- if @mod
+  - content_for :page_scripts do
+    = render :partial=>"mod_thread", :formats=>[:js]
+
+#forums
+  = render(:partial=>"introduction")
+  .titles(class='clearfix')
+    .talk_topics_title
+      %h2
+        = link_to t("forum.name"), "/forums", :class=>"breadcrumb"
+        &rarr;
+        = link_to @thread.topic.name, @thread.topic.link
+    #thread_title
+      - if current_user && current_user.moderator?
+        = best_in_place @thread, :title, :path=>"/forums/thread/#{@thread.id}", :activator=>"#edit_title"
+        .mod_actions
+          %a#edit_title Edit Title
+      - else
+        = @thread.title
+
+  - if @thread.thread_comment.not_blank?
+    .thread_comment
+      = @thread.thread_comment.html_safe
+
+  - if @thread.pages.size>0 
+    %div
+      This thread is about the article "#{link_to @thread.pages.first.title, @thread.pages.first.link}"
+
+  = render(:partial=>"mod_thread", :locals=>{:show_edit_form=>true}) 
+
+  #reverse_link
+    = link_to "#{order_arrow(@post_order)} #{t('forum.reverse_post_order')}".html_safe, "?reverse=1", :rel=>"nofollow" , :rel=>"nofollow", :class=>"action" if @thread.post_count > 1
+  #favourite_link
+    - is_fave = @thread.is_favourited_by(current_user)
+    = link_to_function t("forum.#{is_fave ? 'un_' : ''}favourite_thread"), "favourite_thread(#{@thread.id}, " + current_user.id.to_s + ");", :class=>"action", :rel=>"nofollow" if current_user
+  - if current_user
+    #latest_link
+      = link_to t("forum.read_new"), @thread.link(true), :class=>"action", :rel=>"nofollow"
+
+  #posts.clearfix
+    .top
+      .thread_info(class="clearfix")
+        - if @posts
+          .post_count
+            = pluralize(@thread.post_count, t("forum.post"))
+          .pagination
+            = paginate @posts 
+    - odd_even = true
+    - @posts.each do |post| 
+      - next unless post.is_visible==1 || @mod 
+      - next unless post.body 
+      %a(name="#{post.id}")
+      - if post==@posts.first
+        #thread_title(class='clearfix #{" hidden_thread_title" unless @thread.is_visible?}')
+          = @thread.title if post == @posts.first 
+
+      .post(id="post_#{post.id}" class="clearfix #{odd_even ? 'odd' : 'even'} #{'opening_post' if post.id == @thread.first_post_id}")
+        - odd_even = !odd_even            
+        = render :partial=>@show_mini_profile ? "thread_post_with_profile" : "thread_post", :locals=>{:post=>post, :odd_even=>odd_even}
+
+        - if @mod 
+          .clear
+          .mod_comment(style="display:none;" id="mod_comment_#{post.id}")
+          .info
+            .mod_actions
+              = render :partial=>"post_moderation", :locals=>{:post=>post}
+
+    - if @posts
+      .bottom
+        .thread_info(class='clearfix')
+          .post_count
+            = pluralize(@thread.post_count, t("forum.post"))
+          .pagination
+            = paginate @posts 
+
+  - if @mod && @thread.moderation_comment 
+    .moderation_comment
+      = @thread.moderation_comment.html_safe 
+
+  .clearfix
+    = render(:partial=>"mod_thread", :locals=>{:show_edit_form=>false}) 
+
+  #locked_warning(style='#{"display:none;" unless @thread.is_locked?}')
+    = t "forum.thread_locked"
+
+  %a(name="add_post")
+
+  .clear
+
+  - if current_user
+    #post_message(class='#{"hidden" if @thread.is_locked?}')
+      = render(:partial=>"add_post", :locals=>{:show_header=>true, :show=>true, :add_label=>"Add Your Post", :topic=>@thread.topic, :thread=>@thread}) 
+  - else
+
+    = link_to t("forum.login"), "/users/sign_in", :rel=>"nofollow"
+    to add your message
+
+
+  - if @mod
+    #mod_spam_popup
+      %h2 Spam Options
+
+      %ul.moderation_options
+        %li
+          = link_to_function "Delete post", "spam(#{@thread.id},'spam=1');"
+        %li
+          = link_to_function "Delete post and increase user spam score", "spam(#{@thread.id}, 'spam=1&inc=1');"
+        %li
+          = link_to_function "Delete post and ban user", "spam(#{@thread.id}, 'spam=1&inc=1&ban=1');"
+        %li
+          = link_to_function "Delete all user's posts and ban user", "spam(#{@thread.id}, 'spam=1&ban=1&inc=1&delete_all=1');", :confirm=>"Are you sure you want to delete all of this user's posts?"
+
+      

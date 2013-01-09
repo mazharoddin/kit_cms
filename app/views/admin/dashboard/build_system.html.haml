@@ -1,0 +1,37 @@
+- content_for :main do 
+
+  %h2 Build System
+
+  .cms_form
+    = form_tag "/admin/dashboard/build_system", :method=>:post do 
+    
+      %p
+        %label System Short Name
+        = text_field_tag :name, params[:name]
+
+      %p
+        %label System Full Name
+        = text_field_tag :full_name, params[:full_name]
+
+      %p
+        %label Domain Name
+        = text_field_tag :domain_name, params[:domain_name]
+        .field_help
+          No protocol, just the name, e.g. www.dsc.net
+
+      %p 
+        %label EMail address (super admin account)
+        = text_field_tag :email, params[:email]
+
+      %p
+        %label Password (super admin account)
+        = password_field_tag :password, params[:password]
+
+      %p
+        %label Password again
+        = password_field_tag :password_confirm, params[:password_confirm]
+
+      %p
+        = gnric_submit "Create"
+      
+

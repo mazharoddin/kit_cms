@@ -1,0 +1,23 @@
+- content_for :main do 
+
+  %h1.newsletter_icon Mailchimp
+
+  = icon_to "Send All Users To MailChimp", "/admin/mailchimp/import", false, :confirm=>"Are you sure?", :method=>:post
+
+  %table.loosen
+    %tr
+      %th List Name
+      %th Subscribers
+      %th &nbsp;
+    - @lists.each do |list|
+      %tr
+        %td
+          = link_to list["name"], "https://admin.mailchimp.com/lists/dashboard/overview?id=#{list["web_id"]}", :target=>"_blank"
+        %td
+          = list["stats"]["member_count"]
+        %td
+          - if list["id"] == @default_list
+            Default List
+          - else
+            = icon_to "Make default list", "/admin/mailchimp?make_default=#{list["id"]}", false, :confirm=>"Are you sure?" 
+

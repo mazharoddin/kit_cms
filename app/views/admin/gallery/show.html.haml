@@ -1,0 +1,64 @@
+- content_for :main do 
+
+  %h1.gallery_icon Gallery 
+
+  %table.attributes
+
+    %tr
+      %td Name
+      %td 
+        = @gallery.name
+
+    %tr
+      %td Image Duration
+      %td
+        = @gallery.delay
+
+    %tr
+      %td Transition
+      %td
+        = @gallery.transition
+
+    %tr
+      %td Transition Duration
+      %td
+        = @gallery.transition_duration
+
+    %tr
+      %td Width
+      %td
+        = @gallery.width
+    %tr
+      %td Height
+      %td
+        = @gallery.height
+
+
+  .actions(style="margin-top: 10px;")
+    = link_to "Edit", "/admin/gallery/#{@gallery.id}/edit"
+    = link_to "Delete", "/admin/gallery/#{@gallery.id}", :confirm=>"Are you sure?  Deleting a gallery cannot be undone.  Note: deleting the gallery does not delete any images in may contain", :method=>:delete
+    = link_to "Preview", "/admin/gallery/#{@gallery.id}/preview?iframe", :class=>"fancybox"
+
+  %h1(class="gallery_icon" style="margin-top: 20px;") Images
+  .field_help(class="no_margin")
+    Drag and drop to sort
+
+  %div(style="margin-top: 10px;")
+    = icon_to_show "Add Image to Gallery", "add", :id=>"add_link" unless params[:paging]
+
+  #add(style="#{'display: none;' unless params[:paging]} border: thin #aaa solid; margin: 10px 0 20px 0; padding: 10px;")
+    #list
+      = render :partial=>"images" 
+
+  %table(class="attributes" id="image_list" style="margin-top: 10px;")
+    %tbody
+      - @gallery.gallery_assets.includes(:asset).order(:display_order).each do |asset|
+        - next unless asset && asset.asset
+        = render :partial=>"image_list_entry", :locals=>{:asset=>asset}
+
+- content_for :page_scripts do
+  $(document).ready(function() {
+  $('#image_list tbody').sortable().disableSelection().bind("sortstop", function(event,ui) {
+  sort_gallery_images(#{@gallery.id},event,ui);
+  });
+  });

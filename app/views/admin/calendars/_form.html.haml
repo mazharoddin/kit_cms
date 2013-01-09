@@ -1,0 +1,13 @@
+.cms_form
+  = form_for [:admin, @calendar] do |f|
+    = f.error_messages
+    %p
+      = f.label :name
+      %br
+      = f.text_field :name
+    %p
+      = f.label :description
+      = f.text_area :description
+
+    %p
+      = gnric_submit "Save"

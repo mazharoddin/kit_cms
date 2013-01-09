@@ -1,0 +1,79 @@
+- if @canonical_tag
+  %link(rel='canonical' href='#{@canonical_tag}')
+
+%title
+  = page_title
+
+= stylesheet_link_tag "application"
+= javascript_include_tag "application"
+
+- if @page && @page.editable
+  = render :partial=>"/layouts/cms-common", :locals=>{:include_menu => false} 
+
+- if @show_edit_link
+  %style(type='text/css')
+    div#edit_status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    opacity:0.6;
+    filter:alpha(opacity=60);
+    padding: 5px;
+    }
+
+    div#edit_status.published a {
+    color: green;
+    }
+    div#edit_status.not_published a {
+    color: red;
+    }
+    div#edit_status a.deleted {
+    color: red;
+    }
+
+= gnric_stylesheets
+= gnric_javascripts
+= csrf_meta_tags 
+
+- if @meta_description.not_blank?
+  %meta(name="description" content="#{@meta_description.html_safe}")
+- if @page && @page.meta_description.not_blank?
+  %meta(name="description" content="#{@page.meta_description.html_safe}")
+- if @page && @page.meta_keywords.not_blank?
+  %meta(name="keywords" content="#{@page.meta_keywords}")
+
+- if @page && @page.header
+  <!-- page header starts -->
+  = @page.header.html_safe
+  <!-- page header end -->
+
+- if content_for :head 
+  = yield :head
+
+%script(type="text/javascript")
+  - if @show_edit_link && can?(:moderate, :all)
+    $(document).ready(function() {
+    = edit_link
+    });
+
+  - if content_for :page_scripts
+    = yield :page_scripts
+
+  - if (Preference.getCached(_sid, 'eu_cookies')=='true')
+    $(document).ready(function() { check_cookies(); });
+
+  - if Preference.getCached(_sid, 'google_analytics_id')
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', "#{Preference.getCached(_sid, 'google_analytics_id')}"]);
+    _gaq.push(['_trackPageview']);
+    _gaq.push(['_setCustomVar',1,'User', #{current_user ? current_user.id : 0}, 1], 2);
+
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+
+

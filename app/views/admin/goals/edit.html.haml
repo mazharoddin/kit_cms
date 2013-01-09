@@ -1,0 +1,9 @@
+- content_for :main do
+  
+  %h1.goals_icon Edit Goal
+
+  = render 'form'
+
+  %p
+    = icon_to "Show", [:admin, @goal]
+    = icon_to "Goals", admin_goals_path

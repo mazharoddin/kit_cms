@@ -1,0 +1,65 @@
+<div id="left" class="clearfix">	
+
+    <div id="left-box1" class="box">
+      <h1 class="filter_icon">Filter</h1>
+      <div style="width: 220px;" class="field_help">
+        Show only recent pages that match the following filter.
+      </div>
+      <div id="options">
+        <ul id="filter_list">
+          <%= "<li>#{icon_to 'Favourites', '/pages?fav=1',false }</li>".html_safe unless @mode=="Favourites" %>		
+          <%= "<li>#{icon_to 'Recent', '/pages', false}</li>".html_safe unless @mode=="Recent" %>
+          <% statuses = Status.sys(_sid).order(:order_by).all %>
+          <% statuses.each do |status| %>
+          <% next if status.name == @mode %>
+          <li><%= icon_to status.name, "/pages/status/#{status.id}", false %></li>
+          <% end %>
+        </ul>
+      </div>
+
+
+      <div id="filtered">	
+        <h1 class="pages_icon"><%= @mode %></h1>
+        <div class="field_help" style="width: 220px;">
+          The most recently edited pages
+          <%= "which are on your favourites list" if @mode=='Favourites' %>
+          <%= "which have their status set to '#{@mode}'" if ['Editing','For review','Ready for publication', 'Published', 'On Hold', 'Withdrawn'].include?(@mode) %>
+
+        </div>
+        <% if @pages %>
+        <ul>
+          <% @pages.each do |page| %>
+          <li class="page"><%= link_to list_name(page,28,true), page.link('info', true), {:title=>page.title} %></li>
+          <% end %>
+        </ul>
+        <%= paginate @pages %>
+        <% end %>
+      </div>
+
+    </div>
+
+    <div  id="left-box2" class="box">
+      <h1 class="browse_icon clearfix">
+        <div style="float: left;">Browse</div>
+        <div style="font-size: 14px; color: #000; float: right"><%= icon_to_function "Zoom", "zoom_browser();", "zoom", :class=>"zoom_link" %></div>
+      </h1>
+      <div class="field_help" style="width: 400px;">
+        Browse the tree to see your pages in their categories.  Right click, or click the option icon to the right of the name, to see a list of options for that entry in the tree.  You can move items around the tree by dragging and dropping them.
+      </div>
+      <div id="browser" > </div>
+    </div>
+
+</div>
+
+
+  <div id="right">
+    <% right_column %>
+    <%= yield :right %>
+  </div>
+
+
+<% content_for :page_scripts do %>
+<%= render(:partial=>"category/tree_browser", :formats=>[:js]) %>
+<%= render(:partial=>"category/setup_filter", :formats=>[:js]) %>
+<% end %>
+

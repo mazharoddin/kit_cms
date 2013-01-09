@@ -1,0 +1,38 @@
+- content_for :head do
+  = javascript_include_tag "gnric/jquery.fileupload"
+
+- content_for :page_scripts do
+  $(document).ready(function() {
+  initialise_upload_form('#uploadform');
+
+  $('#files').on('click', '.pagination a', function(event) {
+  event.preventDefault();
+  $.ajax({type: 'GET', url: $(this).attr('href')});
+  });
+  
+  });
+
+- content_for :main do 
+  %h1.file_icon Files
+  .field_help
+    Here you can upload files of any type.  You can also upload images in the editor directly.  
+
+  %fieldset#upload
+    %legend Upload
+    %form(id="uploadform" action="/assets" method="POST" enctype="multipart/form-data")
+      %input(type="file" name="asset[]" multiple) 
+      %br
+      or drag and drop file anywhere on this page
+    %ul#filelist
+
+  %div(style="margin-top: 10px; margin-bottom: 10px;")
+    = form_tag("/assets", :method=>:get) do |f|
+      = text_field_tag :search, params[:search]
+      = submit_tag "Search"
+      or
+      = link_to "Reset", "/assets"
+    .field_help
+      You can search for the name of the file, the content type (e.g. 'gif' or 'doc') or any of the tags you've given the file.
+ 
+  #files(style="margin-top: 10px;")
+    = render(:partial=>"asset/asset_list", :locals=>{:mode=>"editor"})

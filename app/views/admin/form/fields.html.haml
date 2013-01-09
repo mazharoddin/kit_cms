@@ -1,0 +1,7 @@
+- content_for :main do 
+
+  %h1.forms_icon Form '#{@form.title}'
+
+  = icon_to "Show Form Definition", "/admin/form/#{@form.id}"
+
+  = render :partial=>"show_fields", :locals=>{:form=>@form}

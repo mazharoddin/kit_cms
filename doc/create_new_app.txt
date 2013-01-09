@@ -1,0 +1,24 @@
+Copy the model app
+
+Replace the name "Model" with the name of your app, using an uppercase first letter, in:
+
+config/application.rb (around line 12)
+config/environment.rb (around line 5)
+config/environtments/development.rb (around line 1)
+config/environtments/production.rb (around line 1)
+config/environtments/test.rb (around line 1)
+config/initializers/secret_token.rb (around line 7.  AND change some of the letters and numbers, but don't add or remove the total number)
+config/initializers/session_store.rb (around lines 3 and 8)
+config/routes.rb (around line 1)
+config.ru (around line 4)
+Rakefile (around line 7)
+
+Then run:
+bundle
+
+Then edit the database name in config/database.yml, then:
+
+rake db:create
+rake db:schema:load
+rake db:data:load
+

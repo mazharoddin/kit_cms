@@ -1,0 +1,27 @@
+- right_column
+
+- content_for :main do
+  %h1.newsletter_icon{:style=>"margin-bottom: 20px;"} Newsletters
+
+  = button_to "Check For New Newsletters", "/admin/newsletters/fetch"
+  %br
+  = paginate @newsletters
+  %table{:border=>"1", :cellpadding=>"5", :cellspacing=>"0"}
+    %tr
+      %th
+        Subject
+      %th
+        Status 
+      %th
+        Created
+    - @newsletters.each do |news|
+      %tr
+        %td
+          = link_to news.name, "/admin/newsletters/#{news.id}"
+        %td
+          = news.status.titleize
+        %td
+          = news.created_at.to_s(:db)
+       
+  = paginate @newsletters
+
