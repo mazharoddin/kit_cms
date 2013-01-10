@@ -216,6 +216,22 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "can_write",   :limit => 1
   end
 
+  create_table "comments", :force => true do |t|
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "is_moderated", :limit => 1,   :default => 0
+    t.integer  "is_visible",   :limit => 1,   :default => 0
+    t.text     "body"
+    t.string   "user_name",    :limit => 200
+    t.string   "user_email",   :limit => 200
+    t.string   "user_url",     :limit => 200
+    t.string   "url",          :limit => 200
+    t.integer  "system_id"
+  end
+
+  add_index "comments", ["url"], :name => "url"
+
   create_table "conversation_users", :force => true do |t|
     t.integer  "user_id"
     t.datetime "updated_at"
@@ -242,8 +258,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "locked_at"
     t.datetime "failed_at"
     t.string   "locked_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "queue"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
@@ -289,19 +306,6 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "enabled",             :limit => 1,   :default => 1
   end
 
-  create_table "field_types", :force => true do |t|
-    t.string   "name"
-    t.integer  "is_choice"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "template"
-    t.string   "wrapper",     :limit => 20
-    t.string   "editor_type", :limit => 20
-    t.integer  "system_id",   :limit => 1
-  end
-
-  add_index "field_types", ["system_id"], :name => "system_id"
-
   create_table "form_field_groups", :force => true do |t|
     t.string   "name",       :limit => 200
     t.text     "intro"
@@ -332,12 +336,14 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer "display_order"
     t.integer "form_field_type_id"
     t.integer "is_mandatory"
-    t.string  "name",                :limit => 200
-    t.integer "system_id",           :limit => 1
-    t.string  "code_name",           :limit => 200
+    t.string  "name",                 :limit => 200
+    t.integer "system_id",            :limit => 1
+    t.string  "code_name",            :limit => 200
     t.text    "description"
     t.integer "form_field_group_id"
     t.text    "default_value"
+    t.string  "geo_code_from_fields", :limit => 200
+    t.integer "hidden",               :limit => 1,   :default => 0
   end
 
   add_index "form_fields", ["system_id"], :name => "system_id"
@@ -347,6 +353,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.text    "value"
     t.integer "form_submission_id"
     t.integer "system_id",          :limit => 1
+    t.float   "lat"
+    t.float   "lon"
   end
 
   add_index "form_submission_fields", ["form_field_id"], :name => "form_field_id"
@@ -363,34 +371,39 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "visible",    :limit => 1,  :default => 1
     t.integer  "f_id"
     t.datetime "updated_at"
+    t.float    "lat"
+    t.float    "lon"
   end
 
+  add_index "form_submissions", ["form_id", "f_id"], :name => "form_id_2"
   add_index "form_submissions", ["form_id", "system_id"], :name => "form_id"
   add_index "form_submissions", ["system_id"], :name => "system_id"
 
   create_table "forms", :force => true do |t|
-    t.string  "title",              :limit => 200
+    t.string  "title",                  :limit => 200
     t.text    "body"
-    t.string  "redirect_to",        :limit => 200
+    t.string  "redirect_to",            :limit => 200
     t.text    "notify"
-    t.string  "klass",              :limit => 200
-    t.string  "submit_label",       :limit => 200
-    t.string  "url",                :limit => 200
-    t.integer "system_id",          :limit => 1
-    t.integer "user_visible",       :limit => 1,    :default => 0
-    t.integer "owner_visible",      :limit => 1,    :default => 0
-    t.integer "owner_editable",     :limit => 1,    :default => 0
-    t.integer "user_editable",      :limit => 1,    :default => 0
-    t.integer "public_visible",     :limit => 1,    :default => 0
-    t.integer "assignable",         :limit => 1,    :default => 0
-    t.integer "user_creatable",     :limit => 1,    :default => 1
-    t.integer "public_creatable",   :limit => 1,    :default => 1
-    t.integer "locked_for_delete",  :limit => 1,    :default => 1
+    t.string  "klass",                  :limit => 200
+    t.string  "submit_label",           :limit => 200
+    t.string  "url",                    :limit => 200
+    t.integer "system_id",              :limit => 1
+    t.integer "user_visible",           :limit => 1,    :default => 0
+    t.integer "owner_visible",          :limit => 1,    :default => 0
+    t.integer "owner_editable",         :limit => 1,    :default => 0
+    t.integer "user_editable",          :limit => 1,    :default => 0
+    t.integer "public_visible",         :limit => 1,    :default => 0
+    t.integer "assignable",             :limit => 1,    :default => 0
+    t.integer "user_creatable",         :limit => 1,    :default => 1
+    t.integer "public_creatable",       :limit => 1,    :default => 1
+    t.integer "locked_for_delete",      :limit => 1,    :default => 1
     t.text    "html"
     t.text    "body_after"
-    t.string  "stylesheets",        :limit => 1000, :default => ""
-    t.integer "log_activity",       :limit => 1,    :default => 1
-    t.integer "visible_by_default", :limit => 1,    :default => 1
+    t.string  "stylesheets",            :limit => 1000, :default => ""
+    t.integer "log_activity",           :limit => 1,    :default => 1
+    t.integer "visible_by_default",     :limit => 1,    :default => 1
+    t.integer "use_captcha_above_risk",                 :default => 100
+    t.text    "search_result_format"
   end
 
   add_index "forms", ["system_id"], :name => "system_id"
@@ -401,8 +414,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "posts_per_page"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "thread_order",     :limit => 4, :default => "desc"
-    t.string   "post_order",       :limit => 4, :default => ""
+    t.string   "thread_order",                :limit => 4, :default => "desc"
+    t.string   "post_order",                  :limit => 4, :default => ""
+    t.integer  "receive_watch_notifications", :limit => 1, :default => 1
+    t.integer  "receive_user2user_mail",      :limit => 1, :default => 1
   end
 
   create_table "galleries", :force => true do |t|
@@ -487,12 +502,32 @@ ActiveRecord::Schema.define(:version => 0) do
 
   add_index "html_assets", ["system_id"], :name => "system_id"
 
+  create_table "ip_countries", :force => true do |t|
+    t.string  "ip_froms",     :limit => 20
+    t.string  "ip_tos",       :limit => 20
+    t.integer "ip_from",      :limit => 8
+    t.integer "ip_to",        :limit => 8
+    t.string  "country_code", :limit => 2
+    t.string  "name",         :limit => 200
+    t.integer "risk"
+  end
+
+  add_index "ip_countries", ["ip_to"], :name => "ip_to"
+
   create_table "kit_engagements", :force => true do |t|
     t.integer  "kit_session_id"
     t.string   "engage_type",    :limit => 20
     t.string   "value",          :limit => 200
     t.datetime "created_at"
     t.integer  "system_id"
+  end
+
+  create_table "kit_requests", :force => true do |t|
+    t.integer  "kit_session_id"
+    t.string   "url"
+    t.string   "ip",             :limit => 20
+    t.datetime "created_at"
+    t.string   "referer",        :limit => 200
   end
 
   create_table "kit_sessions", :force => true do |t|
@@ -548,8 +583,12 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "params_url"
     t.integer  "is_page",     :limit => 1, :default => 1
     t.integer  "system_id",   :limit => 1
+    t.integer  "hidden",      :limit => 1, :default => 0
+    t.integer  "is_asset",    :limit => 1, :default => 0
   end
 
+  add_index "mappings", ["source_url"], :name => "source_url"
+  add_index "mappings", ["system_id", "hidden"], :name => "system_id_2"
   add_index "mappings", ["system_id"], :name => "system_id"
 
   create_table "menu_items", :force => true do |t|
@@ -759,18 +798,20 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "updated_at"
     t.text     "header"
     t.text     "footer"
-    t.string   "page_type",         :limit => 20
+    t.string   "page_type",                :limit => 20
     t.integer  "layout_id"
-    t.string   "template_type",     :limit => 100
+    t.string   "template_type",            :limit => 100
     t.integer  "display_order"
-    t.integer  "is_mobile",         :limit => 1,    :default => 0
-    t.integer  "mobile_version_id",                 :default => 0
-    t.integer  "is_default",        :limit => 1,    :default => 0
-    t.string   "stylesheets",       :limit => 1000
-    t.integer  "system_id",         :limit => 1
-    t.string   "javascripts",       :limit => 1000
-    t.integer  "hidden",            :limit => 1,    :default => 0
+    t.integer  "is_mobile",                :limit => 1,    :default => 0
+    t.integer  "mobile_version_id",                        :default => 0
+    t.integer  "is_default",               :limit => 1,    :default => 0
+    t.string   "stylesheets",              :limit => 1000
+    t.integer  "system_id",                :limit => 1
+    t.string   "javascripts",              :limit => 1000
+    t.integer  "hidden",                   :limit => 1,    :default => 0
     t.integer  "user_id"
+    t.integer  "allow_anonymous_comments", :limit => 1,    :default => 0
+    t.integer  "allow_user_comments",      :limit => 1,    :default => 0
   end
 
   add_index "page_templates", ["system_id"], :name => "system_id"
@@ -789,7 +830,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "title"
     t.integer  "status_id"
     t.text     "tags"
-    t.integer  "is_deleted",       :limit => 1, :default => 0
+    t.integer  "is_deleted",               :limit => 1, :default => 0
     t.string   "page_name"
     t.string   "page_title"
     t.text     "meta_description"
@@ -802,11 +843,13 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "edit_version"
     t.string   "subtype"
     t.text     "notes"
-    t.integer  "in_sitemap",       :limit => 1, :default => 0
-    t.integer  "mobile_dif",       :limit => 1, :default => 0
-    t.integer  "system_id",        :limit => 1
+    t.integer  "in_sitemap",               :limit => 1, :default => 0
+    t.integer  "mobile_dif",               :limit => 1, :default => 0
+    t.integer  "system_id",                :limit => 1
     t.text     "header"
-    t.integer  "locked",           :limit => 1, :default => 0
+    t.integer  "locked",                   :limit => 1, :default => 0
+    t.integer  "allow_anonymous_comments", :limit => 1, :default => 0
+    t.integer  "allow_user_comments",      :limit => 1, :default => 0
   end
 
   add_index "pages", ["system_id"], :name => "system_id"
@@ -822,7 +865,7 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table "preferences", :force => true do |t|
     t.integer  "user_id"
     t.string   "name"
-    t.string   "value"
+    t.text     "value"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "system_id",  :limit => 1
@@ -857,7 +900,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "updated_at"
     t.integer  "has_code"
     t.text     "description"
-    t.integer  "system_id",   :limit => 1
+    t.integer  "system_id",    :limit => 1
+    t.integer  "show_editors", :limit => 1, :default => 0
   end
 
   add_index "snippets", ["system_id"], :name => "system_id"
@@ -874,6 +918,13 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   add_index "statuses", ["system_id"], :name => "system_id"
+
+  create_table "submission_checks", :force => true do |t|
+    t.string   "check_code", :limit => 32, :null => false
+    t.datetime "created_at"
+  end
+
+  add_index "submission_checks", ["check_code"], :name => "check_code", :unique => true
 
   create_table "subregions", :force => true do |t|
     t.integer  "region_id"
@@ -917,11 +968,13 @@ ActiveRecord::Schema.define(:version => 0) do
   add_index "terms", ["system_id"], :name => "system_id"
 
   create_table "thread_views", :force => true do |t|
-    t.integer "user_id"
-    t.integer "topic_thread_id"
-    t.integer "topic_post_id"
+    t.integer  "user_id"
+    t.integer  "topic_thread_id"
+    t.integer  "topic_post_id"
+    t.datetime "email_sent"
   end
 
+  add_index "thread_views", ["topic_thread_id", "user_id"], :name => "topic_thread_id", :unique => true
   add_index "thread_views", ["user_id", "topic_thread_id"], :name => "user_id", :unique => true
 
   create_table "ticket_sales", :force => true do |t|
@@ -971,6 +1024,13 @@ ActiveRecord::Schema.define(:version => 0) do
   add_index "topic_categories", ["display_order"], :name => "display_order"
   add_index "topic_categories", ["system_id"], :name => "system_id"
 
+  create_table "topic_post_edits", :force => true do |t|
+    t.datetime "created_at"
+    t.text     "raw_body"
+    t.integer  "topic_post_id"
+    t.integer  "user_id"
+  end
+
   create_table "topic_post_votes", :force => true do |t|
     t.integer  "user_id"
     t.integer  "topic_post_id"
@@ -1002,6 +1062,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "topic_thread_id"
     t.integer  "user_id"
     t.datetime "created_at"
+    t.datetime "email_sent"
   end
 
   create_table "topic_threads", :force => true do |t|
@@ -1052,6 +1113,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "old_forum_id"
     t.integer  "post_count",                        :default => 0
     t.integer  "last_thread_id"
+    t.integer  "last_post_id"
   end
 
   add_index "topics", ["system_id"], :name => "system_id"
@@ -1089,9 +1151,11 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "owner_editable",     :limit => 1
     t.integer  "form_field_type_id"
     t.text     "description"
-    t.integer  "is_mandatory",       :limit => 1, :default => 0
-    t.integer  "order_by",                        :default => 0
+    t.integer  "is_mandatory",       :limit => 1,   :default => 0
+    t.integer  "order_by",                          :default => 0
     t.integer  "system_id",          :limit => 1
+    t.string   "code_name",          :limit => 200
+    t.integer  "show_on_signup",     :limit => 1,   :default => 0
   end
 
   add_index "user_attributes", ["system_id"], :name => "system_id"
@@ -1140,6 +1204,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer  "old_user_id"
     t.integer  "forum_points",                          :default => 0
     t.integer  "forum_votes",                           :default => 0
+    t.string   "password_salt",          :limit => 200
+    t.integer  "forum_status"
   end
 
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true

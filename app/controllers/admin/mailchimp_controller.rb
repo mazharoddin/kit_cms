@@ -3,7 +3,7 @@ class Admin::MailchimpController < AdminController
   def import
     gb = mailchimp_connect
 
-    User.where("email <> 'gnric@dsc.net'").find_each do |user|
+    User.where("email <> '#{Preference.get_cached(_sid,'master_user_email')}'").find_each do |user|
       gb.list_subscribe({:id=>Preference.get_cached(user.system_id, "mailchimp_all_user_list"), :email_address=>user.email, :double_optin=>false, :merge_vars=>{:GROUPINGS=>[{:name=>"KIT Groups", :groups=>user.groups.collect {|g| g.name}.join(',')}]} }) rescue nil
     end
 

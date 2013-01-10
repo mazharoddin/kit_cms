@@ -218,7 +218,7 @@ class User < GnricIndexed
   end
 
   def ban!(current_user_id = nil)
-    return if self.email == 'gnric@dsc.net'
+    return if self.email == Preference.get_cached(self.system_id,'master_user_email')
     self.banned_at = Time.now
     self.save
     Activity.add(self.system.id, "Banning user <a href='/admin/user/#{self.id}'>#{self.email}</a>", 0, "Users")
