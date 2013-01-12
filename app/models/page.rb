@@ -1,4 +1,4 @@
-class Page < GnricIndexed
+class Page < KitIndexed
 
     @@index_def =  [
       {:name=>:id, :index=>:not_analyzed, :include_in_all=>false},
@@ -143,8 +143,8 @@ class Page < GnricIndexed
     attr_accessor :page
 
     def generate_block_instances(user_id)
-      # find any instances of:  = gnric_editable_block(id, blah blah)
-      self.page_template.body.scan(/= ?gnric_editable_block\(\'?\"?([^\,\)\'\"]+)\'?\"?\s*,\s*\'?\"?([^\,\)\'\"]+)\'?\"?(?:\s*,\s*(\{.*\}))?\)/) do 
+      # find any instances of:  = kit_editable_block(id, blah blah)
+      self.page_template.body.scan(/= ?kit_editable_block\(\'?\"?([^\,\)\'\"]+)\'?\"?\s*,\s*\'?\"?([^\,\)\'\"]+)\'?\"?(?:\s*,\s*(\{.*\}))?\)/) do 
         self.generate_block_instance($1, $2, $3, user_id)
       end
     end

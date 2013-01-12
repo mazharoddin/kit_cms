@@ -1,4 +1,4 @@
-class CalendarController < GnricController
+class CalendarController < KitController
 
   before_filter { licensed("calendars") }
 

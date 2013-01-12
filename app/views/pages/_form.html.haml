@@ -118,7 +118,7 @@
           .field_help
             Optional.  Anything included here will be inserted in the page's &lt;head&gt; section. Typical content might be styles or javascript.
 
-    = gnric_submit "Save"
+    = kit_submit "Save"
     - unless @page.new_record?
       = icon_to "Cancel Changes", "/page/#{@page.id}/info" 
       and go back to Page Info

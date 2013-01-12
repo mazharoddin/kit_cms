@@ -1,6 +1,6 @@
 require 'simple_rss'
 
-class UtilityController < GnricController
+class UtilityController < KitController
 
   BLOCK_SCORE_BAD_AUTH = 10
   before_filter :authenticate_user!, :only=>[:set_location]

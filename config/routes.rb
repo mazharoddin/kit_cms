@@ -346,11 +346,11 @@ Rails.application.routes.draw do
   
   get 'redir/:id' => 'pages#redir'
   get 'utility/filebrowser' => 'utility#filebrowser'
-  get 'gnric/cookie_text' => 'pages#cookie_text'
+  get 'kit/cookie_text' => 'pages#cookie_text'
   get "view/:view_name" => 'view#show'
   get "error(/:id)" => 'error#application'
 
-  get "/system/:id/:type1/:type2/:n1/:n2/:n3/:n4/:code/:size/*file" => 'gnric#not_found_404'
+  get "/system/:id/:type1/:type2/:n1/:n2/:n3/:n4/:code/:size/*file" => 'kit#not_found_404'
 
   post '*url' => 'pages#save'
   get '*url', :controller=>"pages", :action=>"show", :constraints=>{:url => /(?<!\.gif|\.png|\.jpg|\.jpeg|\.pdf|\.jpeg)$/i}

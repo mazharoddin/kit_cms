@@ -1,4 +1,4 @@
-class OrderController < GnricController
+class OrderController < KitController
   layout "application"
 
   def sage_pay_failure

@@ -1,10 +1,10 @@
-class FormController < GnricController
+class FormController < KitController
 
   def xxxxshow
     @form = Form.sys(_sid).where(:id=>params[:id]).includes({:form_field_groups=>{:form_fields=>:form_field_type}}).first
 
 
-    gnric_render "form/show"
+    kit_render "form/show"
   end
 
   def search
@@ -15,7 +15,7 @@ class FormController < GnricController
       search_size = (params[:per] || "25").to_i
       the_page = (params[:page] || "1").to_i 
 
-      search = Tire.search "gnric_#{app_name.downcase}_form_submissions" do 
+      search = Tire.search "kit_#{app_name.downcase}_form_submissions" do 
         query do
           boolean do 
             must do 
@@ -39,7 +39,7 @@ class FormController < GnricController
       @results = nil
     end
 
-    gnric_render "search", :layout=>"application"
+    kit_render "search", :layout=>"application"
   end
 
 

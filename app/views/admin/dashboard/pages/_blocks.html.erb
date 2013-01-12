@@ -85,18 +85,18 @@ Assuming the user entered "/images/picture.jpg" as the image source, the end res
 <h3>Editable Block</h3>
 <p>Note, as described above, these can only be used in a Page Template, not in a Layout.</p>
 <pre>
-  = gnric_editable_block(block_instance_id, block_id, { defaults })
+  = kit_editable_block(block_instance_id, block_id, { defaults })
 </pre>
 For example:
 <pre>
-  = gnric_editable_block('special_block_27', 7, {:url=>"http://www.dsc.net", :color=>"red"})
+  = kit_editable_block('special_block_27', 7, {:url=>"http://www.dsc.net", :color=>"red"})
 </pre>
 <p>The block_instance_id must be unique within the page the block is to appear (i.e. if you have two of these editable blocks in one template they must each have different instance IDs. The block_id is the identifier for the actual block definition.  Defaults is a hash with one entry per default value.</p>
 
 <h3>Block Instance</h3>
 <p>Note, as described above, these can appear in either a Page Template or a Layout.</p>
 <pre>
-  = gnric_block(instance_id)
+  = kit_block(instance_id)
 </pre>
 <p>instance_id is the name of the block instance, which is set at the time the block instance is created.  To create a block instance, first choose from the list of <a href="/admin/blocks">blocks</a>, then view the detail of the block concerned and choose Create Instance.  Give it a name and set its parameters.  You can change the parameters at any time and they will instantly be updated on every page on which this Block Instance appears.</p>
 

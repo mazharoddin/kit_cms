@@ -2,7 +2,7 @@
   
   %h1.calendar_icon Calendar Entry
 
-  = gnric_calendar_entry_add(@calendar_entry.calendar_id, {:success=>"/admin/calendars/#{@calendar_entry.calendar_id}", :show_ticket_sales=>true})
+  = kit_calendar_entry_add(@calendar_entry.calendar_id, {:success=>"/admin/calendars/#{@calendar_entry.calendar_id}", :show_ticket_sales=>true})
 
   %p
     = icon_to "Show", [:admin, @calendar_entry]

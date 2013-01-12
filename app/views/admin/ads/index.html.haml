@@ -21,7 +21,7 @@
         %td= strike_if(ad.end_date.to_formatted_s(:short), !ad.in_date?)
         %td
           %div(style="width: 200px; max-height: 100px; overflow: hidden;")
-            = gnric_ad(ad.id, {:preview=>true, :admin=>true})
+            = kit_ad(ad.id, {:preview=>true, :admin=>true})
 
   .field_help
     Strikeouts: name = not activated, user email = not approved, dates = not currently in range

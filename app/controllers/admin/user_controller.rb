@@ -191,7 +191,7 @@ class Admin::UserController < AdminController
       musts << { :term => {"attributes.#{parameter}"  => value.downcase} } if parameter.not_blank? && value.not_blank?
 
       if musts.size > 0  
-        search = Tire.search "gnric_#{app_name.downcase}_users", {:query => { :bool => { :must => musts } }, :size=>per_page, :from=>from}
+        search = Tire.search "kit_#{app_name.downcase}_users", {:query => { :bool => { :must => musts } }, :size=>per_page, :from=>from}
         search.size(per_page)
         search.from(from)
         search.filter :terms, :system_id=>system_id

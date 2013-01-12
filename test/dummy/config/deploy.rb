@@ -8,21 +8,21 @@ set :rvm_type, :system
 set :bundle_flags, "--deployment"
 
 
-set :application, "gnric"
+set :application, "kit"
 set :repository,  "git:runmycar"
 
 set :scm, :git
 
-role :web, "gnric"                          # Your HTTP server, Apache/etc
-role :app, "gnric"                          # This may be the same as your `Web` server
-role :db,  "gnric", :primary => true # This is where Rails migrations will run
+role :web, "kit"                          # Your HTTP server, Apache/etc
+role :app, "kit"                          # This may be the same as your `Web` server
+role :db,  "kit", :primary => true # This is where Rails migrations will run
 
 task :to_uat do
-    set :deploy_to, "/var/webs/gnric.dsc.net/testing"
+    set :deploy_to, "/var/webs/kit.dsc.net/testing"
 end
 
 task :to_prod do
-    set :deploy_to, "/var/webs/gnric.dsc.net/production"
+    set :deploy_to, "/var/webs/kit.dsc.net/production"
 end
 
 set :use_sudo, false

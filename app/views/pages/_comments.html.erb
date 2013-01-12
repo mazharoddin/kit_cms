@@ -10,7 +10,7 @@
 			<%= form_tag("/page/#{@page.id}/add_note", :remote=>true) do %>
                         <%= text_area_tag :body, '', {:size=>"40x5"} %>
                         <br/>
-				<%= gnric_submit "Save" %>
+				<%= kit_submit "Save" %>
 			<% end %>
 		</div>
 		

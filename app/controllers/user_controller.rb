@@ -1,4 +1,4 @@
-class UserController < GnricController
+class UserController < KitController
 
   layout Preference.get_cached!(0,"user_profile_layout", "application")
   append_view_path Layout.resolver  
@@ -135,7 +135,7 @@ class UserController < GnricController
       end
     end
 
-    gnric_render "preferences", :layout=>Preference.get_cached!(_sid,"user_profile_layout", "application")
+    kit_render "preferences", :layout=>Preference.get_cached!(_sid,"user_profile_layout", "application")
   end
 
   private

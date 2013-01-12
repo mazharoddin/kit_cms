@@ -1,4 +1,4 @@
-class ViewController < GnricController
+class ViewController < KitController
   prepend_view_path Layout.resolver
 
   def show

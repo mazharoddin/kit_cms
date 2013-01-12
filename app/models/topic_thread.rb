@@ -1,4 +1,4 @@
-class TopicThread < GnricIndexed
+class TopicThread < KitIndexed
 
   TopicThread.do_indexing :TopicThread, [
     {:name=>:id, :index=>:not_analyzed, :include_in_all=>false},

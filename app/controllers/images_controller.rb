@@ -1,4 +1,4 @@
-class ImagesController < GnricController
+class ImagesController < KitController
 
   respond_to :json, :html
 

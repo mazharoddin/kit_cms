@@ -12,7 +12,7 @@
         = link_to @calendar_entry.calendar.name, [:admin, @calendar_entry.calendar]
       %p
         %strong Start Date:
-        = @calendar_entry.start_date.to_formatted_s(:gnric_short_date)
+        = @calendar_entry.start_date.to_formatted_s(:kit_short_date)
 
       %p
         %strong End Date:

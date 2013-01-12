@@ -23,6 +23,6 @@
           = flash[:notice]
       = ace_editor('scss', :sheet, :body, f, "stylesheet_body")
 
-      = gnric_submit "Save"
+      = kit_submit "Save"
       = link_to "Delete", "/admin/stylesheet/#{@sheet.id}", :method=>:delete, :class=>"action", :confirm=>"Are you sure you want to delete this stylesheet?  It cannot be undone."
       = icon_to "Cancel", "/admin/stylesheets"

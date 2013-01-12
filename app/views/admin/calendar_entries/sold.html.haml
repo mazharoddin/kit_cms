@@ -5,5 +5,5 @@
   .div(style="margin: 10px 0;")
     = icon_to "Calendar Entry", "/admin/calendar_entries/#{@calendar_entry.id}"
 
-  = module_gnric_list_tickets(@calendar_entry, :only_sale_id=>params[:sales_id])
+  = module_kit_list_tickets(@calendar_entry, :only_sale_id=>params[:sales_id])
 

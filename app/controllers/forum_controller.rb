@@ -1,6 +1,6 @@
 include ActionView::Helpers::TextHelper
 
-class ForumController < GnricController
+class ForumController < KitController
   append_view_path Layout.resolver
   layout "forums"
   before_filter :load_forum_user_options, :only => [:topic_index, :thread, :search, :add_post, :recent, :im_on, :favourites, :thread_last_unread, :index]
@@ -10,13 +10,13 @@ class ForumController < GnricController
   before_filter :post_order, :only=>[:thread]
 
   def test
-    gnric_render "test", :layout=>get_layout('index')
+    kit_render "test", :layout=>get_layout('index')
   end
 
   def moderate
     redirect_to "/users/sign_in" and return unless @mod
     @topic_posts = TopicPost.sys(_sid).order("id desc").where(:is_visible=>1).page(params[:page]).per(25)  
-    gnric_render "moderate", :layout=>get_layout('index')
+    kit_render "moderate", :layout=>get_layout('index')
   end
 
   def rate_post
@@ -60,7 +60,7 @@ class ForumController < GnricController
       @threads = current_user.topic_threads.page(params[:page]).per(@user_options.threads_per_page)
       @page_title = "Forum: Favourite Threads"
       @show_watch = true
-      gnric_render "thread_list", :layout=>get_layout('im-watching', ['im-watching', 'threads']) 
+      kit_render "thread_list", :layout=>get_layout('im-watching', ['im-watching', 'threads']) 
     else
       redirect_to "/users/sign_in"
     end
@@ -72,7 +72,7 @@ class ForumController < GnricController
     if current_user
       @page_title = "Forum: Threads I Posted To"
       @threads = TopicThread.im_on(current_user, @user_options.threads_per_page, @mod, params[:page])
-      gnric_render "thread_list", :layout=>get_layout('im-on', ['im-on', 'threads'])
+      kit_render "thread_list", :layout=>get_layout('im-on', ['im-on', 'threads'])
     else
       redirect_to "/users/sign_in"
     end
@@ -93,7 +93,7 @@ class ForumController < GnricController
     @destination_last = true
   
     respond_to do |format|
-      format.html { gnric_render "thread_list", :layout=>get_layout('recent', ['recent', 'threads']) }
+      format.html { kit_render "thread_list", :layout=>get_layout('recent', ['recent', 'threads']) }
       format.rss { render "forum/thread_list.rss" }
     end
   end
@@ -120,7 +120,7 @@ class ForumController < GnricController
       return
     end 
 
-    gnric_render "report", :layout=>get_layout('report')
+    kit_render "report", :layout=>get_layout('report')
   end
 
   def index
@@ -129,7 +129,7 @@ class ForumController < GnricController
     @categories = categories.all
     @page_title = "Forums"
     @canonical_tag = "/forums"
-    gnric_render "index", :layout=>get_layout('index')
+    kit_render "index", :layout=>get_layout('index')
   end
 
   def search
@@ -151,8 +151,8 @@ class ForumController < GnricController
       log = logger
 
       [ "TopicPost", "TopicThread" ].each do |model|
-        indexes << "gnric_#{app_name.downcase}_#{model.tableize}"
-        GnricIndexed.indexed_columns(model).collect { |ic|
+        indexes << "kit_#{app_name.downcase}_#{model.tableize}"
+        KitIndexed.indexed_columns(model).collect { |ic|
           search_fields << ic[:name] if ic[:user]
         }
       end
@@ -185,7 +185,7 @@ class ForumController < GnricController
       @results = nil
     end
 
-    gnric_render "search", :layout=>get_layout('search')
+    kit_render "search", :layout=>get_layout('search')
   end
 
   def topic_index
@@ -215,7 +215,7 @@ class ForumController < GnricController
     @page_title = "Forums: #{@topic.name}"
     @canonical_tag = "/forums/#{@topic.url}"
     @meta_description = "Forums"
-    gnric_render "topic_index", :layout=>get_layout('threads')
+    kit_render "topic_index", :layout=>get_layout('threads')
   end
 
   def category_topic_list
@@ -292,7 +292,7 @@ class ForumController < GnricController
     @page_title = "#{@thread.topic.name} - #{@thread.title}"
     @canonical_tag = @thread.link
 
-    gnric_render "thread", :layout=>get_layout('posts')
+    kit_render "thread", :layout=>get_layout('posts')
   end
 
   def preview
@@ -300,7 +300,7 @@ class ForumController < GnricController
 
     post.update_body
 
-    gnric_render :partial=>"post_preview", :locals=>{:post=>post}
+    kit_render :partial=>"post_preview", :locals=>{:post=>post}
   end
 
   def add_post
@@ -325,7 +325,7 @@ class ForumController < GnricController
 
     if params[:topic_post][:body] && params[:topic_post][:body].strip.length<2
       flash[:form_message] = "Your message must be at least 2 characters"            
-      gnric_render "thread", :layout=>get_layout('thread')
+      kit_render "thread", :layout=>get_layout('thread')
       return
     end
 
@@ -360,7 +360,7 @@ class ForumController < GnricController
     redirect_to "/forums" and return unless can?(:moderate, self)    
     @post = TopicPost.sys(_sid).where(:id=>params[:id]).first
 
-    gnric_render :text=>@post.moderation_comment
+    kit_render :text=>@post.moderation_comment
   end
 
   def thread_comment
@@ -392,7 +392,7 @@ class ForumController < GnricController
     @threads = nil
     @page_id = params[:page_id] 
     @about_page_title = Page.find_sys_id(_sid, @page_id).title
-    gnric_render "topic_index", :layout=>get_layout('threads')
+    kit_render "topic_index", :layout=>get_layout('threads')
   end
 
   def create_thread
@@ -408,12 +408,12 @@ class ForumController < GnricController
 
     if @post.raw_body.strip.length<2
       flash[:form_message] = "Your message must be at least 2 characters"      
-      gnric_render "topic_index", :layout=>get_layout('threads')
+      kit_render "topic_index", :layout=>get_layout('threads')
       return
     end
     if params[:topic_post][:title].strip.length<2
       flash[:form_message] = "Title must be at least 4 characters"
-      gnric_render "topic_index", :layout=>get_layout('threads')
+      kit_render "topic_index", :layout=>get_layout('threads')
       return
     end
     @post.system_id = _sid

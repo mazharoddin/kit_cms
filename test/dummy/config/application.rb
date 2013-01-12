@@ -3,7 +3,7 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 
 Bundler.require
-require "gnric"
+require "kit"
 
 module Dummy
   class Application < Rails::Application
@@ -31,7 +31,7 @@ module Dummy
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
-    config.session_store :cookie_store, :key => '_gnric_session'
+    config.session_store :cookie_store, :key => '_kit_session'
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]

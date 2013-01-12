@@ -1,4 +1,4 @@
-class AdController < GnricController
+class AdController < KitController
 
   def buy
     options = JSON.parse(params[:options]) 

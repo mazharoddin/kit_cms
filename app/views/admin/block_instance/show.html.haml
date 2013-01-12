@@ -22,7 +22,7 @@
         %b Preview:
 
         %div(style="border: thin black solid; padding: 10px; width: 720px; overflow: hidden; margin-bottom: 20px;")
-          = gnric_block(@instance.id, @instance.version).html_safe
+          = kit_block(@instance.id, @instance.version).html_safe
 
         - has_params = !(@options.size==1 && @options.first.field_name == 'no_params')
 

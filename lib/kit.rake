@@ -53,7 +53,7 @@ namespace :kit do
 
 %head
   %meta(charset="utf-8")
-  = render :partial=>"layouts/gnric_header"  
+  = render :partial=>"layouts/kit_header"  
 
   %style(type="text/css")
     == div#edit_link{top:30px;}

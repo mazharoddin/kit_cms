@@ -3,7 +3,7 @@
   - if params[:files]
     = hidden_field_tag "files", "1"
   = f.text_field :search
-  = gnric_submit "Search", :class=>"action"
+  = kit_submit "Search", :class=>"action"
   = icon_to "Upload Images", "/assets"
   = icon_to_function "Done Adding", "$('#add').slideUp(); $('#add_link').show();"
   

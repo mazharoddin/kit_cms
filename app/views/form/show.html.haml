@@ -3,7 +3,7 @@
     - if @form.html.not_blank?
       = @form.html.html_safe
     - else
-      = gnric_render(:partial=>"form/show", :locals=>{:form=>@form, :show_title=>true, :show_body=>true, :submission=>@sub}) 
+      = kit_render(:partial=>"form/show", :locals=>{:form=>@form, :show_title=>true, :show_body=>true, :submission=>@sub}) 
   - else
     - if @form.user_creatable==1
       You need to

@@ -37,7 +37,7 @@ class Admin::HelpController < AdminController
     if params[:search]
       search_for = params[:search]
 
-      search = Tire.search "gnric_#{app_name.downcase}_helps" do
+      search = Tire.search "kit_#{app_name.downcase}_helps" do
         query do
           string search_for, :fields=>["name", "body", "path"]
         end

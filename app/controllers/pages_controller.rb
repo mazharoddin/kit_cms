@@ -1,4 +1,4 @@
-class PagesController < GnricController
+class PagesController < KitController
 
   before_filter :load_page, :except=>[:search, :cookie_text, :unique, :index, :new, :create, :stub, :zoom, :terms, :editor_trial]
   before_filter :can_use, :except=>[:show, :search, :cookie_text, :editor_trial, :save, :redir]
@@ -100,8 +100,8 @@ class PagesController < GnricController
       the_page = (params[:page] || "1").to_i 
 
       [ "Page" ].each do |model|
-        indexes << "gnric_#{app_name.downcase}_#{model.downcase.pluralize}"
-        GnricIndexed.indexed_columns(model).collect { |c|
+        indexes << "kit_#{app_name.downcase}_#{model.downcase.pluralize}"
+        KitIndexed.indexed_columns(model).collect { |c|
           search_fields << c[:name] if c[:user]
         }
       end
@@ -125,7 +125,7 @@ class PagesController < GnricController
     @searched_for = params[:search]
 
     @show_edit_link = user_can_edit = can?(:use, self)
-    gnric_render "pages/search", :layout=>Preference.getCached(_sid, "layout_search") || "application"
+    kit_render "pages/search", :layout=>Preference.getCached(_sid, "layout_search") || "application"
   end
 
   def auto_save_delete
@@ -282,7 +282,7 @@ class PagesController < GnricController
     end
 
     @show_edit_link = true if user_can_edit && !@page.editable
-    render_page(@page) # in gnric_controller base class
+    render_page(@page) # in kit_controller base class
   end
 
   def redir

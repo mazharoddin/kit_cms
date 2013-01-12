@@ -19,7 +19,7 @@ module FormDataHelper
         lon = geo_loc[0].longitude
       end
 
-      search = Tire.search "gnric_#{app_name.downcase}_form_submissions" do 
+      search = Tire.search "kit_#{app_name.downcase}_form_submissions" do 
         query do
           boolean do 
             must do 
@@ -100,7 +100,7 @@ module FormDataHelper
     options[:user_id] = current_user ? current_user.id : nil
     records = form.records(options).page(params[:page]).per(options[:per_page])
 
-    gnric_render :partial=>"form/records", :locals=>{:records=>records, :form=>form, :options=>options}
+    kit_render :partial=>"form/records", :locals=>{:records=>records, :form=>form, :options=>options}
     rescue Exception => e
       e.message
     end

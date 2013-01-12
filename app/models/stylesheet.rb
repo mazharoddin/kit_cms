@@ -13,7 +13,7 @@ class Stylesheet < ActiveRecord::Base
     end
   end
 
-  def gnric_name
+  def kit_name
     "#{self.name.downcase}-#{self.fingerprint}.css".downcase
   end
 
@@ -25,7 +25,7 @@ class Stylesheet < ActiveRecord::Base
   end
 
   def self.cache_key(system_id, name)
-    "gnric_stylesheet_#{name.downcase}-#{system_id}"
+    "kit_stylesheet_#{name.downcase}-#{system_id}"
   end
 
   def self.default_body 

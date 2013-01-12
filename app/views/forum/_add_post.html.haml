@@ -36,10 +36,10 @@
             = t "forum.post_body"
           = form.text_area :body
 
-        - formatting = gnric_snippet('Forum Post Formatting Help')
+        - formatting = kit_snippet('Forum Post Formatting Help')
         - if formatting.not_blank?
           #formatting_help
-            = gnric_snippet('Forum Post Formatting Help', 'Formatting Help')
+            = kit_snippet('Forum Post Formatting Help', 'Formatting Help')
 
         #submit
           = link_to_function t("forum.submit_post"), "send_this_form();", :class=>"action"

@@ -1,3 +1,0 @@
-$gnric_indexes = {}
-
-

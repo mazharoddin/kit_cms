@@ -75,7 +75,7 @@
             The relative order of this attribute when displayed - the higher the number the later in the list it will appear, the lower the number the earlier in the list.
 
         %li(style="margin-top: 5px;")
-          = gnric_submit "Save"
+          = kit_submit "Save"
           = link_to "Delete", "/admin/users/attribute/#{@attribute.id}", :method=>:delete, :class=>"action", :confirm=>"Are you sure?  This cannot be undone and if you delete an attribute then any values associated with it will also be removed"
           = icon_to "Attributes", "/admin/users/attributes"
         

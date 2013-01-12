@@ -1,4 +1,4 @@
-class Help < GnricIndexed
+class Help < KitIndexed
 
    Help.do_indexing :Help, [
       {:name=>"id", :index=>:not_analyzed, :include_in_all=>false},

@@ -1,2 +1,2 @@
-class ProfileController < GnricController
+class ProfileController < KitController
 end

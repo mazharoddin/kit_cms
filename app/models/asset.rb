@@ -1,6 +1,6 @@
 include ActionView::Helpers::TextHelper
 
-class Asset < GnricIndexed
+class Asset < KitIndexed
 
   Asset.do_indexing :Asset, [
     {:name=>:id, :index=>:not_analyzed, :include_in_all=>false},

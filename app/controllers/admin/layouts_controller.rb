@@ -19,7 +19,7 @@ class Admin::LayoutsController < AdminController
 / Layout: #{@layout.name}
 %html
   %head
-    = render :partial=>"layouts/gnric_header"
+    = render :partial=>"layouts/kit_header"
     %style(type="text/css")
       div#edit_link { top:30px; }
   %body

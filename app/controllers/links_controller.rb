@@ -1,4 +1,4 @@
-class LinksController < GnricController
+class LinksController < KitController
 
   def index
     params[:target_field] = 'link_external_url' if params[:target_field]=="undefined"

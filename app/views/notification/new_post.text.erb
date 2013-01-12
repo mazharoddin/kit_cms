@@ -1,4 +1,4 @@
-<% text = gnric_snippet!(@post.system_id, 'Forum New Post Notification') %>
+<% text = kit_snippet!(@post.system_id, 'Forum New Post Notification') %>
 <% if text.not_blank? %>
   <%= render :inline=>text %>
 <% else %>

@@ -1,4 +1,4 @@
-class Category < GnricIndexed
+class Category < KitIndexed
 
     Category.do_indexing :Category, [
       {:name=>"id", :index=>:not_analyzed, :include_in_all=>false},

@@ -1,4 +1,4 @@
-class FormSubmission  < GnricIndexed
+class FormSubmission  < KitIndexed
 
   FormSubmission.do_indexing :FormSubmission, [
     {:name=>"id", :index=>:not_analyzed, :include_in_all=>false},

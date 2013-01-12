@@ -1,4 +1,4 @@
-class Group < GnricIndexed
+class Group < KitIndexed
   has_many :group_users
   has_many :users, :through=>:group_users
 

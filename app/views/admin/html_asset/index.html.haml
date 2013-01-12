@@ -10,7 +10,7 @@
 
       = f.text_field :name
       = f.select :file_type, options_for_select([["Stylesheet","css"], ["Javascript", "js"]], @asset.file_type)
-      = gnric_submit "Create"
+      = kit_submit "Create"
   
   = paginate @assets
 

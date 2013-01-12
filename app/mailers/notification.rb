@@ -1,7 +1,7 @@
 include ActionView::Helpers::TextHelper
 
 class Notification < ActionMailer::Base
-  helper :gnric_modules
+  helper :kit_modules
 
   def report_post_admin(report,sid)
     @post = report.topic_post

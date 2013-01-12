@@ -10,7 +10,7 @@ class Admin::AdUnitsController < AdminController
     if block
       notice = 'Block already exists'
     else
-      block = Block.create(:system_id=>_sid, :name=>@ad_unit.block_name, :description=>"System generated block to display an ad of size '#{@ad_unit.name}'", :show_editors=>true, :all_templates=>true, :user_id=>current_user.id, :body=>"<%= gnric_ad_by_unit(#{@ad_unit.id}) %>")
+      block = Block.create(:system_id=>_sid, :name=>@ad_unit.block_name, :description=>"System generated block to display an ad of size '#{@ad_unit.name}'", :show_editors=>true, :all_templates=>true, :user_id=>current_user.id, :body=>"<%= kit_ad_by_unit(#{@ad_unit.id}) %>")
       notice = 'Block created'
     end
 

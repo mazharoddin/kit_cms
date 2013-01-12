@@ -1,2 +1,2 @@
-Time::DATE_FORMATS[:gnric_short_date] = "%d-%m-%Y"
+Time::DATE_FORMATS[:kit_short_date] = "%d-%m-%Y"
 

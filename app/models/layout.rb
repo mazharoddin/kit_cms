@@ -56,7 +56,7 @@ class Layout < ActiveRecord::Base
 %html
   / Layout: application-#{sid}
   %head
-    = render :partial=>"layouts/gnric_header"
+    = render :partial=>"layouts/kit_header"
     %style(type="text/css")
       div#edit_link { top:30px; }
   %body

@@ -1,4 +1,4 @@
-class MessagingController < GnricController
+class MessagingController < KitController
 
   before_filter :load_user, :except=>[:index]
 

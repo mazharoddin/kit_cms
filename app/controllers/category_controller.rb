@@ -1,4 +1,4 @@
-class CategoryController < GnricController
+class CategoryController < KitController
   include ActionView::Helpers::JavaScriptHelper
 
   layout 'cms-boxed'

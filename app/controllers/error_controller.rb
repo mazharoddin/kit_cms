@@ -1,4 +1,4 @@
-class ErrorController < GnricController
+class ErrorController < KitController
   
   def check_diag_only
     return true

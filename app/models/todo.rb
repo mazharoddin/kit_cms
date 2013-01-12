@@ -1,4 +1,4 @@
-class Todo < GnricIndexed
+class Todo < KitIndexed
 
    Todo.do_indexing :Todo,  [
     {:name=>"id", :index=>:not_analyzed},

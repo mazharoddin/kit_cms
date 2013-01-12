@@ -29,67 +29,67 @@ The type may be either "text" or "line", though both are treated the same in the
 <h3>Menu Module</h3>
 <p>Shows a collection of links, which can be formatted in to various menu styles using a stylesheet.</p>
 <pre>
-  = gnric_menu(ID)
+  = kit_menu(ID)
 </pre>
 
 <h3>Reusable Snippet</h3>
 <p>A snippet of content - usually text but may also include formatting or other HTML.</p>
 <pre>
-  = gnric_snippet(ID)
+  = kit_snippet(ID)
 </pre>
 
 <h3>Map</h3>
 <p>A google map for the location specified.  Title, height and width are all optional. Specify height and width as a number of pixels; just the number, no "px".</p>
 <pre>
-  = gnric_map("location", "Title", height, width)
+  = kit_map("location", "Title", height, width)
 </pre>
 <p>Where "location" is the place on which the map should be centred.</p>
 
 <h3>Current Year</h3>
 <p>The current 4 digit year.</p>
 <pre>
-  = gnric_current_year
+  = kit_current_year
 </pre>
 
 <h3>User's EMail</h3>
 <p>The currently logged-in user's email address. If not logged in this will be blank.</p>
 <pre>
-  = gnric_users_email
+  = kit_users_email
 </pre>
 
 <h3>View</h3>
 <p>The given view (a view is typically a colleciton of content from multiple pages)</p>
 <pre>
-  = gnric_view(ID)
+  = kit_view(ID)
 </pre>
 
 <h3>Form</h3>
 <pre>
-  = gnric_form(ID)
+  = kit_form(ID)
 </pre>
 
 <h3>Gallery</h3>
 A carousel-style image gallery.
 <pre>
-  = gnric_gallery(ID)
+  = kit_gallery(ID)
 </pre>
 
 <h3>Code</h3>
 <p>Evaluates the Ruby code. Use with caution.</p>
 <pre>
-  = gnric_code("# Ruby Code")
+  = kit_code("# Ruby Code")
 </pre>
 
 <h3>Search</h3>
 <p>A page and forum search box.</p>
 <pre>
-  = gnric_search
+  = kit_search
 </pre>
 
 <h3>Page Field</h3>
 <p>This module allows you to retrieve a field of content from any page (not just the page on which this module appears).  The given field from the given page (page_id can be the page's ID number of the page's URL).  The true/false indicates if the field may contain a template - the default is false. </p>
 <pre>
-  = gnric_page_field(page_id, "field_name", false)
+  = kit_page_field(page_id, "field_name", false)
 </pre>
 
 <h2>Blocks in Templates & Layouts</h2>

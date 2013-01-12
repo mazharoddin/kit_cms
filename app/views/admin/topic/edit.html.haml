@@ -41,7 +41,7 @@
           = f.file_field :image
           .field_help A small icon or other image which will appear next to the topic in topic lists.
 
-      = gnric_submit "Save", :class=>"save_wicon action_icon"
+      = kit_submit "Save", :class=>"save_wicon action_icon"
       or 
       = icon_to "Cancel", "/admin/forums/topic/#{@topic.id}"
 

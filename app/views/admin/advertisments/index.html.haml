@@ -21,7 +21,7 @@
         %td
           = link_to ad.name, [:admin, ad]
           %div(id="preview_#{ad.id}" style="display: none;")
-            = gnric_ad(ad.id)
+            = kit_ad(ad.id)
         %td= link_to truncate(ad.user.email, :length=>30), "/admin/user/#{ad.user_id}"
         %td= ad.ad_zones.collect { |zone| link_to zone.name, [:admin, zone] }.join(',').html_safe
         %td= ad.start_date.to_formatted_s(:short)

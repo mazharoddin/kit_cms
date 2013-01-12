@@ -1,4 +1,4 @@
-class BlocksController < GnricController
+class BlocksController < KitController
 
   def index
     page = Page.sys(_sid).where(:id=>params[:page_id]).first

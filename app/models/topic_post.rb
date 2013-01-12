@@ -1,6 +1,6 @@
 require 'rdiscount'
 
-class TopicPost < GnricIndexed
+class TopicPost < KitIndexed
 
   TopicPost.do_indexing  :TopicPost, [
     {:name=>:id, :index=>:not_analyzed, :include_in_all=>false},

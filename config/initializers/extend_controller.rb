@@ -1,6 +1,6 @@
 module DomainController
 
-  attr_accessor :gnric_system
+  attr_accessor :kit_system
 
   def licensed(c = nil)
     if c!=nil
@@ -59,13 +59,13 @@ module DomainController
       end
     end
 
-    self.gnric_system = System.where(:id=>session[:system_id]).first
+    self.kit_system = System.where(:id=>session[:system_id]).first
     if use_multiple_databases
-      current_user.system = self.gnric_system if current_user 
-      logger.info "*** Master Database: #{default_database_name} Master System ID: #{self.gnric_system.id} Database Connection: #{self.gnric_system.database_connection || 'default'} System ID: #{_sid}"
+      current_user.system = self.kit_system if current_user 
+      logger.info "*** Master Database: #{default_database_name} Master System ID: #{self.kit_system.id} Database Connection: #{self.kit_system.database_connection || 'default'} System ID: #{_sid}"
 
-      if self.gnric_system.database_connection && self.gnric_system.database_connection != default_database_name
-        make_db_connection(get_connection(self.gnric_system.database_connection, self.gnric_system.database_username, self.gnric_system.database_password))
+      if self.kit_system.database_connection && self.kit_system.database_connection != default_database_name
+        make_db_connection(get_connection(self.kit_system.database_connection, self.kit_system.database_username, self.kit_system.database_password))
       end
     else
       logger.info "*** System ID #{_sid}"
@@ -77,7 +77,7 @@ module DomainController
   end
 
   def _sid
-    self.gnric_system.get_system_id
+    self.kit_system.get_system_id
   end
 
   def _sids

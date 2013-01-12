@@ -12,7 +12,7 @@ module OrderHelper
       @order.firstname = @ticket_sale.firstname
       @order.lastname = @ticket_sale.lastname
 
-      gnric_render :partial=>"order/pay_for_tickets", :locals=>{:options=>options}
+      kit_render :partial=>"order/pay_for_tickets", :locals=>{:options=>options}
     rescue Exception => e
       e.message
     end

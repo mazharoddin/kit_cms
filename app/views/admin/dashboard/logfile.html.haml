@@ -3,7 +3,7 @@
 
   = form_tag "/admin/dashboard/logfile", :method=>:get do
     = text_field_tag "grep", params[:grep]
-    = gnric_submit "Grep"
+    = kit_submit "Grep"
     = icon_to "Reset", "/admin/dashboard/logfile"
 
   %pre(style="overflow: auto; line-height: 12px; font-size: 12px; ")

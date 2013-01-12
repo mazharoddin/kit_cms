@@ -1,4 +1,4 @@
-class User < GnricIndexed
+class User < KitIndexed
 
   User.do_indexing :User, [
     {:name=>"id", :index=>:not_analyzed, :include_in_all=>false},

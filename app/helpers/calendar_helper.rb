@@ -1,14 +1,14 @@
 module CalendarHelper
 
-  def module_gnric_list_tickets(item, options={})
+  def module_kit_list_tickets(item, options={})
     begin
-    gnric_render :partial=>"calendar/list_tickets", :locals=>{:item=>item, :options=>options}
+    kit_render :partial=>"calendar/list_tickets", :locals=>{:item=>item, :options=>options}
     rescue Exception => e
       e.message
     end
   end
 
-  def module_gnric_buy_tickets(item, options = {})
+  def module_kit_buy_tickets(item, options = {})
     begin
     event = CalendarEntry.sys(_sid).where(:id=>item).first
 
@@ -22,25 +22,25 @@ module CalendarHelper
       options[:show_ticket_warning] = false
     end
 
-    gnric_render :partial=>"calendar/buy_tickets", :locals=>{:item=>item, :options=>options}
+    kit_render :partial=>"calendar/buy_tickets", :locals=>{:item=>item, :options=>options}
     rescue Exception => e
       e.message
     end
   end
 
-  def module_gnric_ticket_form(model, description, options = {})
+  def module_kit_ticket_form(model, description, options = {})
   
    options[:submit] ||= "Submit"
    options[:redirect] ||= "/"
    options[:label] ||= 'Tickets'
    begin
-     gnric_render :partial=>"calendar/sell_tickets", :locals=>{:description=>description, :options=>options,  :model=>model}
+     kit_render :partial=>"calendar/sell_tickets", :locals=>{:description=>description, :options=>options,  :model=>model}
     rescue Exception => e
       e.message
     end
   end
 
-  def module_gnric_calendar_entry_add(calendar_id, options = {})
+  def module_kit_calendar_entry_add(calendar_id, options = {})
 
     unless calendar_id.is_number?
       calendar_id = Calendar.find_by_name(calendar_id).id
@@ -58,20 +58,20 @@ module CalendarHelper
       calendar_entry.location.country = "United Kingdom"
     end
 
-    gnric_render :partial=>"calendar/form", :locals=>{:calendar_entry=>calendar_entry, :choose_calendar=>false, :options=>options}
+    kit_render :partial=>"calendar/form", :locals=>{:calendar_entry=>calendar_entry, :choose_calendar=>false, :options=>options}
   end
 
-  def module_gnric_calendar_entry_load(id)
+  def module_kit_calendar_entry_load(id)
     entry = CalendarEntry.sys(_sid).where(:id=>id).first
     entry = nil if entry && entry.approved_at == nil && !can?(:moderate, :calendar)
     return entry
   end
 
-  def module_gnric_calendar_entry(id, options)
+  def module_kit_calendar_entry(id, options)
     entry = CalendarEntry.sys(_sid).where(:id=>id).first
     if entry
       entry = nil if entry.approved_at == nil && !can?(:moderate, :calendar)
-      gnric_render :partial=>"calendar/calendar_entry", :locals=>{:entry=>entry, :options=>options}
+      kit_render :partial=>"calendar/calendar_entry", :locals=>{:entry=>entry, :options=>options}
     else
       if params[:edit]=="1"
         "[Calendar entry will appear here]"
@@ -81,7 +81,7 @@ module CalendarHelper
     end
   end
 
-  def module_gnric_calendar(calendar_id, options = {})
+  def module_kit_calendar(calendar_id, options = {})
 
     begin
     year = options[:year]
@@ -151,7 +151,7 @@ module CalendarHelper
         end
       end
     end  
-    gnric_render :partial=>"calendar/month", :locals=>{:calendar=>cal, :date=>date, :entries=>entries, :options=>options, :position=>position}
+    kit_render :partial=>"calendar/month", :locals=>{:calendar=>cal, :date=>date, :entries=>entries, :options=>options, :position=>position}
 
     rescue Exception => e
       logger.debug e

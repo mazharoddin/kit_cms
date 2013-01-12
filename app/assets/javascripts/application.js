@@ -1,4 +1,4 @@
-/* Gnric application.js 
-*= require "gnric"
+/* Kit application.js 
+*= require "kit"
 */
 

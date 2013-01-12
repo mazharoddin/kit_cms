@@ -5,7 +5,7 @@
 
   - if @results
     %h1.search_icon(style="margin-top: 10px;") Results
-    = gnric_pagination @results 
+    = kit_pagination @results 
 
     %ul
       - @results.each do |item|

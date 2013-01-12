@@ -36,7 +36,7 @@
       %p
         = render :partial=>"utility/design_history", :locals=>{:object=>@html_asset}
       
-      = gnric_submit "Save"
-      = gnric_submit "Save and Edit Again"
+      = kit_submit "Save"
+      = kit_submit "Save and Edit Again"
       = link_to "Delete", "/admin/html_asset/#{@html_asset.id}", :method=>:delete, :class=>"action", :confirm=>"Are you sure you want to delete this asset?  It cannot be undone."
       = icon_to "Cancel", "/admin/html_assets"

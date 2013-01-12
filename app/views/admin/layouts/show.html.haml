@@ -45,7 +45,7 @@
         %li
           = render :partial=>"utility/design_history", :locals=>{:object=>@layout}
       
-      = gnric_submit "Save"
+      = kit_submit "Save"
       - if @layout.page_templates.count == 0 
         = link_to "Delete", "/admin/layouts/#{@layout.id}", :method=>:delete, :class=>"action", :confirm=>"Are you sure you want to delete this layout?  It cannot be undone."
 

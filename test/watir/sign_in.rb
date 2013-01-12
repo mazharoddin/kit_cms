@@ -20,8 +20,8 @@ unless b.text.include? "Sign in"
   exit -1
 end
 
-b.text_field(:name=>'user[email]').set 'gnric@dsc.net'
-b.text_field(:name=>'user[password]').set 'gnric101'
+b.text_field(:name=>'user[email]').set 'kit@dsc.net'
+b.text_field(:name=>'user[password]').set 'kit101'
 b.button(:name=>'commit').click
 
 unless b.text.include? "Signed in successfully"

@@ -1,4 +1,4 @@
-class Snippet < GnricIndexed
+class Snippet < KitIndexed
   belongs_to :user
 
   use_kit_caching

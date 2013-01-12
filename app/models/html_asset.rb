@@ -34,7 +34,7 @@ class HtmlAsset < ActiveRecord::Base
   end
   
   def write_to_file
-    path = File.join(Rails.root, "public", "kit", self.file_type, self.gnric_name)
+    path = File.join(Rails.root, "public", "kit", self.file_type, self.kit_name)
     dir = File.join(Rails.root, "public", "kit", self.file_type)
     found = false
     Dir.glob(dir + "/#{self.name.downcase}*") do |f|
@@ -50,7 +50,7 @@ class HtmlAsset < ActiveRecord::Base
     end
   end
 
-  def gnric_name
+  def kit_name
     "#{self.name.downcase}-#{self.fingerprint}.#{self.file_type}".downcase
   end
 
@@ -77,7 +77,7 @@ class HtmlAsset < ActiveRecord::Base
   end
 
   def self.cache_key(system_id, name, type)
-    "gnric_htmlasset_#{name.downcase}.#{system_id}.#{type}"
+    "kit_htmlasset_#{name.downcase}.#{system_id}.#{type}"
   end
 
   def self.clear_cache(asset)

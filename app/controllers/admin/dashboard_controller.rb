@@ -374,8 +374,8 @@ class Admin::DashboardController < AdminController
 
     @@to_search.each do |model|
       if params["include_#{model.pluralize.downcase}".to_sym]
-        indexes << "gnric_#{app_name.downcase}_" + model.tableize
-        GnricIndexed.indexed_columns(model).collect { |ic| 
+        indexes << "kit_#{app_name.downcase}_" + model.tableize
+        KitIndexed.indexed_columns(model).collect { |ic| 
           next if ic[:include_in_all]==false
           next if ic[:index]==:not_analyzed
           search_fields << ic[:name] 
@@ -427,7 +427,7 @@ class Admin::DashboardController < AdminController
     if params[:search]
       search_for = params[:search]
 
-      search = Tire.search "gnric_#{app_name}_helps" do
+      search = Tire.search "kit_#{app_name}_helps" do
         query do
           string search_for, :fields=>["name", "body", "path"]
         end

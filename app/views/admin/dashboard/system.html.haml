@@ -8,7 +8,7 @@
           Down for maintenance message:
           = text_area_tag :message, params[:message] || Preference.get_cached(_sid, "down_for_maintenance_message")
           %br
-          = gnric_submit "Save"
+          = kit_submit "Save"
           %br
           Note: Setting a message will cause the site to be "down for maintenance".  To bring the site back up, clear the message.
 

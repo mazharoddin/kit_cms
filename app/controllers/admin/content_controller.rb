@@ -24,7 +24,7 @@ class Admin::ContentController < AdminController
     end
 
     indexes = [ "pages", "topic_posts", "topic_threads" ] 
-    search = Tire.search indexes.map { |name| "gnric_#{app_name}_#{name}"}.join(',') do
+    search = Tire.search indexes.map { |name| "kit_#{app_name}_#{name}"}.join(',') do
       query do
         string words.join(' ')
       end

@@ -1,6 +1,6 @@
 module AdsHelper
 
-  def gnric_pay_for_ad(id, options = {}) 
+  def kit_pay_for_ad(id, options = {}) 
     begin
       return "pay form will appear here" unless id 
       @ad = Ad.find_sys_id(_sid, id)
@@ -10,24 +10,24 @@ module AdsHelper
       @order = Order.new
       @order.email = @ad.user.email
 
-      gnric_render :partial=>"order/pay_for_ads", :locals=>{:options=>options}
+      kit_render :partial=>"order/pay_for_ads", :locals=>{:options=>options}
     rescue Exception => e
       e.message
     end
   end
 
-  def gnric_ad_buy_form(zones, options = {})
+  def kit_ad_buy_form(zones, options = {})
     begin
       @ad = Ad.new
       @zones = AdZone.sys(_sid).where("ad_zones.id in (#{zones.join(',')})").all
       options[:zones] = zones 
-      gnric_render partial:"ad/buy", :locals=>{:options=>options}
+      kit_render partial:"ad/buy", :locals=>{:options=>options}
     rescue Exception => e
       e.message + e.backtrace.join("<br/")
     end
   end
 
-  def gnric_ad_by_unit(unit_id, options = {})
+  def kit_ad_by_unit(unit_id, options = {})
     begin
       possible_zones = []
       highest_priority = nil
@@ -41,7 +41,7 @@ module AdsHelper
       end
 
       if possible_zones.length>0 
-        return gnric_ad_by_zone(possible_zones, options)
+        return kit_ad_by_zone(possible_zones, options)
       else
         return "[[no zones found]]"
       end
@@ -52,7 +52,7 @@ module AdsHelper
     end
   end
 
-  def gnric_ad_by_zone(ids, options = {})
+  def kit_ad_by_zone(ids, options = {})
     begin
       matching_ads = AdZone.load_ads(_sid, ids, options)
       return nil unless matching_ads && matching_ads.size>0
@@ -63,11 +63,11 @@ module AdsHelper
     end
   end
 
-  def gnric_render_ad_by_zone(ids, options = {})
-    gnric_ad_by_zone(ids, options).impress.render
+  def kit_render_ad_by_zone(ids, options = {})
+    kit_ad_by_zone(ids, options).impress.render
   end
 
-  def gnric_ad(id, options = {})
+  def kit_ad(id, options = {})
   begin
     ad = Ad.sys(_sid).where(:id=>id).includes(:ad_zones).first
     
