@@ -14,6 +14,21 @@ website or add CMS functionality to an existing Rails application.  It has the f
 8. User management, user grouping
 9. Integration with Mailchimp
 10. Fast and sophisticated searching with ElasticSearch
+11. Create complex forms and provide instant or completely customised views of the data submitted.
+
+Commercial Support
+------------------
+
+Commercial support, hosting, customisation and other assistance is available from the authors of Kit, (DSC)[http://www.dsc.net].
+
+Example Sites
+-------------
+
+The following sites use Kit.  None of them have any custom functionality not already present in the Kit gem.
+
+(Working With Rails)[http://www.workingwithrails.com]
+(Women's Sport and Fitness Foundation)[http://www.wsff.org.uk]
+(EuroGA)[http://www.euroga.org]
 
 Note
 ----
