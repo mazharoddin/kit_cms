@@ -1,5 +1,30 @@
 namespace :kit do
 
+  desc "Setup the database - USE WITH CAUTION"
+  task :setup_db => :environment do
+    require 'fileutils'
+    ok = true
+    source_dir = `bundle show kit_cms`.strip
+    ['schema.rb', 'data.yml'].each do |fn|
+      source = File.join(source_dir, 'db', fn)
+      dest = File.join('db', fn)
+      if File.exists?(dest)
+        puts "'#{dest}' already exists, I'm not going to overwrite it. If you want to use the Kit #{fn.split('.')[0]} you will have to delete or move that file out of the way.\n\n" 
+        ok = false
+      else
+        FileUtils.copy(source, dest)
+      end
+    end
+
+    if ok
+      Rake::Task['db:reset'].invoke
+      puts "The next step will take a while (at least 60 seconds and depending on your system could be several minutes) and no progress will be shown."
+      Rake::Task['db:data:load'].invoke
+    else
+      puts "As one of the file copy operations failed I'm not going to create your database. Resolve the copying issue and run this command again.\n\n"
+    end
+  end  
+
   desc "Empties the database - USE WITH CAUTION"
   task :clean_db => :environment do
 
@@ -30,10 +55,16 @@ namespace :kit do
   end
 
   desc "Create user"
-  task :create_user, [:email, :password] => :environment do |t, args|
+  task :create_user => :environment do 
+
+    print "\nEmail address of master administrator? > "
+    email = STDIN.gets.chomp
+    print "\nPassword for master administator? > "
+    password = STDIN.gets.chomp
+
     u = User.new
-    u.email = args.email
-    u.password = args.password
+    u.email = email
+    u.password = password
     u.system_id = 1
     u.save
     r = Role.where(:name=>"SuperAdmin").where(:system_id=>1).first
@@ -70,7 +101,7 @@ namespace :kit do
     l.path = 'layouts/application'
     l.save!
   end
- 
+
   desc "Create Basic Assets"
   task :basic_assets => :environment do 
     a = HtmlAsset.new
@@ -124,8 +155,9 @@ namespace :kit do
 
     UserLink.create(:user_id=>nil, :label=>"Browse", :url=>"/pages")
     UserLink.create(:user_id=>nil, :label=>"New Page", :url=>"/pages/new")
-    
+
     s = System.new
+    s.id = 1
     s.system_id = 1
     s.name = 'kit'
     s.save
@@ -153,8 +185,13 @@ namespace :kit do
     pc.version = 0
     pc.save
     p.publish(editor.id)
+    p.make_home_page!
 
-
+    original_index = File.join("public", "index.html")
+    if File.exists?(original_index)
+      FileUtils.mv(original_index, File.join("public","index.html.old"))
+      puts "Original /public/index.html has been renamed /public/index.html.old"
+    end
   end
 
   desc "Create Category Tree"
@@ -205,25 +242,25 @@ namespace :kit do
     end
   end
 
+
   desc "Initial Kit Setup" 
-  task :setup, [:email, :password] => :environment do |t, args|
-    puts "Cleaning Database"
+  task :setup_cms, [:email, :password] => :environment do |t, args|
+
+    print "\nThis will remove ALL existing Kit CMS data. If you enter anything other than 'YES' (without quotes) I'll stop.\n\nAre you sure? > "
+    confirm = STDIN.gets.chomp
+    exit unless confirm == 'YES'
     Rake::Task['kit:clean_db'].invoke
-    puts "Creating User Roles"
     Rake::Task['kit:create_roles'].invoke
-    puts "Creating user #{args.email} with a password as specified"
-    Rake::Task['kit:create_user'].invoke(args.email, args.password)
-    puts "Creating Page Statuses"
+    Rake::Task['kit:create_user'].invoke
     Rake::Task['kit:create_statuses'].invoke
-    puts "Creating assets, a basic layout, some basic preferences, a simple template and initialising the page category tree"
     Rake::Task['kit:basic_assets'].invoke
     Rake::Task['kit:basic_layout'].invoke
     Rake::Task['kit:basic_preferences'].invoke
     Rake::Task['kit:basic_template'].invoke
     Rake::Task['kit:basic_tree'].invoke
-    puts "Creating a very simple home page"
     Rake::Task['kit:basic_homepage'].invoke
+    puts "\nStart the Rails server then visit http://localhost:3000 or to login to the administrative dashboard go to http://localhost:3000/db\n\n"
   end
 
-  
+
 end
