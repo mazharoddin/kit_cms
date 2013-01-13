@@ -26,8 +26,8 @@
  *= require_self
  *
  * Minimum jQuery requirements are 1.7
- *= require mercury/dependencies/jquery-1.7
- *= require mercury/dependencies/jquery-ui-1.8.18.custom.min
+ *= require jquery
+ *= require jquery-ui.min
  *
  * You can include the Rails jQuery ujs script here to get some nicer behaviors in modals, panels and lightviews when
  * using :remote => true within the contents rendered in them.
@@ -231,7 +231,7 @@ window.Mercury = {
             // and submitted with the AJAX request sent when a page is saved.  These are expected to be HTML5 data attributes,
             // and 'data-' will automatically be prepended to each item in this directive. (ex. ['scope', 'version'])
             regions: {
-                       className: 'mercury-region',
+              className: 'mercury-region',
                        identifier: 'id',
                        dataAttributes: ['fieldid']
                      },

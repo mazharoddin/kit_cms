@@ -125,8 +125,15 @@ namespace :kit do
     UserLink.create(:user_id=>nil, :label=>"Browse", :url=>"/pages")
     UserLink.create(:user_id=>nil, :label=>"New Page", :url=>"/pages/new")
     
-    System.create(:system_id=>1, :name=>'kit')
-    SystemIdentifier.create(:system_id=>1, :ident_type=>"hostname", :ident_value=>"localhost")
+    s = System.new
+    s.system_id = 1
+    s.name = 'kit'
+    s.save
+    si = SystemIdentifier.new
+    si.system_id = 1
+    si.ident_type = 'hostname'
+    si.ident_value = 'localhost'
+    si.save
   end
 
   desc "Create Home Page"
@@ -152,7 +159,14 @@ namespace :kit do
 
   desc "Create Category Tree"
   task :basic_tree => :environment do
-    Category.create(:name=>"/", :parent_id=>0, :is_visible=>1, :path=>"/", :is_readable_anon=>1, :system_id=>1)
+    c = Category.new
+    c.name="/"
+    c.parent_id = 0
+    c.is_visible=1
+    c.path="/"
+    c.is_readable_anon=1
+    c.system_id=1
+    c.save
   end
 
   desc "Create Basic Template"
@@ -193,17 +207,15 @@ namespace :kit do
 
   desc "Initial Kit Setup" 
   task :setup, [:email, :password] => :environment do |t, args|
-    Rake::Task['db:create']
-    Rake::Task['db:schema:load']
-    Rake::Task['db:data:load']
     Rake::Task['kit:clean_db']
+    Rake::Task['kit:create_roles']
     Rake::Task['kit:create_user'].invoke(args.email, args.password)
     Rake::Task['kit:create_statuses']
-    Rake::Task['kit:create_roles']
     Rake::Task['kit:basic_assets']
     Rake::Task['kit:basic_layout']
     Rake::Task['kit:basic_preferences']
     Rake::Task['kit:basic_template']
+    Rake::Task['kit:basic_tree']
     Rake::Task['kit:basic_homepage']
   end
 

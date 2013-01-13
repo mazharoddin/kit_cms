@@ -132,7 +132,11 @@ Rails.application.routes.draw do
   put 'mercury/images/:id' => 'images#update'
   post 'mercury/images' => 'images#create'
   match 'mercury/links' => 'links#index'
-  Mercury::Engine.routes
+  scope '/mercury' do
+          match ':type/:resource' => "mercury#resource"
+          match 'snippets/:name/options' => "mercury#snippet_options"
+          match 'snippets/:name/preview' => "mercury#snippet_preview"
+  end
  
   get "menus/new/:mode" => 'menu#new' 
   get "menus" => 'menu#index'
@@ -148,7 +152,7 @@ Rails.application.routes.draw do
   put "asset/:id/tags" => 'asset#tags'
   put "asset/:id" => 'asset#update'
   delete "asset/:id" => "asset#delete"
-#  get "admin/asset/:id" => "asset#show" ???? DO WE NEED THIS?
+#  get "admin/asset/:id" => "asset#show" ???? not sure we need this???
   get "asset/:id" => "asset#show"
   post "assets" => "asset#create"
   match "assets" => "asset#index"

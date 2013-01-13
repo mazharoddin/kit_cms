@@ -1,5 +1,7 @@
 class Page < KitIndexed
 
+  attr_accessible :full_path, :category_id, :status, :name, :title, :page_template_id, :created_by, :updated_by, :system_id
+
     @@index_def =  [
       {:name=>:id, :index=>:not_analyzed, :include_in_all=>false},
       {:name=>:system_id, :index=>:not_analyzed, :include_in_all=>false},

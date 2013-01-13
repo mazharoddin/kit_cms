@@ -1,5 +1,6 @@
 class Status < ActiveRecord::Base
   has_many :pages
+  attr_accessible :system_id, :name, :value, :user_id, :order_by, :is_default, :is_published, :is_stub
 
   @@statuses = {}
 

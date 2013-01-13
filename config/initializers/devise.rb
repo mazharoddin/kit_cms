@@ -6,7 +6,7 @@ require "digest/sha1"
 Devise.setup do |config|
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in DeviseMailer.
-  config.mailer_sender = Preference.get_cached(1, "notifications_from")
+  config.mailer_sender = Preference.get_cached(1, "notifications_from") rescue ''
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"

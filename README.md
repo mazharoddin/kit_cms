@@ -21,7 +21,7 @@ NOT YET COMPLETE. DO NOT TRY FOLLOWING THESE INSTRUCTIONS YET.
 
 Include the kit gem in your Rails app's Gemfile:
 
-gem 'kit'
+gem 'kit_cms'
 
 
 

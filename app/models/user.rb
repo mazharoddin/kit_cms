@@ -111,7 +111,7 @@ class User < KitIndexed
          :recoverable, :rememberable, :trackable, :lockable,
          :maximum_attempts=>10, :unlock_strategy=>:time
 
-  if Rails.configuration.use_rest_auth
+  if Rails.configuration.respond_to?(:use_rest_auth) && Rails.configuration.use_rest_auth
     devise :encryptable, :encryptor => :restful_authentication_sha1
   end
 

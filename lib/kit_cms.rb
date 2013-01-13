@@ -1,0 +1,28 @@
+require "kit_cms/engine"
+require 'rubygems'
+require 'delayed_job_active_record'
+require 'daemons'
+require 'kaminari'
+require 'yaml_db'
+require 'devise'
+require 'devise-encryptable'
+require 'cancan'
+require 'rmagick'
+#require 'ruby-stemmer'
+require 'tire'
+require 'panoramic'
+require 'country_select'
+require 'geocoder'
+require 'truncate_html'
+require 'file-tail'
+require 'sanitize'
+require 'rdiscount'
+require 'gibbon'
+require 'imgkit'
+require 'haml'
+require 'paperclip'
+require 'browser'
+require 'mercury-rails'
+
+module KitCms
+end
