@@ -1,6 +1,12 @@
 Kit
 ===
 
+THIS IS ALPHA SOFTWARE.  DO NOT USE.
+
+Whilst the code in this release has been in production use for over a year, the release of it as open source is new, the packaging of it as a gem is new and this documentation is new.  If you're interested come back in a few days when the installation procedure etc. should be all sorted.  
+
+
+
 Kit is the Community and Content Management engine for Ruby on Rails 3.1 and above.  Kit can be used as an entire CMS-based
 website or add CMS functionality to an existing Rails application.  It has the following features:
 
