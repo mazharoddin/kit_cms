@@ -25,49 +25,50 @@ Installation
 
 NOT YET COMPLETE. DO NOT TRY FOLLOWING THESE INSTRUCTIONS YET.
 
-* To build a Rails app using this gem, first create your Rails app:
+To build a Rails app using this gem, first create your Rails app:
 
-  rails new my_cms
-  cd my_cms
+    rails new my_cms
+    cd my_cms
   
-* Edit the Gemfile to include MySQL and the Kit CMS gems:
+Edit the Gemfile to include MySQL and the Kit CMS gems:
 
-  # add these lines to Gemfile, around line 8
-  gem 'mysql2'
-  gem 'kit_cms'
+    # add these lines to Gemfile, around line 8
+    gem 'mysql2'
+    gem 'kit_cms'
   
-* Then build the bundle:
+Then build the bundle:
 
-  bundle
+    bundle
   
-* Edit the config/database.yml file to point to a local, not-yet-existing databsae:
+Edit the config/database.yml file to point to a local, not-yet-existing databsae:
 
-  development:
-  adapter: mysql2
-  database: mycms_development
-  hostname: localhost
-  pool: 5
-  timeout: 5000
+    # edit config/database.yml to have a section like this
+    development:
+    adapter: mysql2
+    database: mycms_development
+    hostname: localhost
+    pool: 5
+    timeout: 5000
 
-* Create the database:
+Create the database:
 
-  rake db:create
+    rake db:create
   
-* Setup the database:
+Setup the database:
 
-  rake kit:setup_db
+    rake kit:setup_db
   
-* Setup the CMS:
+Setup the CMS:
 
-  rake kit:setup_cms
+    rake kit:setup_cms
   
-* Start your Rails app:
+Start the Rails app:
 
-  rails s
+    rails s
   
-* Visit this URL:
+Visit this URL:
 
-  http://localhost:3000/db
+    http://localhost:3000/db
   
   
   
