@@ -15,6 +15,7 @@ website or add CMS functionality to an existing Rails application.  It has the f
 9. Integration with Mailchimp
 10. Fast and sophisticated searching with ElasticSearch
 11. Create complex forms and provide instant or completely customised views of the data submitted.
+12. Lots more.
 
 Commercial Support
 ------------------
@@ -50,11 +51,12 @@ To build a Rails app using this gem, first create your Rails app:
     rails new my_cms
     cd my_cms
   
-Edit the Gemfile to include MySQL and the Kit CMS gems:
+Edit the Gemfile to include MySQL,the Kit CMS and thin server gems:
 
     # add these lines to Gemfile, around line 8
     gem 'mysql2'
     gem 'kit_cms'
+    gem 'thin'
   
 Then build the bundle:
 
@@ -92,11 +94,18 @@ Setup the CMS:
   
 Start the Rails app:
 
-    rails s
+    rails s thin
   
-Visit this URL:
+Visit the home page:
+
+    http://localhost:3000
+    
+To edit the home page and use all the other functions:
 
     http://localhost:3000/db
+    
+Login, then click the Dashboard link that will appear on the home page.  Or click the Edit link to edit the home page in place.
+
   
 Adding Kit to an Existing System
 --------------------------------
