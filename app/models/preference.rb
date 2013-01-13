@@ -47,7 +47,11 @@ class Preference < ActiveRecord::Base
   def Preference.get!(sid,name, value, user_id = nil) # get, but return value if not found
     pref_s = Preference.get(sid,name, user_id)
     if (pref_s==nil)
-      pref = Preference.new(:system_id=>sid,:name => name, :value => value, :user_id=> user_id)
+      pref = Preference.new
+      pref.system_id=sid
+      pref.name = name
+      pref.value = value
+      pref.user_id = user_id
       pref.save
       return value
     else

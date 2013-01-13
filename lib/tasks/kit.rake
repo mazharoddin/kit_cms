@@ -207,16 +207,22 @@ namespace :kit do
 
   desc "Initial Kit Setup" 
   task :setup, [:email, :password] => :environment do |t, args|
-    Rake::Task['kit:clean_db']
-    Rake::Task['kit:create_roles']
+    puts "Cleaning Database"
+    Rake::Task['kit:clean_db'].invoke
+    puts "Creating User Roles"
+    Rake::Task['kit:create_roles'].invoke
+    puts "Creating user #{args.email} with a password as specified"
     Rake::Task['kit:create_user'].invoke(args.email, args.password)
-    Rake::Task['kit:create_statuses']
-    Rake::Task['kit:basic_assets']
-    Rake::Task['kit:basic_layout']
-    Rake::Task['kit:basic_preferences']
-    Rake::Task['kit:basic_template']
-    Rake::Task['kit:basic_tree']
-    Rake::Task['kit:basic_homepage']
+    puts "Creating Page Statuses"
+    Rake::Task['kit:create_statuses'].invoke
+    puts "Creating assets, a basic layout, some basic preferences, a simple template and initialising the page category tree"
+    Rake::Task['kit:basic_assets'].invoke
+    Rake::Task['kit:basic_layout'].invoke
+    Rake::Task['kit:basic_preferences'].invoke
+    Rake::Task['kit:basic_template'].invoke
+    Rake::Task['kit:basic_tree'].invoke
+    puts "Creating a very simple home page"
+    Rake::Task['kit:basic_homepage'].invoke
   end
 
   
