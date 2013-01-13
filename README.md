@@ -24,6 +24,10 @@ encounter any difficulties.
 Installation
 ------------
 
+Kit CMS is provided as a Rails engine.  Therefore it is possible to add Kit's functionality to an existing app or you can create a new app in which 
+to run it.  To create a new app, which is probably the easiest option if you want to explore what Kit has to offer, follow the step-by-step instructions below.  
+Advice for those wishing to use Kit as an addition to an existing system are also below.
+
 To build a Rails app using this gem, first create your Rails app:
 
     rails new my_cms
@@ -69,7 +73,18 @@ Visit this URL:
 
     http://localhost:3000/db
   
-  
+Adding Kit to an Existing System
+--------------------------------
+
+Kit is a Rails Engine and can be added to any existing Rails application. To do this include the `kit_cms` gem in your Gemfile and rebuild your bundle.  You will need to 
+create the various tables as described in the gem's db/schema.rb file and populate them with the data from db/data.yml.  You should then be able to run the kit:setup_cms 
+rake task as listed above.  One issue you may face is name clashes with your existing tables.  As Kit was abstracted from an existing system many of the table
+names are fairly common, like 'users', 'pages' etc. At some point in the future we hope to release a version which provides Kit's own tables in their own 
+namespace, e.g. 'kit_users', 'kit_pages' etc.  If you've not yet built the wider system or you have one with limited functionality 
+it's probably easiest to follow the instructions above for creating a new application with Kit, then building your new functionality or retrofitting your 
+existing code in to that app.
+
+
   
 
 
