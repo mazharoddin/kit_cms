@@ -1,12 +1,6 @@
 Kit
 ===
 
-THIS IS ALPHA SOFTWARE.  DO NOT USE.
-
-Whilst the code in this release has been in production use for over a year, the release of it as open source is new, the packaging of it as a gem is new and this documentation is new.  If you're interested come back in a few days when the installation procedure etc. should be all sorted.  
-
-
-
 Kit is the Community and Content Management engine for Ruby on Rails 3.1 and above.  Kit can be used as an entire CMS-based
 website or add CMS functionality to an existing Rails application.  It has the following features:
 
@@ -20,10 +14,15 @@ website or add CMS functionality to an existing Rails application.  It has the f
 8. User management, user grouping
 9. Integration with Mailchimp
 
+Note
+----
+
+The Kit system has been deployed in several production environments for over a year, on Linux servers with Passenger and MySQL.  However, the production of an open source Gem 
+is new as of January 2013.  As such, the installation procedure, documentation and use on other platforms is new.  Please let us know if you 
+encounter any difficulties.  
+
 Installation
 ------------
-
-NOT YET COMPLETE. DO NOT TRY FOLLOWING THESE INSTRUCTIONS YET.
 
 To build a Rails app using this gem, first create your Rails app:
 
