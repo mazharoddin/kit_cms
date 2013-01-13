@@ -43,7 +43,7 @@ Installation
 Kit CMS is provided as a Rails engine.  Therefore it is possible to add Kit's functionality to an existing app or you can create a new app in which 
 to run it.  To create a new app, which is probably the easiest option if you want to explore what Kit has to offer, follow the step-by-step instructions below.  
 Advice for those wishing to use Kit as an addition to an existing system are also below.  Finally, we also have a sample app with almost everything installed
-and ready to run.  For details of that please see [kit-app on Github](https://github.com/dsc-os/kit-app).
+and ready to run.  For details of that please see [kit_app on Github](https://github.com/dsc-os/kit_app).
 
 To build a Rails app using this gem, first create your Rails app:
 
