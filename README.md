@@ -26,9 +26,9 @@ Example Sites
 
 The following sites use Kit.  None of them have any custom functionality not already present in the Kit gem.
 
-[Working With Rails](http://www.workingwithrails.com)
-[Women's Sport and Fitness Foundation](http://www.wsff.org.uk)
-[EuroGA](http://www.euroga.org)
+* [Working With Rails](http://www.workingwithrails.com)
+* [Women's Sport and Fitness Foundation](http://www.wsff.org.uk)
+* [EuroGA](http://www.euroga.org)
 
 Note
 ----
