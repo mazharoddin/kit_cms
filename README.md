@@ -13,6 +13,7 @@ website or add CMS functionality to an existing Rails application.  It has the f
 7. Easily extended with reuseable components, easily created in HTML and Ruby.
 8. User management, user grouping
 9. Integration with Mailchimp
+10. Fast and sophisticated searching with ElasticSearch
 
 Note
 ----
@@ -26,7 +27,8 @@ Installation
 
 Kit CMS is provided as a Rails engine.  Therefore it is possible to add Kit's functionality to an existing app or you can create a new app in which 
 to run it.  To create a new app, which is probably the easiest option if you want to explore what Kit has to offer, follow the step-by-step instructions below.  
-Advice for those wishing to use Kit as an addition to an existing system are also below.
+Advice for those wishing to use Kit as an addition to an existing system are also below.  Finally, we also have a sample app with almost everything installed
+and ready to run.  For details of that please see [kit-app on Github](https://github.com/dsc-os/kit-app).
 
 To build a Rails app using this gem, first create your Rails app:
 
@@ -60,6 +62,14 @@ Create the database:
 Setup the database:
 
     rake kit:setup_db
+    
+Now to install and run ElasticSearch, which must be running before you start your CMS.  Download the latest version from (http://www.elasticsearch.org/download/).  
+Extract the contents of the file you downloaded in to a fresh directory called `elasticsearch` then do:
+
+    cd elasticsearch
+    bin/elasticsearch -f
+    
+This will start the search engine in foreground mode.  Drop the -f to run in background mode.  Once that's running, we need to continue with the CMS setup.    
   
 Setup the CMS:
 
@@ -82,7 +92,7 @@ rake task as listed above.  One issue you may face is name clashes with your exi
 names are fairly common, like 'users', 'pages' etc. At some point in the future we hope to release a version which provides Kit's own tables in their own 
 namespace, e.g. 'kit_users', 'kit_pages' etc.  If you've not yet built the wider system or you have one with limited functionality 
 it's probably easiest to follow the instructions above for creating a new application with Kit, then building your new functionality or retrofitting your 
-existing code in to that app.
+existing code in to that app.  Note that you'll need to follow the instructions above to download and run ElasticSearch, unless it's already running.
 
 
   
