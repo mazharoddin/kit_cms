@@ -25,9 +25,55 @@ Installation
 
 NOT YET COMPLETE. DO NOT TRY FOLLOWING THESE INSTRUCTIONS YET.
 
-Include the kit gem in your Rails app's Gemfile:
+# To build a Rails app using this gem, first create your Rails app:
 
-gem 'kit_cms'
+  rails new my_cms
+  cd my_cms
+  
+# Edit the Gemfile to include MySQL and the Kit CMS gems:
+
+  # add these lines to Gemfile, around line 8
+  gem 'mysql2'
+  gem 'kit_cms'
+  
+# Then build the bundle:
+
+  bundle
+  
+# Edit the config/database.yml file to point to a local, not-yet-existing databsae:
+
+  development:
+  adapter: mysql2
+  database: mycms_development
+  hostname: localhost
+  pool: 5
+  timeout: 5000
+
+# Create the database:
+
+  rake db:create
+  
+# Setup the database:
+
+  rake kit:setup_db
+  
+# Setup the CMS:
+
+  rake kit:setup_cms
+  
+# Start your Rails app:
+
+  rails s
+  
+# Visit this URL:
+
+  http://localhost:3000/db
+  
+  
+  
+
+
+
 
 
 
