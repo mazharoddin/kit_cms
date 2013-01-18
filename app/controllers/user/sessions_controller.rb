@@ -15,9 +15,16 @@ class User::SessionsController < Devise::SessionsController
   end
 
   def new
-    session[:return_to] ||= request.referer
     @page_title = "Sign In"
     self.kit_template = "user/sign-in"
+    if params[:return_to]
+        session[:return_to] = params[:return_to]
+    elsif url = Preference.get_cached(_sid, "url_after_sign_up")
+        session[:return_to] = url
+    else
+        session[:return_to] ||= request.referer
+    end
+    
     super
   end
 

@@ -16,7 +16,4 @@ capybara-*.html
 **.orig
 rerun.txt
 pickle-email-*.html
-
-kit_cms-2.3.3.gem
-
-kit_cms-2.3.4.gem
+kit_cms-*gem

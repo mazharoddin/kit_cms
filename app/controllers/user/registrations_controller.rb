@@ -8,7 +8,7 @@ class User::RegistrationsController < Devise::RegistrationsController
   before_filter :check_captcha, :only=>[:create] 
   layout "application"
 
-  def after_sign_in_path_for(resource)
+  def after_sign_up_path_for(resource)
     path = session[:return_to] || "/"
     session[:return_to] = nil
     return path.to_s
@@ -61,6 +61,14 @@ class User::RegistrationsController < Devise::RegistrationsController
   def new
     @page_title = "Sign Up"
     self.kit_template = "user/register"
+
+    if params[:return_to]
+      session[:return_to] = params[:return_to]
+    elsif url = Preference.get_cached(_sid, "url_after_sign_up")
+      session[:return_to] = url
+    else
+      session[:return_to] ||= request.referer
+    end
 
     @attributes = UserAttribute.sys(_sid).where(:show_on_signup=>1).all
     super
