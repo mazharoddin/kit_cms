@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = KitCms::VERSION
   s.authors     = ["DSC"]
   s.email       = ["os@dsc.net"]
-  s.homepage    = "https://github.com/dsc-os/kit"
+  s.homepage    = "https://github.com/dsc-os/kit_cms"
   s.summary     = "Community and Content Management System as a Rails 3.1+ Engine"
   s.description = "Kit is DSC's Community and Content Management System (CCMS) built as a Rails engine for Rails 3.1 and above. It provides an entire application's worth of CMS functions including in-place WYSIWYG editing with versioning, flexible layouts and templates, CSS and JS all managed within your browser, drag and drop image/file uploading, modules for sophisticated forums (with in place moderation) asset management, calendars, advertising, menus, RSS feeds, re-useable components, full audit trail of editing, integration with mailchimp, Google Analytics and lots more."
 
