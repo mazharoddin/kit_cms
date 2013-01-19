@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 3.2.1"
   s.add_dependency "mysql2"
   s.add_dependency 'class-table-inheritance'
-  s.add_dependency 'kiteditor'
+#  s.add_dependency 'kiteditor'
   s.add_dependency "tire"
   s.add_dependency "delayed_job_active_record"
   s.add_dependency "daemons"
@@ -46,6 +46,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rdiscount'
   s.add_dependency 'gibbon'
   s.add_dependency 'imgkit'
+  s.add_dependency 'dynamic_form'
 
 
 end

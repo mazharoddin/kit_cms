@@ -1,6 +1,6 @@
-<script type='text/javascript' src='/javascripts/ace/ace.js'></script>
-<script type='text/javascript' src='/javascripts/ace/theme-textmate.js'></script>
-<script type='text/javascript' src='/javascripts/ace/mode-<%= mode %>.js'></script>
+<%= javascript_include_tag 'kit/ace/ace.js' %>
+<%= javascript_include_tag 'kit/ace/theme-textmate.js' %>
+<%= javascript_include_tag "kit/ace/mode-#{ mode }.js" %>
 
 <script type="text/javascript">
   $(document).ready(function() {
