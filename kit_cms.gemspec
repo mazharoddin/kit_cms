@@ -6,11 +6,11 @@ require "kit_cms/version"
 # Describe your s.gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "kit_cms"
-  s.version     = KitCms::VERSION
+  s.version     = "2.3.8"
   s.authors     = ["DSC"]
   s.email       = ["os@dsc.net"]
   s.homepage    = "https://github.com/dsc-os/kit_cms"
-  s.summary     = "Community and Content Management System as a Rails 3.1+ Engine"
+  s.summary     = "Community and Content Management System as a Rails 3.2+ Engine"
   s.description = "Kit is DSC's Community and Content Management System (CCMS) built as a Rails engine for Rails 3.1 and above. It provides an entire application's worth of CMS functions including in-place WYSIWYG editing with versioning, flexible layouts and templates, CSS and JS all managed within your browser, drag and drop image/file uploading, modules for sophisticated forums (with in place moderation) asset management, calendars, advertising, menus, RSS feeds, re-useable components, full audit trail of editing, integration with mailchimp, Google Analytics and lots more."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["LICENSE", "Rakefile", "README.rdoc"]
@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 3.2.1"
   s.add_dependency "mysql2"
   s.add_dependency 'class-table-inheritance'
-#  s.add_dependency 'kiteditor'
+  s.add_dependency 'kiteditor', "~> 1.0.5"
   s.add_dependency "tire"
   s.add_dependency "delayed_job_active_record"
   s.add_dependency "daemons"

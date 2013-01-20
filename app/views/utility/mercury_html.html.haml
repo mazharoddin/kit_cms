@@ -1,14 +1,39 @@
 %form(id="mercury_html_editor" style="width:900px;")
-  %textarea(class="mercury-display-pane-container" id='edit' )
+  %textarea(class="mercury-display-pane-container" id='edit' style="" )
 
   .mercury-display-controls
     %fieldset(class="buttons")
       %ol
+        %li(class="commit button" style='margin-right: 610px;')
+          %input(class="submit" onClick="parent.frames[0].lorem();" type="button" value="Lorem Ipsum")
         %li(class="commit button")
-          %input(class="submit" name="commit" type="submit" value="Save and Replace")
+          %input(onClick="parent.frames[0].html_editor.toTextArea(); " class="submit" name="commit" type="submit" value="Save and Replace")
 
+/ Note, the dialog box in which this appears is in the context of the parent window, but the page which you're editing is the context of an iframe
+            
 %script(type='text/javascript')
+  var html_editor;
   $(document).ready(function() {
-  parent.$('#edit').markItUp(parent.editor_settings).css('height', '300px');
+  setTimeout(setup_editor, 200);
   });
+
+  function setup_editor() {
+  var editor_a = parent.document.getElementById('edit');
+  var options = { lineNumbers: true, theme: 'blackboard', indentUnit: 2, lineWrapping: true, matchBrackets: true  , collapseRange: true};
+  html_editor = parent.CodeMirror.fromTextArea(editor_a, options);
+  html_editor.focus();
+  html_editor.on('change', function() {
+  console.debug(html_editor.getValue());
+  });
+  }
+
+  function the_editor() {
+  return parent.frames[0].html_editor;
+  }
+
+  function lorem() {
+  the_editor().replaceSelection('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+  the_editor().focus();
+  }
+
 
