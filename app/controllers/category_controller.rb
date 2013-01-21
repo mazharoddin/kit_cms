@@ -1,7 +1,7 @@
 class CategoryController < KitController
   include ActionView::Helpers::JavaScriptHelper
 
-  layout 'cms-boxed'
+  layout 'cms'
   protect_from_forgery :except => [:subcat]
   before_filter :can_use
 
@@ -154,7 +154,7 @@ class CategoryController < KitController
 
   def show
     @category = Category.find_sys_id(_sid, params[:id])
-    render "show", :layout=>"cms-boxed"
+    render "show", :layout=>"cms"
   end
 
   def browse

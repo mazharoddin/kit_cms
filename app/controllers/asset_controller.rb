@@ -1,5 +1,5 @@
 class AssetController < AdminController
-  layout "cms-boxed"
+  layout "cms"
 
 
   def update

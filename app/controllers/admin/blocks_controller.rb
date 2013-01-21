@@ -1,5 +1,5 @@
 class Admin::BlocksController < AdminController
-  layout "cms-boxed"
+  layout "cms"
   
   def index
     @blocks = Block.sys(_sid).order(:name)

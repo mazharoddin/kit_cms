@@ -1,7 +1,7 @@
 class Admin::ForumController < AdminController
   before_filter { licensed("forums") }
 
-  layout 'cms-boxed'
+  layout 'cms'
 
 
   def index

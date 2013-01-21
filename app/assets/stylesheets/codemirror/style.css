@@ -4,8 +4,8 @@
   /* Set height, width, borders, and global font properties here */
   font-family: monospace;
   height: 800px;
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 15px;
+  line-height: 18px;
 }
 .CodeMirror-scroll {
   /* Set scrolling behaviour here */

@@ -1,5 +1,5 @@
 class Admin::UserController < AdminController
-  layout "cms-boxed" 
+  layout "cms" 
 
 
   def email

@@ -3,6 +3,7 @@ class Layout < ActiveRecord::Base
 
   use_kit_caching
 
+  attr_accessible :name, :handler, :stylesheets, :javascripts, :body
   before_save :make_path
   before_save :set_format
   has_many :page_templates

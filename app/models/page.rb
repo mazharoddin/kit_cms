@@ -1,6 +1,6 @@
 class Page < KitIndexed
 
-  attr_accessible :full_path, :category_id, :status, :name, :title, :page_template_id, :created_by, :updated_by, :system_id
+  attr_accessible :full_path, :category_id, :status_id, :name, :title, :page_template_id, :created_by, :updated_by, :system_id, :tags, :meta_description, :meta_keywords, :header
 
     @@index_def =  [
       {:name=>:id, :index=>:not_analyzed, :include_in_all=>false},
@@ -115,9 +115,8 @@ class Page < KitIndexed
 
     validates_associated :page_template
     validates_presence_of :page_template, :unless => "self.status == Status.stub_status(self.system_id)"
-    validates_associated :status
-    validates_presence_of :status
     validates_presence_of :category_id
+    validates_presence_of :status_id
     validates_associated :category
     validates :name, :format=>{:with=>/^[a-z0-9\-\.]+$/}, :presence=>true
     validates :title, :presence=>true

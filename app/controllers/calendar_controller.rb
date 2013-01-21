@@ -105,7 +105,7 @@ class CalendarController < KitController
     else
       url = params[:edit_url]
       if url =~ /^\/admin\//
-        render "/admin/calendar_entries/edit", :layout=>"cms-boxed"
+        render "/admin/calendar_entries/edit", :layout=>"cms"
       else
         render_page_by_url(params[:edit_url])
       end

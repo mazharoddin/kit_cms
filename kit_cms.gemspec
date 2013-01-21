@@ -1,12 +1,9 @@
 $:.push File.expand_path("../lib", __FILE__)
 
-# Maintain your gem's version:
-require "kit_cms/version"
-
 # Describe your s.gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "kit_cms"
-  s.version     = "2.3.8"
+  s.version     = "2.3.10"
   s.authors     = ["DSC"]
   s.email       = ["os@dsc.net"]
   s.homepage    = "https://github.com/dsc-os/kit_cms"

@@ -1,5 +1,5 @@
 class Admin::TodoController < AdminController
-  layout 'cms-boxed'
+  layout 'cms'
 
   def test
     
@@ -21,7 +21,7 @@ class Admin::TodoController < AdminController
     if params[:todo_paginate]
       render :partial=>"/admin/todo/sidebar"
     else
-      render "/admin/todo/search", :layout=>"cms-boxed"    
+      render "/admin/todo/search", :layout=>"cms"    
     end
 
   end

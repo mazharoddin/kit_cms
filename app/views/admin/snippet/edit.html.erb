@@ -18,7 +18,7 @@
   </div>
   </div>
     <b>Content:</b><br/>
-    <%= ace_editor('html', :snippet, :body, f) %>
+    <%= cm_editor('html', :snippet, :body, f) %>
 
 
     <%= kit_submit "Save" %> or <%= link_to "Cancel", "/admin/snippet/#{@snippet.id}" %>

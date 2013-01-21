@@ -1,6 +1,6 @@
 class Admin::PageTemplateTermsController < AdminController
 
-  layout "cms-boxed"
+  layout "cms"
 
   def index
     @page_template_terms = PageTemplateTerm.where(:page_template_id=>params[:page_template_id]).sys(_sid).all

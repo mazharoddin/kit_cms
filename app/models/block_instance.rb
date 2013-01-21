@@ -26,9 +26,14 @@ class BlockInstance < ActiveRecord::Base
     return "[No block definition #{self.block_id}]" unless self.block
 
     self.block.body.gsub(/\[\[([^\:]+)\:([^\:]+)\:[^\]]+\]\]/) do
-      bi = self.page.get_block_instances(self.instance_id, self.version, $1, self.block_id)
-      return "[No block instances]" unless bi
-      block_instance = bi.first
+      if self.page
+        bi = self.page.get_block_instances(self.instance_id, self.version, $1, self.block_id)
+        return "[No block instances]" unless bi
+       block_instance = bi.first
+      else
+        block_instance = self
+      end
+
       if block_instance && block_instance.field_value
         if $2 == "friendly"
           block_instance.field_value.friendly_format 

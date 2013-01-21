@@ -1,5 +1,5 @@
 class Admin::PageTemplatesController < AdminController
-  layout "cms-boxed"
+  layout "cms"
  
   def pages
    @page_template = PageTemplate.sys(_sid).where(:id=>params[:id]).first

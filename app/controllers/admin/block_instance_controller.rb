@@ -15,7 +15,7 @@ class Admin::BlockInstanceController < AdminController
   end
 
   def show
-    @instance = BlockInstance.where(:page_id=>params[:page_id]).where(:id=>params[:id]).sys(_sid).where(:version=>params[:version] || 0).first
+    @instance = BlockInstance.where(:id=>params[:id]).sys(_sid).where(:version=>params[:version] || 0).first
     if @instance
       @block = @instance.block
       @options = BlockInstance.where(:page_id=>params[:page_id]).where(:version=>@instance.version).where(:instance_id=>@instance.instance_id).sys(_sid).all

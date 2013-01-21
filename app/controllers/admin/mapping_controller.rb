@@ -1,6 +1,6 @@
 class Admin::MappingController < AdminController
 
-  layout "cms-boxed"
+  layout "cms"
 
   def index
     @mappings = Mapping.sys(_sid).where(:hidden=>0).order(:source_url).page(params[:page]).per(20)

@@ -2,6 +2,8 @@ include ActionView::Helpers::TextHelper
 
 class Asset < KitIndexed
 
+  attr_accessible :file, :file_file_name, :file_content_type, :file_file_size, :comment, :tags, :height, :width, :extension, :code, :is_image,  :system_id
+  
   Asset.do_indexing :Asset, [
     {:name=>:id, :index=>:not_analyzed, :include_in_all=>false},
     {:name=>:file_file_name, :boost=>25},

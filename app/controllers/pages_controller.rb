@@ -3,7 +3,7 @@ class PagesController < KitController
   before_filter :load_page, :except=>[:search, :cookie_text, :unique, :index, :new, :create, :stub, :zoom, :terms, :editor_trial]
   before_filter :can_use, :except=>[:show, :search, :cookie_text, :editor_trial, :save, :redir]
 
-  layout "layouts/cms-boxed"
+  layout "layouts/cms"
 
   def copy
     @original = @page
@@ -20,7 +20,7 @@ class PagesController < KitController
     @page.header = @original.header
     @page.tags = @original.tags
 
-    render "new", :layout=>"cms-boxed"
+    render "new", :layout=>"cms"
 
   end
 
@@ -355,7 +355,7 @@ class PagesController < KitController
     @page.page_template_id = PageTemplate.sys(_sid).where(:is_default=>1).first.id rescue Pagetemplate.first.id
     @page.category_id = params[:cat_id]
 
-    render "new", :layout=>"cms-boxed"
+    render "new", :layout=>"cms"
   end
 
   def create
@@ -369,7 +369,7 @@ class PagesController < KitController
         @original = Page.sys(_sid).where(:id=>@page.copy_of).first
         @page.copy_content_from(@original)
       end
-      Activity.add(_sid,"Created page '#{@page.name}' as <a href='#{@page.full_path}'>#{@page.full_path}</a>", current_user, 'Pages')
+      Activity.add(_sid,"Created page '#{@page.name}' as <a href='#{@page.full_path}'>#{@page.full_path}</a>", current_user.id, 'Pages')
       @page.generate_block_instances(current_user.id) unless @original
 
       redirect_to @page.link("show", true)
@@ -545,7 +545,7 @@ class PagesController < KitController
       redirect_to "/page/#{@page.id}/info"
       return
     else
-      render "edit", :layout=>"cms-boxed"
+      render "edit", :layout=>"cms"
     end
   end
 

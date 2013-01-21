@@ -1,7 +1,7 @@
 class Admin::CalendarsController < AdminController
   before_filter :licensed
   
-  layout "cms-boxed"
+  layout "cms"
 
 
   def index

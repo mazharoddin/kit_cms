@@ -22,9 +22,6 @@
   var options = { lineNumbers: true, theme: 'blackboard', indentUnit: 2, lineWrapping: true, matchBrackets: true  , collapseRange: true};
   html_editor = parent.CodeMirror.fromTextArea(editor_a, options);
   html_editor.focus();
-  html_editor.on('change', function() {
-  console.debug(html_editor.getValue());
-  });
   }
 
   function the_editor() {

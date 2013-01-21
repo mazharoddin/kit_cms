@@ -31,7 +31,7 @@
           = flash[:notice]
 
       %a(name='editor')
-      = ace_editor(@html_asset.file_type == 'css' ? 'scss' : 'javascript', :html_asset, :body, f, "html_asset_body")
+      = cm_editor(@html_asset.file_type, :html_asset, :body, f, "html_asset_body")
 
       %p
         = render :partial=>"utility/design_history", :locals=>{:object=>@html_asset}

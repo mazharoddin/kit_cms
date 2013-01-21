@@ -23,6 +23,8 @@ require 'haml'
 require 'paperclip'
 require 'browser'
 require 'mercury-rails'
+require 'dynamic_form'
+require 'best_in_place'
 
 module KitCms
 end

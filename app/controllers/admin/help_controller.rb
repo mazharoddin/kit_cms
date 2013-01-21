@@ -1,6 +1,6 @@
 class Admin::HelpController < AdminController
 
-  layout 'cms-boxed'
+  layout 'cms'
   def edit
     @help = Help.find(params[:id])
   end

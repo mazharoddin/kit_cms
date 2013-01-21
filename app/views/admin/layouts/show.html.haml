@@ -40,9 +40,9 @@
             Comma separated list of javascripts to include.  If left blank it will default to none.
         %li
           %label Body
-          = ace_editor('html', :layout, :body, f)
+          = cm_editor('html', :layout, :body, f)
 
-        %li
+        %li(style="margin-top: 10px;")
           = render :partial=>"utility/design_history", :locals=>{:object=>@layout}
       
       = kit_submit "Save"

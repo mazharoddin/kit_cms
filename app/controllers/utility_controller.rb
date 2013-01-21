@@ -32,7 +32,7 @@ class UtilityController < KitController
 
   def design_history
     @dh = DesignHistory.sys(_sid).where(:id=>params[:id]).first
-    render "design_history", :layout=>"cms-boxed"
+    render "design_history", :layout=>"cms"
   end
 
   def addresses

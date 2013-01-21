@@ -1,6 +1,6 @@
 class Admin::ContentController < AdminController
 
-  layout 'cms-boxed'
+  layout 'cms'
 
   def match
     @page = Page.where(:id=>params[:id]).sys(_sid).first

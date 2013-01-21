@@ -16,6 +16,7 @@
       %li(style="margin-bottom: 10px;")
         Reindex content:
         = icon_to "Reindex", "/admin/dashboard/reindex", false, :method=>:post, :confirm=>"Are you sure?  This can take a long time if there is lots of content and searching won't work properly whilst it's taking place."
+        = icon_to "Reindex (With Logging)", "/admin/dashboard/reindex?slow=1", false, :method=>:post, :confirm=>"Are you sure?  This can take a long time if there is lots of content and searching won't work properly whilst it's taking place."
 
       %li
         Integrity check:

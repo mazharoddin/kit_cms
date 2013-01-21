@@ -3,6 +3,7 @@ class HtmlAsset < ActiveRecord::Base
   validates :name, :presence=>true, :length=>{:minimum=>1, :maximum=>80}
   before_save :generate_fingerprint
 
+  attr_accessible :name, :file_type, :body, :system_id
   attr_accessor :compiled
 
   before_save :record_history

@@ -1,6 +1,6 @@
 class Admin::SnippetController < AdminController
 
-  layout "cms-boxed"
+  layout "cms"
 
   def index
     @snippets = Snippet

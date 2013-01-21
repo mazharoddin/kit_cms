@@ -1,0 +1,35 @@
+/*
+ *= require_tree "./cms"
+ *= require_tree "./ui-lightness"
+ *= require '../codemirror/editor' 
+ *= require "./calendar"
+ *= require "./fancybox"
+*/
+
+.ui-widget {
+  background-color: white;
+  font-family: 'Oxygen', sans-serif, arial, helvetica, sans-serif;
+  font-size:   14px;
+  line-height: 18px;
+}
+
+.ui-widget-header {
+  background-color: #AD3131 !important; 
+  border-color: black;
+  background-image: none;
+}
+
+.ui-dialog {
+  background-color: white;
+}
+
+.ui-dialog-content {
+  padding: 10px;
+}
+
+.ui-dialog-title {
+  background-color: #AD3131 !important; 
+
+}
+
+

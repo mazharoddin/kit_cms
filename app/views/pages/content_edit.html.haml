@@ -6,7 +6,7 @@
   .cms_form
     = form_for @page_content, :url=>"/page/#{@page.id}/content/#{@page_content.id}", :method=>:post do |f|
 
-      = ace_editor('html', :page_content, :value, f)
+      = cm_editor('html', :page_content, :value, f)
 
       .div
         = kit_submit "Save" 

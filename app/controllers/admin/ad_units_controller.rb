@@ -1,6 +1,6 @@
 class Admin::AdUnitsController < AdminController
 
-  layout 'cms-boxed'
+  layout 'cms'
 
   def create_block
     @ad_unit = AdUnit.find_sys_id(_sid, params[:id])

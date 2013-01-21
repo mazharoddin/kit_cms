@@ -1,6 +1,6 @@
 class Admin::BlockController < AdminController
 
-  layout "cms-boxed"
+  layout "cms"
 
   def index
     @blocks = Block

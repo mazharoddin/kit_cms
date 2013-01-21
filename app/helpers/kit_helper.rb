@@ -142,25 +142,13 @@ module KitHelper
     link_to_function label, "submit_form(this)", options
   end
 
-  def ace_editor(mode, object, field, form, form_field = nil)
-
+  def cm_editor(mode, object, field, form, form_field = nil)
     form_field ||= "#{object}_#{field}"
-    begin
-      content = eval("@#{object}.#{field}").html_safe
-    rescue
-      content = ''
-    end
-     
-    "
-    #{render :partial=>'utility/ace_editor', :locals=>{:mode=>mode, :field=>field, :form_field=>form_field, :content=>content}}
-    <div id='editor_mode'>Mode: #{mode.upcase}
-      <a target='_blank' href='/db/help/html_editor_keys'>Shortcut Keys</a>
-    </div>
-    <div id='editor_body'></div> 
-    #{form.text_area field, :style=>'display: none;'}
-    ".html_safe
+  
+    mode = 'htmlmixed' if mode == 'html'
+    mode = 'css' if mode == 'sass' || mode == 'scss'
+    render :partial=>'utility/cm_editor', :locals=>{:mode=>mode, :field=>field, :form_field=>form_field, :form=>form}
   end
-
 
   def hide_if(bool)
     bool ? "display:none;" : ""

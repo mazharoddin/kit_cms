@@ -9,14 +9,8 @@
       var is_draft = <%= params[:draft] ? 'true' : 'false' %>;
     </script>
 
-      <%= stylesheet_link_tag    'mercury', 'mercury_editor'  %>
-      <%= javascript_include_tag 'kit/mercury-editor' %>
-      <%= javascript_include_tag 'kit/utilities.js' %>
-      <%= javascript_include_tag 'kit/application-edit' %>
-      <%= javascript_include_tag "codemirror/editor" %>
-      <%= stylesheet_link_tag 'codemirror/style.css' %>
-      <%= stylesheet_link_tag 'codemirror/theme.css' %>
-      <%= stylesheet_link_tag 'codemirror/dialog.css' %>
+    <%= stylesheet_link_tag    'kit/editor'  %>
+    <%= javascript_include_tag 'kit/editor'%>
 
     </head>
     <body>

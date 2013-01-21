@@ -1,6 +1,6 @@
 class MenuController < AdminController
 
-  layout "cms-boxed"
+  layout "cms"
 
   def new
     @menu = Menu.new

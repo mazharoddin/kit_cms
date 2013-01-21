@@ -1,0 +1,19 @@
+<%= javascript_include_tag 'codemirror/editor' %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+      var editor_a = parent.document.getElementById('<%= form_field %>');
+      var options = { lineNumbers: true, theme: 'blackboard-cms', indentUnit: 2, lineWrapping: true, matchBrackets: true  , collapseRange: true, mode : '<%= mode %>'};
+  html_editor = parent.CodeMirror.fromTextArea(editor_a, options);
+  html_editor.focus();
+    
+  });
+</script>
+
+<div id='editor_mode'>Mode: <%= (mode=='htmlmixed' ? 'html' : mode).upcase %>
+</div>
+
+<%= form.text_area field %>
+
+
+

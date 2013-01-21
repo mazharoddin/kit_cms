@@ -1,0 +1,43 @@
+!!!
+%head
+  = render :partial=>'/layouts/cms-common', :locals=>{:include_menu=>true}
+  = stylesheet_link_tag "kit/cms"
+  - if content_for? :head
+    = yield :head
+
+  - if pref("advanced_mode")!="advanced"
+    %style(type='text/css')
+      \.advanced {
+      display:none;
+      }
+
+  - if content_for? :page_scripts
+    %script(type="text/javascript")
+      = yield :page_scripts
+
+  - if notice.not_blank?
+    %script(type="text/javascript")
+      $(document).ready(function() {
+      notify('#{j notice }');
+      });
+
+%body.app_body.clearfix
+  #wrapper
+    #inner
+      = render :partial=>"/utility/menu"
+
+      #page.clearfix
+        #cms-boxed.clearfix
+          #notice_box.message(style="display: none;")
+            #notice
+              = notice
+
+          - if content_for(:main).not_blank?
+            #left.clearfix
+              .box
+                = yield :main
+            #right.clearfix
+              - right_column
+              = yield :right
+          - else
+            = yield

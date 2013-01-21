@@ -2,7 +2,7 @@ class Admin::CalendarEntriesController < AdminController
 
   before_filter { licensed('calendars') }
   
-  layout "cms-boxed"
+  layout "cms"
 
   def sold
     @calendar_entry = CalendarEntry.where(:id=>params[:id]).sys(_sid).first

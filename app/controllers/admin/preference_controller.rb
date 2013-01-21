@@ -1,6 +1,6 @@
 class Admin::PreferenceController < AdminController
 
-  layout "cms-boxed"
+  layout "cms"
 
   def index
     @user_link = UserLink.new

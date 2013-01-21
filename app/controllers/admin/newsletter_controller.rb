@@ -2,7 +2,7 @@ require 'net/pop'
 require 'net/smtp'
 
 class Admin::NewsletterController < AdminController
-  layout "cms-boxed" 
+  layout "cms" 
   before_filter { licensed("newsletters") }
 
   def email

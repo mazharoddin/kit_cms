@@ -282,7 +282,7 @@ module KitModulesHelper
         (render :inline=>@instance.render).html_safe
       rescue Exception => e
         logger.debug("***** Block error: #{e.message}")
-        e.message
+        e.message 
       end
     else
       "[Block instance missing '#{id}']"

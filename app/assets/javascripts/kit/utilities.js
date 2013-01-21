@@ -17,21 +17,6 @@ select_change_parent = function(element, child, data, value) {
   $('#' + child).html(op);
 }
 
-var ace_editor = null;
-
-function create_ace_editor(mode, field, content) {
-  ace_editor = ace.edit('editor_body');
-  ace_editor.setTheme("ace/theme/textmate");
-  var editorMode = require("ace/mode/" + mode).Mode;
-  ace_editor.getSession().setMode(new editorMode());
-  ace_editor.getSession().setTabSize(2);
-  ace_editor.setShowPrintMargin(false);
-  ace_editor.getSession().setValue(content);
-
-  $('.cms_form form').on('submit', function() {
-    $('#'+ field).val(ace_editor.getSession().getValue());
-  });
-}
 
 function markup_menu(id) {
   var first_top_level = true;

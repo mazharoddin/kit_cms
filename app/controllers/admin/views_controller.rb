@@ -1,5 +1,5 @@
 class Admin::ViewsController < AdminController
-  layout 'cms-boxed'
+  layout 'cms'
 
   def index
     @views = View.sys(_sid).all

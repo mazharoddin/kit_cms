@@ -1,5 +1,5 @@
 class Admin::DashboardController < AdminController
-  layout  "cms-boxed"
+  layout  "cms"
 
   def user_comment
     comment = Comment.sys(_sid).where(:id=>params[:id]).first
@@ -357,10 +357,19 @@ class Admin::DashboardController < AdminController
 
   def reindex
     @@to_search.each do |model|
-      force_class = model.constantize.new
-      eval("#{model}.index.delete") rescue nil
-      eval("#{model}.create_elasticsearch_index")
-      eval("#{model}.import :per_page=>5000")
+      modelk = Kernel.const_get(model)
+
+      modelk.index.delete rescue nil
+      modelk.create_elasticsearch_index
+
+      if params[:slow]
+        modelk.find_each do |record|
+          logger.info "Importing #{model} #{record.id}"
+          modelk.index.store  record
+        end
+      else
+        modelk.import :per_page=>1000
+      end
     end 
 
     flash[:notice] = "Reindex complete"
@@ -419,7 +428,7 @@ class Admin::DashboardController < AdminController
     if request.xhr?
       render :partial=>"activity_list"
     else
-      render "activity", :layout=>"cms-boxed"
+      render "activity", :layout=>"cms"
     end
   end
 
