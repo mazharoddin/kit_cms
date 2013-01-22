@@ -3,9 +3,9 @@
 <head>
   <title><%= yield :title %></title>
   <!-- layout: minimal -->
-
+  
+  <%= stylesheet_link_tag "cms" %>
   <%= render :partial=>'/layouts/cms-common', :locals=>{:include_menu=>true} %>
-  <%= stylesheet_link_tag "kit_admin" %>
 
   <%= csrf_meta_tag %>
 
