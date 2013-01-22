@@ -3,3 +3,5 @@ The following form has been submitted:
 <% @sub.form_submission_fields.each do |field| %>
   <%= field.form_field.name %>: <%= field.value %> 
 <% end %>
+
+View online:  <%= "#{Preference.get_cached(@sid, 'host')}/admin/forms/#{@sub.form_id}/browse?id=#{@sub.id}" %>

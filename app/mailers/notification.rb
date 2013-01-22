@@ -32,7 +32,7 @@ class Notification < ActionMailer::Base
 
   def form_submission(submission,sid, recipient)
     @sub = submission
-
+    @sid = sid
     mail :subject=>"#{Preference.getCached(sid,'app_name')} #{@sub.form.title} Submission",
            :to=>recipient, :from=>isfrom(sid)
   end
