@@ -35,6 +35,9 @@ class HtmlAsset < ActiveRecord::Base
   end
   
   def write_to_file
+    parent = File.join(Rails.root, "public", "kit", self.file_type)
+    FileUtils.mkdir_p(parent) unless File.exists?(parent)
+
     path = File.join(Rails.root, "public", "kit", self.file_type, self.kit_name)
     dir = File.join(Rails.root, "public", "kit", self.file_type)
     found = false
