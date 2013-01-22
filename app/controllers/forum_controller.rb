@@ -345,7 +345,7 @@ class ForumController < KitController
       @thread.last_post_by_user_display_name = current_user.display_name
       @thread.last_post_at = Time.now
       @thread.save
-      @thread.topic.post_count += 1
+      @thread.topic.post_count += 1 rescue 1
       @thread.topic.last_thread_id = @thread.id
       @thread.topic.last_post_at = Time.now
       @thread.topic.last_post_id = @post.id
