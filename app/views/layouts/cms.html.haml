@@ -1,7 +1,7 @@
 !!!
 %head
-  = render :partial=>'/layouts/cms-common', :locals=>{:include_menu=>true}
   = stylesheet_link_tag "kit/cms"
+  = render :partial=>'/layouts/cms-common', :locals=>{:include_menu=>true}
   - if content_for? :head
     = yield :head
 

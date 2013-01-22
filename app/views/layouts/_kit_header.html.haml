@@ -5,10 +5,12 @@
   = page_title
 
 = stylesheet_link_tag "kit/kit" 
-= javascript_include_tag "kit/kit" 
+= kit_stylesheets
 
 - if @page && @page.editable
   = render :partial=>"/layouts/cms-common", :locals=>{:include_menu => false} 
+
+= javascript_include_tag "kit/kit" 
 
 - if @show_edit_link
   %style(type='text/css')
@@ -32,7 +34,6 @@
     color: red;
     }
 
-= kit_stylesheets
 = kit_javascripts
 = csrf_meta_tags 
 

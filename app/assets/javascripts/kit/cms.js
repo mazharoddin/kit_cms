@@ -4,6 +4,7 @@
  *= require '../underscore'
  *= require '../jquery.contextmenu'
  *= require '../jquery.fileupload'
+ *= require '../codemirror/editor'
  *= require './tree'
  *= require_self
  */
