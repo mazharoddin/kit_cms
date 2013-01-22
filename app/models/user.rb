@@ -117,7 +117,7 @@ class User < KitIndexed
 
   after_create :welcome_message
 
-  validates :display_name, :uniqueness=>{:scope=>:system_id}
+  validates :display_name, :uniqueness=>{:scope=>:system_id}, :allow_blank => true
   validates :email, :presence=>true, :uniqueness=>{:scope=>:system_id}
   validates :password, :presence=>true, :confirmation=>true, :on=>:create
   validates_confirmation_of :password, :on=>:create
