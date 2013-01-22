@@ -62,7 +62,7 @@ class User::RegistrationsController < Devise::RegistrationsController
     @page_title = "Sign Up"
     self.kit_template = "user/register"
 
-    session[:capthca_okay] = true
+    session[:captcha_okay] = true
     if params[:return_to]
       session[:return_to] = params[:return_to]
     elsif url = Preference.get_cached(_sid, "url_after_sign_up")
