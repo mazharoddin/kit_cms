@@ -2,7 +2,7 @@ class FormSubmission  < KitIndexed
 
   FormSubmission.do_indexing :FormSubmission, [
     {:name=>"id", :index=>:not_analyzed, :include_in_all=>false},
-    {:name=>"location", :type => 'geo_point', :as=>'"#{self.lat}, #{self.lon}"' },
+    {:name=>"location", :type => 'geo_point', :as=>'"#{self.lat ? self.lat : 0}, #{self.lon ? self.lon : 0}"' },
     {:name=>"created_at", :index=>:not_analyzed, :include_in_all=>false},
     {:name=>"marked", :as=>"self.marked ? self.marked : 0", :index=>:not_analyzed, :include_in_all=>false},
     {:name=>"system_id", :index=>:not_analyzed, :include_in_all=>false},
