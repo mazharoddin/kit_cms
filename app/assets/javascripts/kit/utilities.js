@@ -3164,7 +3164,7 @@ timezoneText: 'Time Zone'
 
   titleHeight = 0, titleStr = '', start_pos, final_pos, busy = false, fx = $.extend($('<div/>')[0], { prop: 0 }),
 
-  isIE6 = $.browser.msie && $.browser.version < 7 && !window.XMLHttpRequest,
+  isIE6 = false, // $.browser.msie && $.browser.version < 7 && !window.XMLHttpRequest,
 
   /*
    * Private methods 
