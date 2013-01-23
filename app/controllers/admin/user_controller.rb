@@ -284,13 +284,12 @@ class Admin::UserController < AdminController
   def stream_csv(users)
     filename = params[:action] + ".csv"    
 
-    #this is required if you want this to work with IE		
     csv_headers(filename)
 
     csv_string = CSV.generate do |csv|
-      csv << ["id","email","groups"]
+      csv << ["id","email","groups", "attributes"]
       users.each do |u|
-        csv << [u.id, u.email, u.groups.join(", ")]
+        csv << [u.id, u.email, u.groups.join(", "), u.user_attribute_values.map {|uav| "#{uav.user_attribute.name}:#{uav.value}"}.join(',')]
       end
     end
     render :text => csv_string 

@@ -2,13 +2,18 @@
   $(document).ready(function() {
       var editor_a = parent.document.getElementById('<%= form_field %>');
       var options = { lineNumbers: true, theme: 'blackboard-cms', indentUnit: 2, lineWrapping: true, matchBrackets: true  , collapseRange: true, mode : '<%= mode %>'};
-  html_editor = parent.CodeMirror.fromTextArea(editor_a, options);
+  var html_editor = parent.CodeMirror.fromTextArea(editor_a, options);
   html_editor.focus();
-    
+  <% if height || width %>
+    <% width = width ?  "\"#{width}\"" : 'null' %>
+    <% height = height ?  "\"#{height}\"" : 'null' %>
+    <%= "html_editor.setSize(#{width}, #{height})".html_safe %>
+  <% end %>
+
   });
 </script>
 
-<div id='editor_mode'>Mode: <%= (mode=='htmlmixed' ? 'html' : mode).upcase %>
+<div class='editor_mode'>Mode: <%= (mode=='htmlmixed' ? 'html' : mode).upcase %>
 </div>
 
 <%= form.text_area field %>

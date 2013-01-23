@@ -24,7 +24,7 @@
 .cm-s-blackboard .cm-hr { color: #AEAEAE; }
 .cm-s-blackboard .cm-link { color: #8DA6CE; }
 
-.cm-s-blackboard-cms.CodeMirror { width: 740px !important; height: 600px !important; background: #0C1021; color: #F8F8F8; }
+.cm-s-blackboard-cms.CodeMirror { width: 740px; height: 600px; background: #0C1021; color: #F8F8F8; }
 .cm-s-blackboard-cms .CodeMirror-selected { background: blue !important;  }
 .cm-s-blackboard-cms .CodeMirror-gutters { background: #4C5061; border-right: 0; }
 .cm-s-blackboard-cms .CodeMirror-linenumber { color: #888; }

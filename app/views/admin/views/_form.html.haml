@@ -11,17 +11,17 @@
 
     %p
       = f.label :body
-      = f.text_area :body
+      = cm_editor("html", :view, :body, f, nil, "400px")
 
     %p
       = f.label :header
-      = f.text_area :header
+      = cm_editor("html", :view, :header, f, nil, "120px")
       .field_help
         Optional
 
     %p
       = f.label :footer
-      = f.text_area :footer
+      = cm_editor("html", :view, :footer, f, nil, "120px")
       .field_help
         Optional
 
@@ -50,7 +50,7 @@
 
     %p 
       = f.label :layout_id
-      = f.select :layout_id, options_from_collection_for_select(Layout.order(:name).all, :id, :name, @view.layout_id)
+      = f.select :layout_id, options_from_collection_for_select(Layout.sys(_sid).order(:name).all, :id, :name, @view.layout_id)
       .field_help
         Only used if rendering this view as a whole page.  Not used if rendering the view in another page
 

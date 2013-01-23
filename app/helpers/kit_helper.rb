@@ -142,12 +142,12 @@ module KitHelper
     link_to_function label, "submit_form(this)", options
   end
 
-  def cm_editor(mode, object, field, form, form_field = nil)
+  def cm_editor(mode, object, field, form, form_field = nil, height = nil, width = nil)
     form_field ||= "#{object}_#{field}"
   
     mode = 'htmlmixed' if mode == 'html'
     mode = 'css' if mode == 'sass' || mode == 'scss'
-    render :partial=>'utility/cm_editor', :locals=>{:mode=>mode, :field=>field, :form_field=>form_field, :form=>form}
+    render :partial=>'utility/cm_editor', :locals=>{:mode=>mode, :field=>field, :form_field=>form_field, :form=>form, :height=>height, :width=>width}
   end
 
   def hide_if(bool)

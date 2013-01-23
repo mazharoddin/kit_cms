@@ -44,7 +44,7 @@
 
     %p
       %label End Date
-      = @experiment.end_date.to_s(:short)
+      = @experiment.end_date.to_s(:short) rescue ''
 
     %p
       %label Goal
