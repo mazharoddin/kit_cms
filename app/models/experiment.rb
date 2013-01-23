@@ -4,6 +4,8 @@ class Experiment < ActiveRecord::Base
   belongs_to :user
   belongs_to :goal
 
+  validates :end_date, :presence=>true
+
   after_save { Experiment.flush_cache }
   after_destroy { Experiment.flush_cache }
 

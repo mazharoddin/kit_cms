@@ -91,7 +91,21 @@ class Category < KitIndexed
 
   # all categories, in depth order (root at the top)
   def self.tree_by_depth(sid)
-    Category.sys(sid).includes(:category_groups).all.sort { |a,b| a.depth <=> b.depth }
+    Category.sys(sid).includes(:category_groups).all.sort do |a,b| 
+      if a.depth < b.depth
+        -1
+      elsif a.depth > b.depth
+        1
+      else
+        if a.name < b.name
+          -1
+        elsif a.name > b.name
+          1
+        else
+          0
+        end
+      end
+    end
   end
 
   # all categories, in a hash keyed by parent_id
@@ -109,7 +123,7 @@ class Category < KitIndexed
   # all categories, in a hash keyed by category_id, with "parent_of" attribute populated with a list of child categories AND child documents
   def self.tree_with_children(sid)
     lookup = { }
-    cats = Category.sys(sid).all
+    cats = Category.sys(sid).order(:name).all
     
     cats.each do |cat|
       cat.parent_of = []
@@ -122,7 +136,7 @@ class Category < KitIndexed
       lookup[cat.parent_id].parent_of << cat
     end
 
-    Page.sys(sid).includes(:status).find_each do |page|
+    Page.sys(sid).order(:name).includes(:status).find_each do |page|
       lookup[page.category_id].parent_of << page
     end
  
