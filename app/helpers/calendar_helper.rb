@@ -168,7 +168,9 @@ module CalendarHelper
     last_region_id = nil 
     first = true
     op = "{ "
+    at_least_one = false
     Subregion.order("regions.name, subregions.name").includes(:region).each do |sr| 
+      at_least_one = true
       if sr.region_id != last_region_id 
         if !first
           op += "],\r\n"
@@ -180,7 +182,8 @@ module CalendarHelper
       end
       op += "[ \"#{sr.name}\", #{sr.id} ], "
     end
-    op += "]}"
+    op += "]" if at_least_one
+    op += "}"
 
     return op.html_safe
   end

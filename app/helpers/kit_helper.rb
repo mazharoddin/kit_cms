@@ -96,7 +96,7 @@ module KitHelper
     s = stylesheets 
     rescue Exception => e
       s = ['application'] 
-      logger.debug "#{e.message}"
+      logger.info "#{e.message}"
     end
     (additional + s).each do |name|
       next if name.is_blank?

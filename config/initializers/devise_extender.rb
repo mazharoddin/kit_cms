@@ -20,6 +20,7 @@ module DeviseExtender
       options[:type] = custom_template.template_type || 'erb'
       options[:inline] = custom_template.body
       options[:layout] = custom_template.layout.path
+
       super options
     else
       super name, options
@@ -27,4 +28,12 @@ module DeviseExtender
   end
 
 
+  def stylesheets
+    custom_template = PageTemplate.get_custom_template(_sid, kit_template ? kit_template : name, request)
+    if custom_template
+      return custom_template.layout.stylesheets.split(',').uniq
+    else
+      return ["application"]
+    end
+  end
 end

@@ -14,10 +14,6 @@ class User::RegistrationsController < Devise::RegistrationsController
     return path.to_s
   end
 
-  def stylesheets
-    "xxxx"
-  end
-
   def create
     self.kit_template = "user/register" 
     build_resource

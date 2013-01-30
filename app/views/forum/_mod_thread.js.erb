@@ -44,7 +44,7 @@ function edit_post(thread_id, post_id) {
   div = $('#popup_form');
 
  div.append('Post: <textarea style="width:95%;" rows="18" id="topic_post_body_mod"></textarea>');
-  markdown_editor('#topic_post_body_mod');
+  //markdown_editor('#topic_post_body_mod');
   div.append('Comment: <textarea style="width:95%;" rows="6" id="comment"></textarea>');
   div.append('<br/><input type="button" onClick="save_edit();" value="Save"/>');
   $('#topic_post_body_mod').load("/forums/post/"+post_id);

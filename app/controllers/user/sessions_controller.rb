@@ -5,6 +5,8 @@ class User::SessionsController < Devise::SessionsController
 
   before_filter :set_system
   before_filter { params[:user][:system_id] = _sids if params[:user]}
+
+  helper_method :stylesheets
   
   layout "application"
 

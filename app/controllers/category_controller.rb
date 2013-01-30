@@ -267,7 +267,7 @@ class CategoryController < KitController
   def grant_permission(category_id, group_id, mode)
       cg = CategoryGroup.sys(_sid).where(:category_id=>category_id).where(:group_id=>group_id).first
       unless cg
-        cg = CategoryGroup.new(:system_id=>_sid, :category_id=>category_id, :group_id=>group_id)
+        cg = CategoryGroup.new(:category_id=>category_id, :group_id=>group_id)
       end
       if mode=='read'
         cg.can_read = 1
@@ -280,9 +280,9 @@ class CategoryController < KitController
 
   def revoke_permission(category_id, group_id, mode)
       if mode=='read'
-        CategoryGroup.delete_all(["system_id = ? and category_id = ? and group_id = ?", _sid, category_id, group_id])      
+        CategoryGroup.delete_all(["category_id = ? and group_id = ?", _sid, category_id, group_id])      
       else
-        cg = CategoryGroup.sys(_sid).where(:category_id=>category_id).where(:group_id=>group_id).first
+        cg = CategoryGroup.where(:category_id=>category_id).where(:group_id=>group_id).first
         if cg
           cg.can_write = 0
           cg.save

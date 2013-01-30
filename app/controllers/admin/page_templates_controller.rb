@@ -27,6 +27,7 @@ class Admin::PageTemplatesController < AdminController
       @page_template.is_default = 1
     end
     @page_template.user_id = current_user.id
+    @page_template.system_id = _sid
     if @page_template.save
       Activity.add(_sid, "Created Page Template '#{@page_template.name}'", current_user.id, "Page Template")
       redirect_to [:admin, @page_template], :notice => "Successfully created page template."

@@ -52,6 +52,14 @@
         .field_help
           Include new and updated entries in system activity log
 
+      - if @form.respond_to?(:layout)
+        %li.advanced
+          = f.label "Layout"
+          = f.select :layout, options_from_collection_for_select(Layout.sys(_sid).order(:name).all, 'name', 'name')
+
+          .field_help
+            The layout to use for this form when rendering it as a page.
+
       %li.advanced
         = f.label "Stylesheets"
         = f.text_field :stylesheets

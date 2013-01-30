@@ -6,7 +6,7 @@ class Calendar < ActiveRecord::Base
   validates :name, :presence=>true, :uniqueness=>true, :length=>{:minimum=>1, :maximum=>200}
 
   def entries_between(start_date, end_date, filter, position = nil, distance = nil) 
-    e = self.calendar_entries.where(["(start_date < ? and end_date > ?)", end_date, start_date]).includes({:location=>:subregion})
+    e = self.calendar_entries.where(["(start_date <= ? and end_date >= ?)", end_date, start_date]).includes({:location=>:subregion})
 
     if filter =~ /subregions.name/
       e = e.joins({:location=>:subregion})

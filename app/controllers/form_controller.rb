@@ -85,7 +85,7 @@ class FormController < KitController
 
     if @form.notify.not_blank?
       @form.notify.split(',').each do |recipient|
-        Notification.form_submission(sub, _sid, recipient).deliver
+        Notification.form_submission(sub_id, _sid, recipient).deliver
       end
     end
 

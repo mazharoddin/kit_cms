@@ -182,7 +182,7 @@ class Category < KitIndexed
   def self.build_permission_cache(sid)
     @@perms_cache[sid] = {}
     all_groups = {}
-    Group.all.collect { |g| all_groups[g.id] = g.name }
+    Group.where(:system_id=>sid).all.collect { |g| all_groups[g.id] = g.name }
     Category.tree_by_depth(sid).each do |cat|
       permissions = @@perms_cache[sid][cat.parent_id] ? @@perms_cache[sid][cat.parent_id].clone : { :read_groups=>{}, :write_groups=>{} } # start with permissions of parent
 

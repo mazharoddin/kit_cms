@@ -30,8 +30,8 @@ class Notification < ActionMailer::Base
     mail :from=>isfrom(sid),:subject=>"Event #{event.id} occurred: #{event.name}",  :to => Preference.getCached(sid, 'notify:event')
   end
 
-  def form_submission(submission,sid, recipient)
-    @sub = submission
+  def form_submission(submission_id,sid, recipient)
+    @sub = FormSubmission.find(submission_id)
     @sid = sid
     mail :subject=>"#{Preference.getCached(sid,'app_name')} #{@sub.form.title} Submission",
            :to=>recipient, :from=>isfrom(sid)

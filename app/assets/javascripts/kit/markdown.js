@@ -21,17 +21,7 @@ markdown_settings = {
 	]
 }
 
-miu = {
-	markdownTitle: function(markItUp, char) {
-		heading = '';
-		n = $.trim(markItUp.selection||markItUp.placeHolder).length;
-		for(i = 0; i < n; i++) {
-			heading += char;
-		}
-		return '\n'+heading;
-	}
-}
+miu = "None";
 
 function markdown_editor(field) {
-  $(field).markItUp(markdown_settings);
 }

@@ -75,18 +75,32 @@
       .next
         = link_to "&gt;".html_safe, current_path_with_new_params("month=#{next_month}&year=#{next_year}&srid=#{params[:srid]}&etid=#{params[:etid]}")
 
-  - if options[:show_days]
-    .clear
-    %ol.titles.clearfix
-      - for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] do
-        %li
-          = day
-      .clear
-    %br 
-  %ol.grid.clearfix
+
+  %table(class="#{mini ? 'mini' : 'full'}")
+    %tr.titles
+      - if options[:show_days]
+        %th.monday Monday
+        %th.tuesday Tuesday
+        %th.wednesday Wednesday
+        %th.thursday Thursday
+        %th.friday Friday
+        %th.saturday Saturday
+        %th.sunday Sunday
+
+    - row = 1
+    - col = 0 
+
     - entries.keys.sort.each do |key|
       - days = entries[key]
-      %li(id="box_#{key}" rel='#{key}' class="date_box #{date.strftime("%A").downcase if key==1} #{'today' if (date+(key-1).days).to_date==Date.today}")
+      - col += 1
+      = "<tr>".html_safe if col==1
+
+      - if col==1 && row==1
+        - while col < Date.new(date.year, date.month, 1).wday
+          = "<td class='pad'>&nbsp;</td>".html_safe
+          - col += 1
+
+      %td(id="box_#{key}" rel="#{key}" class="date_box #{date.strftime("%A").downcase if key==1} #{'today' if (date+(key-1).days).to_date==Date.today}")
         - if mini
           = key
         - else
@@ -94,23 +108,40 @@
         - if days.size==0 || mini
           &nbsp;
         - else 
-          %div
-            - cnt = 0
-            - days.each do |entry|
-              - cnt += 1
-              %p
-                - if cnt>3
-                  - if Preference.get_cached(_sid, 'calendar_show_event_count')=='true'
-                    - cnt = days.size
-                    .event_count
-                      = "#{cnt}"
-                  
-                  = link_to_function "more...", "month_show_day(#{key})"
-                  - break
-                - else
-                  = "*" unless entry.approved_at
-                  = link_to_function truncate(entry.name, :length=>20), "month_show_entry(#{key}, #{entry.id})"
-    .clear
+          - cnt = 0
+          - days.each do |entry|
+            - cnt += 1
+            %p
+              - if cnt>3
+                - if Preference.get_cached(_sid, 'calendar_show_event_count')=='true'
+                  - cnt = days.size
+                  .event_count
+                    = "#{cnt}"
+                
+                = link_to_function "more...", "month_show_day(#{key})"
+                - break
+              - else
+                = "*" unless entry.approved_at
+                = link_to_function truncate(entry.name, :length=>20), "month_show_entry(#{key}, #{entry.id})"
+
+
+      - if col==7
+        = "</tr>".html_safe
+        - col = 0
+        - row += 1
+    - need_close = false
+    - if col > 0
+      - while col < 7
+        = "<td class='pad'>&nbsp;</td>".html_safe
+        - col += 1
+        - need_close = true
+
+    = "</tr>".html_safe if need_close
+
+
+
+        
+  .clear
 
   - unless mini
     .details

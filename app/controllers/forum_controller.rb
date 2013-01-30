@@ -545,7 +545,7 @@ class ForumController < KitController
       @post.created_by_user.notes << UserNote.new(:category=>"Forum", :description=>"Removed all posts for spamming", :created_by_id=>current_user)
       TopicPost.delete_all_by_user(_sid, @post.created_by_user_id, current_user)
     else
-      @post.created_by_user.user_notes << UserNote.new(:category=>"Forum", :description=>"Had <a href='#{@post.link}'>post</a> #{params[:delete]=='0' ? '' : 'un'}deleted", :created_by_id=>current_user)
+      @post.created_by_user.user_notes << UserNote.new(:category=>"Forum", :description=>"Had <a href='#{@post.link}'>post</a> #{params[:delete]=='0' ? '' : 'un'}deleted", :created_by_id=>current_user.id)
     end
 
     render :js=>"done_delete(#{@post.id}, #{@post.is_visible});"

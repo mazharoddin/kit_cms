@@ -73,7 +73,7 @@ class UserController < KitController
           else
             uav.value = val
           end
-          uav.updated_by = current_user
+          uav.updated_by = current_user.id
           if uav.save
             at_least_one = true
           else

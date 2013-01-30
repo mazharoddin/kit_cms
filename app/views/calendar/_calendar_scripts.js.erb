@@ -4,7 +4,7 @@ function month_show_day(day) {
     $('#day_' + i).hide();
   }
   $('#day_' + day).show().find('li').show();
-  $('li.selected').removeClass('selected');
+  $('table td.selected').removeClass('selected');
   $('#box_' + day).addClass('selected');
 }
 
@@ -12,7 +12,7 @@ function month_show_entry(day, entry) {
   month_show_day(day);
   $('#day_' + day + " li").hide();
   $('.entry_' + entry).show();
-  $('li.selected').removeClass('selected');
+  $('table td.selected').removeClass('selected');
   $('#box_' + day).addClass('selected');
 }
 

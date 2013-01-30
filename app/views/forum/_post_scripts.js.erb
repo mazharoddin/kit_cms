@@ -14,7 +14,7 @@ $(document).ready(function() {
     show_post();
   <% end %>
 
-  markdown_editor('#topic_post_body');
+  //markdown_editor('#topic_post_body');
 });
 
 var editing_id = null;
@@ -30,7 +30,7 @@ function user_edit_post(post_id) {
   div.append('Post: <textarea style="width:95%;" rows="18" id="topic_post_body_edit"></textarea>');
   div.append('<br/><input type="button" onClick="user_save_edit();" value="Save"/>');
   $('#topic_post_body_edit').load("/forums/post/"+post_id);
-  markdown_editor('#topic_post_body_edit');
+  //markdown_editor('#topic_post_body_edit');
   editing_id = post_id;
 }
 

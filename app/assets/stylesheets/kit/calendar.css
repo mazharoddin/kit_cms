@@ -14,6 +14,7 @@ div#calendar .clear {
 
 div#calendar.full .header {
   font-size: 30px;
+  margin-bottom: 15px;
 }
 
 div#calendar.mini .header {
@@ -46,9 +47,6 @@ div#calendar .header div.next {
 div#calendar .header div.months {
   display: block;
 }
-div#calendar  ol {
-  list-style-type: none;
-}
 
 div#calendar .filters div {
   float: left;
@@ -68,103 +66,9 @@ div#calendar.full .postcode input, div#calendar.full .postcode select {
   font-size: 12px;
 }
 
-#calendar.full .grid {
-  width: 588px;
-}
-
 #calendar.mini .grid {
   width: 224px;
 }
-
-#calendar .grid {
-   margin: 0;
-   padding: 0;
-   border: 2px solid #333;
-   background-color: #ddd; }
-
-#calendar ol.grid {
-}
-
-#calendar .titles {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-#calendar .titles li {
-  width: 74px;
-  padding: 5px 5px 0 5px;
-  float: left;
-  font-size: 12px;
-  text-align: center;
-}
-
-#calendar .grid li {
-   list-style-position: inside;
-   font-weight: bold;
-   border: 1px solid #999;
-   float: left; 
-   background-color: #fff; 
-   padding: 5px;
-   overflow: hidden;
-  font-size: 12px;
- }
-
- #calendar.full .grid li {
-   width: 72px;
-   height: 72px;
- }
-
- #calendar.mini .grid li {
-   width: 20px;
-   height: 20px;
- }
-
- #calendar .grid li div {
-   margin-top: 5px;
-  }
-
-#calendar .grid li p {
-   list-style: none;
-   font-weight: normal;
-   float: none;
-   border: none;
-   padding: 0;
-   margin: 0;
-   overflow: hidden;
-   white-space:nowrap;
-}
-
-#calendar.full .grid li.monday {
-   margin-left: 0; }
-#calendar.full .grid li.tuesday {
-   margin-left: 84px; }
-#calendar.full .grid li.wednesday {
-   margin-left: 168px; }
-#calendar.full .grid li.thursday {
-   margin-left: 252px; }
-#calendar.full .grid li.friday {
-   margin-left: 336px; }
-#calendar.full .grid li.saturday {
-   margin-left: 420px; }
-#calendar.full .grid li.sunday {
-   margin-left: 504px; }
-
-#calendar.mini .grid li.monday {
-   margin-left: 0; }
-#calendar.mini .grid li.tuesday {
-   margin-left: 32px; }
-#calendar.mini .grid li.wednesday {
-   margin-left: 64px; }
-#calendar.mini .grid li.thursday {
-   margin-left: 96px; }
-#calendar.mini .grid li.friday {
-   margin-left: 128px; }
-#calendar.mini .grid li.saturday {
-   margin-left: 160px; }
-#calendar.mini .grid li.sunday {
-   margin-left: 192px; }
-
 
 #calendar .details h2 {
   margin-top: 20px;
@@ -239,3 +143,60 @@ div#calendar.full .postcode input, div#calendar.full .postcode select {
   margin-right: 10px;
 }
 
+div#calendar table {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  border-collapse: collapse;
+  border: 2px black solid !important;
+  overflow: hidden;
+}
+ 
+div#calendar th, div#calendar td {
+  border: 1px solid black;
+  overflow: hidden;
+}
+
+div#calendar table.full {
+  width: 590px;
+  font-size: 12px;
+}
+
+div#calendar table.mini {
+  width: 224px;
+  font-size: 10px;
+}
+
+div#calendar table.full th {
+  font-weight: bold;
+  text-align: center;
+  height: 24px;
+}
+
+div#calendar table.full td {
+  height: 74px;
+  text-align: left;
+  vertical-align: top;
+}
+
+div#calendar table.full td, div#calendar table.full th {
+  width: 74px;
+  padding: 5px;
+}
+
+div#calendar table td.pad {
+  background-color: #DDD;
+}
+
+div#calendar table.full td div {
+  margin: 0;
+}
+
+div#calendar table.full td p {
+  line-height: 14px;
+  margin: 0;
+}
+
+div#calendar table.full td.today {
+  background-color: #eee !important;
+}

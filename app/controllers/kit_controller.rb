@@ -337,7 +337,7 @@ HERE
       end
     end
 
-    render "form/show", :layout=>"application"
+    render "form/show", :layout=>((form.respond_to?(:layout) && form.layout) ? form.layout : 'application')
   end    
   
   def captcha_okay?

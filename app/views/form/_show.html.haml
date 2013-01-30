@@ -1,18 +1,26 @@
+- first_field = nil
 - content_for :page_scripts do 
   $(document).ready(function() {
 
   - form.form_fields.each do |field|
+    - first_field = field
     - next unless field.form_field_type.html_options.not_blank?
     - field.form_field_type.html_options.split('|').each do |hh|
       $('#field_#{field.id}').attr('#{hh.split('=')[0]}', #{hh.split('=')[1]});
   $('#form_#{form.id}').validate();
-  $('#field_#{form.form_fields.first.id}').focus();
+  - if first_field
+    $('#field_#{first_field.id}').focus();
   });
 
 %div(class="#{form.klass}")
   - if show_title
     .form-title
       = form.title
+
+  - if first_field == nil && (is_admin? || (current_user && form.user_id==current_user.id) ) 
+    This form has no fields.  Go to the
+    = link_to "form in the dashboard", "/admin/form/#{form.id}/fields"
+    to add some.  Normal users will not see this message.
 
   - if show_body
     .body
