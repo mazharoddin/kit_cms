@@ -29,8 +29,7 @@ $('input#page_title').change(function() {
   }
 });
 
-$('#category_filter').bind('keydown', function () {
-  if ($(this).val().length>0) {
+$('#category_filter').bind('keyup', function () {
     $('#wait').show();
     $.ajax({type:"POST", 
       url:"/category/select_options", 
@@ -39,7 +38,6 @@ $('#category_filter').bind('keydown', function () {
         $('#wait').hide();
       },
       data:"type=page&search="+$(this).val()});
-  }
 });
 
 $('#category_filter').focus();

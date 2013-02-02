@@ -65,7 +65,6 @@ return false;
       <td><%= @page.locked? ? "Yes" : "No" %></td>
       <td><%= link_to @page.locked? ? "No" : "Yes", "/page/#{@page.id}/info?locked=#{!@page.locked?}", :class=>"action", :method=>:post %></td>
     </tr>
-
     
     <tr>
       <td>Path:</td>
@@ -73,7 +72,8 @@ return false;
     </tr>
     <tr>
       <td>Template:</td>
-      <td colspan='2'><%= link_to(@page.page_template.name, "/admin/page_templates/#{@page.page_template_id}") rescue '' %></td>
+      <td><%= link_to(@page.page_template.name, "/admin/page_templates/#{@page.page_template_id}") rescue '' %></td>
+      <td><%= icon_to "Change", "/page/#{@page.id}/page_template", false, :style=>"position:relative; left: -3px;" %></td>
     </tr>
 
     <% if @page.page_template && @page.page_template.has_mobile_version? && feature?("mobile_templates") %>

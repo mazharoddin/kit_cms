@@ -207,9 +207,8 @@ class CategoryController < KitController
     end
 
     if @categories.size>0 
-      html = render_to_string(:partial=>"select_options.html")
-
-      render :js => "$('#page_category_id').html('#{html}'); $('#category_warning').html('');"
+      html = render_to_string(:partial=>"select_options").strip
+      render :js => "$('#page_category_id').html('#{html}'); $('#category_warning').html(''); "
     else
       render :js => "$('#page_category_id').html(''); $('#category_warning').html('No match found');"
     end

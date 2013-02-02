@@ -1,6 +1,18 @@
 class Admin::PageTemplatesController < AdminController
   layout "cms"
- 
+
+  def mapping
+    template = PageTemplate.sys(_sid).where(:id=>params[:id]).first
+    page = template.pages.first
+
+    if page==nil
+      render :js=>"$('#error_explanation').html('You must have already created at least one page with the \'#{template.name}\' template to use it for this page.').show();"
+      return
+    end
+
+    render :json=>page.current_content.map { |field| field.field_name }
+  end
+
   def pages
    @page_template = PageTemplate.sys(_sid).where(:id=>params[:id]).first
   

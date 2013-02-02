@@ -1,0 +1,40 @@
+- content_for :head do
+  %script(type='text/javascript')
+    = render :partial=>"/pages/page_template_script", :formats=>:js, :locals=>{:current=>@page.page_template_id}
+
+- content_for :main do 
+
+  %h1.page_icon Page Template for '#{@page.title}'
+
+  %h3 
+    Current Template: 
+    = @page.page_template.name
+
+  %h3 
+    New Template
+
+  = form_for @page , :url=>"/page/#{@page.id}/page_template" do |f|
+    = f.select :page_template_id, options_from_collection_for_select(PageTemplate.sys(_sid).order(:display_order).all, :id, :name, @page.page_template_id)
+
+    #error_explanation(style="display: none;")
+
+    - contents = @page.current_content
+    %ul#mapping(style="display: none;")
+      %li 
+        %h3 Editable Region Mappings
+        %p
+          When moving to a new template you must map the editable regions for the current page
+          to the the ones present in the new template. Where the name matches they have already
+          been selected.  Make the other selections as appropriate and click Save to make the change.
+          %span.check_error
+            The contents of any regions which are not mapped will be discarded. 
+
+      - contents.each do |content|
+        %li(id="field_#{content.id}")
+          %label
+            = content.field_name
+          = select_tag "f_#{content.field_name}", "<option></option>".html_safe, {:class=>"field_select", "data-name"=>content.field_name}
+
+      %li(style='margin-top: 10px;')
+        = kit_submit "Save"
+

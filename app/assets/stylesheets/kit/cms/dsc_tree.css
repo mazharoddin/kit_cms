@@ -124,6 +124,10 @@
   color: red !important;
 }
 
+.dsc_tree li.not_published {
+  color: #888 !important;
+}
+
 .dsc_tree input {
   font-size: 14px;
   width: 200px;

@@ -1,7 +1,6 @@
 - content_for :page_scripts do
 
   function updated(id, moderated, visible) {
-  console.debug(moderated + " " + visible);
   var mod;
   var nmod;
   var vis;
@@ -24,8 +23,6 @@
   vis = 'Yes';
   vnmod = 0;
   }
-
-  console.debug(id + ", " + moderated + ", " + visible + ", " + mod + ", " + nmod + "," + vis + ", " + vnmod);
 
   $('#mod_link_' + id + ' a').text(mod).attr('href', '/admin/dashboard/user_comment/' + id + '?comment[is_moderated]='+nmod);
 
@@ -57,18 +54,32 @@
       %th(width='200') User
       %th Moderated
       %th Visible
+      %th Delete
     - @comments.each do |comment|
-      %tr
+      %tr(class="comment_#{comment.id}")
         %td
           = link_to comment.url, comment.url
         %td
           = link_to_if comment.user_id!=0, comment.user_email, "/admin/user/#{comment.user_id}" 
         %td(id="mod_link_#{comment.id}")
-          = link_to comment.is_moderated? ? 'Yes' : 'No', "/admin/dashboard/user_comment/#{comment.id}?comment[is_moderated]=#{comment.is_moderated? ? 0 : 1}", :method=>:post, :remote=>true
+          = icon_to comment.is_moderated? ? 'Yes' : 'No', "/admin/dashboard/user_comment/#{comment.id}?comment[is_moderated]=#{comment.is_moderated? ? 0 : 1}", false, :method=>:post, :remote=>true
         %td(id="vis_link_#{comment.id}")
-          = link_to comment.is_visible? ? 'Yes' : 'No', "/admin/dashboard/user_comment/#{comment.id}?comment[is_visible]=#{comment.is_visible? ? 0 : 1}", :method=>:post, :remote=>true
-      %tr
-        %td(colspan="4")
+          = icon_to comment.is_visible? ? 'Yes' : 'No', "/admin/dashboard/user_comment/#{comment.id}?comment[is_visible]=#{comment.is_visible? ? 0 : 1}", false, :method=>:post, :remote=>true
+        %td(id="delete_link_#{comment.id}")
+          = icon_to "Delete", "/admin/dashboard/user_comment/#{comment.id}?delete=1", false, :method=>:post, :remote=>true, :confirm=>"Are you sure?"
+      %tr(class="comment_#{comment.id}")
+        %td(colspan="5")
+          .info
+            Name: 
+            = comment.user_name
+          .info
+            Email:
+            = comment.user_email
+          .info
+            URL:
+            = link_to comment.user_url, comment.user_url
+          %br
           = field_reveal(comment.body, 200)
+          %hr
 
 

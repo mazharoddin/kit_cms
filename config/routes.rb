@@ -48,6 +48,7 @@ Rails.application.routes.draw do
   post "/admin/calendar_entries/:id" => "admin/calendar_entries#show" 
   get "/admin/calendars/:calendar_id/:start_date/:id" => "admin/calendar_entries#show"
   get "/admin/page_templates/:id/pages" => "admin/page_templates#pages"
+  get "/admin/page_templates/:id/mapping" => "admin/page_templates#mapping"
   match "/tickets/:item_model/:item_id" => "calendar#buy_tickets"
   get "/tickets/sold_as_csv/:item_model/:item_id" => "calendar#sold_as_csv"
 
@@ -316,6 +317,7 @@ Rails.application.routes.draw do
   get 'pages/zoom' => 'pages#zoom'
   post 'page/unique' => 'pages#unique'
   get 'page/info' => 'pages#info'
+  match 'page/:id/page_template' => 'pages#page_template', :only=>[:get, :post]
   post 'page/:id/copy' => 'pages#copy'
   delete 'page/:id/terms/:term_id' => 'pages#terms'
   match '/page/:id/terms' => 'pages#terms'

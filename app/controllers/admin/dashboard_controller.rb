@@ -5,10 +5,17 @@ class Admin::DashboardController < AdminController
     comment = Comment.sys(_sid).where(:id=>params[:id]).first
 
     if comment
-      comment.update_attributes(params[:comment])
+      if params[:delete]
+        comment.destroy
+        render :js=>"$('tr.comment_#{comment.id}').remove();"
+      else
+        comment.update_attributes(params[:comment])
+        render :js=>"updated(#{comment.id}, #{comment.is_moderated}, #{comment.is_visible});"
+      end
+      return
     end
 
-    render :js=>"updated(#{comment.id}, #{comment.is_moderated}, #{comment.is_visible});"
+    render :js=>""
   end
 
   def user_comments

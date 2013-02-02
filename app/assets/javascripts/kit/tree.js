@@ -451,6 +451,9 @@ get_node_data : function(id) {
       }
       else {
         control_class = node.y=='s' ? 'stub' : 'page';
+        if (node.b==false) {
+          li.addClass("not_published");
+        }
       }
       if (node.b===true) {
         li.addClass("pub");
@@ -553,16 +556,18 @@ get_node_data : function(id) {
       copy_mode();
     }));
     buttons_div.append($('<a style="display: none;" class="cancel icon no_icon" href="#">Cancel</a>').on('click', function() {
-      cancel_move();
+      cancel_move(true);
     }));
   }
 
-  function cancel_move() {
-    div.find('div.buttons a.copy_icon').show();
-    div.find('div.buttons a.move_icon').show();
+  function cancel_move(show_buttons_again) {
+    if (show_buttons_again) {
+      div.find('div.buttons a.copy_icon').show();
+      div.find('div.buttons a.move_icon').show();
+    }
     div.find('div.buttons a.cancel').hide();
     div.find('li div.move').hide();
-    div.find('li.type_c > div.move').droppable('destroy');
+    //div.find('li.type_c > div.move').droppable('destroy');
     div.find('.dd_accept').removeClass('dd_accept'); 
   }
 
@@ -588,17 +593,20 @@ get_node_data : function(id) {
      revert: true
     });
 
-    div.find('li.type_c > div.move').droppable({
+    div.find('li.type_c ').droppable({
       over: function(event, ui) {
-        var li = get_li_up(event); //$(event.target).parent('li').first();
+        //var li = get_li_up(event); //$(event.target).parent('li').first();
+        var li = $(event.target);
         li.find('div.title').first().addClass("dd_accept");
       },
       out: function(event, ui) {
-        var li = get_li_up(event); // $(event.target).parent('li').first();
+        //var li = get_li_up(event); // $(event.target).parent('li').first();
+        var li = $(event.target);
         li.find('div.title').first().removeClass("dd_accept");
       },
       drop: function(event, ui) {
-        move($(ui.draggable).parent('li'), get_li_up(event));  
+        var li = $(event.target);
+        move($(ui.draggable).parent('li'), li);  
       }
     });
   }
@@ -722,7 +730,7 @@ get_node_data : function(id) {
               }
               open_node(target_node, target);
               style_node(target, target_node);
-              cancel_move();
+              cancel_move(false);
             } else {
               log("Move failed " + resp.message);
             }

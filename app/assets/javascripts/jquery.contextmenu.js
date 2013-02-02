@@ -986,13 +986,13 @@ var // currently active contextMenu trigger
                 $t.appendTo(opt.$menu);
                 
                 // Disable text selection
-                if (!opt.hasTypes) {
-                    if($.browser.msie) {
-                        $t.on('selectstart.disableTextSelect', handle.abortevent);
-                    } else if(!$.browser.mozilla) {
-                        $t.on('mousedown.disableTextSelect', handle.abortevent);
-                    }
-                }
+//                if (!opt.hasTypes) {
+ //                   if($.browser.msie) {
+  //                      $t.on('selectstart.disableTextSelect', handle.abortevent);
+   //                 } else if(!$.browser.mozilla) {
+    //                    $t.on('mousedown.disableTextSelect', handle.abortevent);
+     //               }
+      //          }
             });
             // attach contextMenu to <body> (to bypass any possible overflow:hidden issues on parents of the trigger element)
             if (!opt.$node) {

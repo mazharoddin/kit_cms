@@ -19,7 +19,7 @@
   = render :partial=>"google_preview"
 
   - simple_mode = pref('advanced_mode')!='advanced'
-
+  - advanced_mode = !simple_mode
 
 #pageinfo.cms_form(style="margin-bottom: 10px;")
   = form_for @page do |f|
@@ -32,15 +32,14 @@
         = f.hidden_field :copy_of
 
       - if @page.new_record? 
-        - category_visible = !simple_mode || @page.category_id==nil || @page.errors[:name]
+        - category_visible = advanced_mode || params[:cat_id]==nil || @page.errors[:name].size>0
         %li(class='select optional more_options' id='article_category_input' style="#{'display: none;' unless category_visible}")
           %label(for='article_category_id') Category
-          = text_field_tag "category_filter", '', {"data-focus"=>has_cat ? '':'special'}
-          -  cat_options = page.category_id ?  "<option value='#{page.category.id}'>#{page.category.path}</option>" :  options_from_collection_for_select(Category.order('name').sys(_sid).all, :id, :name) 
-          = select_tag "page[category_id]", cat_options.html_safe
-          %br
-          .field_help
-            Enter any part of the name of the desired category
+          -  cat_options = options_from_collection_for_select(Category.order('path').sys(_sid).all, :id, :path, @page.category_id || params[:cat_id]) 
+          = select_tag "page[category_id]", cat_options.html_safe, :style=>"width: 542px;"
+          %span.category_filter
+            = icon_to_function "Filter Categories", "$('.category_filter input').show().focus(); $('.category_filter a').hide();", false
+            = text_field_tag "category_filter", '', {"data-focus"=>has_cat ? '':'special', :style=>"width: 100px; display: none;"}
           #category_warning
       - else 
         %script(type='text/javascript')

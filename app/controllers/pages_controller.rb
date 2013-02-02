@@ -439,6 +439,30 @@ class PagesController < KitController
     @terms = @page.terms
   end
 
+  def page_template
+    if request.put?
+      page = Page.sys(_sid).where(:id=>params[:id]).first
+      return unless page
+      notice = nil 
+      if page.page_template_id != params[:page][:page_template_id]
+        new_template = PageTemplate.sys(_sid).where(:id=>params[:page][:page_template_id]).first
+        if new_template
+          lookup = {}
+          page.page_template_id = params[:page][:page_template_id]
+          page.save
+          params.each do |param_name, new_name|
+            if param_name =~ /^f_(.+)$/
+              old_name = $1
+              PageContent.connection.execute("update page_contents set field_name = '#{new_name}' where field_name = '#{old_name}' and page_id = #{page.id}")
+            end
+          end
+          notice = 'Changes saved'
+        end
+      end
+      redirect_to "/page/#{params[:id]}/info", :notice=>notice
+    end 
+  end
+
   def info    
     if params[:sitemap] && request.post?
       @page.skip_history

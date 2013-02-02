@@ -655,6 +655,11 @@ div#admin_panel div#popup ul li a:hover {
   -webkit-padding-start: 0;
 }
 
+div#category_warning {
+  top: 0 !important;
+  margin-left: 0 !important;
+}
+
 div#page_name_valid, div#category_warning {
   margin-left: 180px;
   color: red;
@@ -1656,3 +1661,17 @@ div.plumbbox {
   padding: 10px;
 }
 
+
+table.comments .info {
+  margin-right: 20px;
+  display: inline-block;
+}
+
+table.comments th {
+  font-weight: bold;
+}
+
+ul#mapping li label {
+  float: left;
+  width: 300px;
+}
