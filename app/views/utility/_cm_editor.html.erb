@@ -1,20 +1,40 @@
 <script type="text/javascript">
   $(document).ready(function() {
       var editor_a = parent.document.getElementById('<%= form_field %>');
-      var options = { lineNumbers: true, theme: 'blackboard-cms', indentUnit: 2, lineWrapping: true, matchBrackets: true  , collapseRange: true, mode : '<%= mode %>'};
-  var html_editor = parent.CodeMirror.fromTextArea(editor_a, options);
+      var options = { 
+      <% unless options[:dont_show_line_numbers] %>
+      lineNumbers: true, 
+      <% end %>
+      theme: "<%= options[:theme] || 'blackboard-cms' %>", 
+      indentUnit: 2, 
+      lineWrapping: true, 
+      matchBrackets: true, 
+      collapseRange: true, 
+      mode : '<%= mode %>'};
+      var html_editor = parent.CodeMirror.fromTextArea(editor_a, options);
+      html_editors["<%= form_field %>"] = html_editor;
   html_editor.focus();
+  <% height = options[:height] %>
+  <% width = options[:width] %>
   <% if height || width %>
     <% width = width ?  "\"#{width}\"" : 'null' %>
     <% height = height ?  "\"#{height}\"" : 'null' %>
     <%= "html_editor.setSize(#{width}, #{height})".html_safe %>
   <% end %>
-
+   
   });
 </script>
 
+<% unless options[:dont_show_mode] %>
 <div class='editor_mode'>Mode: <%= (mode=='htmlmixed' ? 'html' : mode).upcase %>
 </div>
+<% end %>
+
+<% if options[:show_toolbar] %>
+<div class='toolbar'>
+  <%= render :partial=>"utility/cm_toolbar_#{mode}", :locals=>{:name=>form_field} %>
+</div>
+<% end %>
 
 <%= form.text_area field %>
 

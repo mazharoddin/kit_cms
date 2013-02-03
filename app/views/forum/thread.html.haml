@@ -2,6 +2,10 @@
   - content_for :page_scripts do
     = render :partial=>"mod_thread", :formats=>[:js]
 
+- content_for :head do
+  = javascript_include_tag "codemirror/editor"
+  = stylesheet_link_tag "codemirror/editor"
+
 #forums
   = render(:partial=>"introduction")
   .titles(class='clearfix')

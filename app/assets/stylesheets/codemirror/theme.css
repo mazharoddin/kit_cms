@@ -48,3 +48,58 @@
 .cm-s-blackboard-cms .cm-hr { color: #AEAEAE; }
 .cm-s-blackboard-cms .cm-link { color: #8DA6CE; }
 
+.cm-s-neat {
+  font-family: Arial, "sans serif";
+
+}
+
+.cm-s-neat span.cm-em { font-weight: bold; }
+.cm-s-neat span.cm-comment { color: #a86; }
+.cm-s-neat span.cm-keyword { line-height: 1em; font-weight: bold; color: blue; }
+.cm-s-neat span.cm-string { color: #a22; }
+.cm-s-neat span.cm-builtin { line-height: 1em; font-weight: bold; color: #077; }
+.cm-s-neat span.cm-special { line-height: 1em; font-weight: bold; color: #0aa; }
+.cm-s-neat span.cm-variable { color: black; }
+.cm-s-neat span.cm-number, .cm-s-neat span.cm-atom { color: #3a3; }
+.cm-s-neat span.cm-meta {color: #555;}
+.cm-s-neat span.cm-link { color: #3a3; }
+
+
+.toolbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 5px 5px 0 5px;
+  background-color: #CCC;
+  width: 99%;
+}
+
+.toolbar ul li {
+  cursor: pointer;
+  list-style-type: none;
+  float: left;
+  width: 18px;
+  font-size: 10px;
+  font-family: Arial, "sans serif";
+  background-repeat: no-repeat;
+  height: 18px;
+  background-color: #eee;
+  border: 1px #000 solid;
+  margin-right: 5px;
+  text-align: center;
+  position: relative;
+  background-position: 4px 4px;
+  border-radius: 2px;
+}
+
+.toolbar ul li label {
+  position: absolute;
+  bottom: 2px;
+}
+
+.toolbar ul li.underline {
+  background-image: url('/assets/kit/toolbar/underline.png');
+}
+.toolbar ul li.bold {
+  background-image: url('/assets/kit/toolbar/bold.png');
+}
+

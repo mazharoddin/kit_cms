@@ -1,0 +1,18 @@
+- rand = rand(100000)
+
+%ul.markdown.clearfix(id="tb_#{rand}")
+  
+  %li.bold(data-start="*" data-end="*" data-placeholder="Bold" data-hint="Bold")
+  %li.underline(data-start="_" data-end="_" data-placeholder="Underline" data-hint="Underline")
+  %li.list(data-start="- " data-end="" data-placeholder="" data-hint="Bullet Point List")
+%script
+  $(document).ready(function() {
+  $('#tb_#{rand} li').on('click', function() {
+  
+  if ($(this).attr('data-end')=='') {
+  insert_code('#{name}', $(this).attr('data-start'));
+  }
+
+  insert_formatting('#{name}', $(this).attr('data-start'), $(this).attr('data-end'), $(this).attr('data-placeholder')); 
+  });
+  });

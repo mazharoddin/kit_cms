@@ -11,17 +11,17 @@
 
     %p
       = f.label :body
-      = cm_editor("html", :view, :body, f, nil, "400px")
+      = cm_editor("html", :view, :body, f, nil, :height=>"400px")
 
     %p
       = f.label :header
-      = cm_editor("html", :view, :header, f, nil, "120px")
+      = cm_editor("html", :view, :header, f, nil, :height=>"120px")
       .field_help
         Optional
 
     %p
       = f.label :footer
-      = cm_editor("html", :view, :footer, f, nil, "120px")
+      = cm_editor("html", :view, :footer, f, nil, :height=>"120px")
       .field_help
         Optional
 
