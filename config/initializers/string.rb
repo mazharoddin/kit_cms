@@ -20,7 +20,7 @@ class String
     options[:filter_styles] ||= true
     options[:autolink] ||= true
 
-    r = RDiscount.new(text)
+    r = Maruku.new(text)
 
     options.each do |k,v|
       if r.respond_to?(k.to_sym)

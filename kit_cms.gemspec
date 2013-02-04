@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 # Describe your s.gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "kit_cms"
-  s.version     = "2.3.16"
+  s.version     = "2.3.17"
   s.authors     = ["DSC"]
   s.email       = ["os@dsc.net"]
   s.homepage    = "https://github.com/dsc-os/kit_cms"
@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_dependency "truncate_html"
   s.add_dependency "file-tail"
   s.add_dependency "sanitize"
-  s.add_dependency 'rdiscount'
+  s.add_dependency 'maruku'
   s.add_dependency 'gibbon'
   s.add_dependency 'imgkit'
   s.add_dependency 'dynamic_form'
