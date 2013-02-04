@@ -1,18 +1,49 @@
 - rand = rand(100000)
 
+
 %ul.markdown.clearfix(id="tb_#{rand}")
   
-  %li.bold(data-start="*" data-end="*" data-placeholder="Bold" data-hint="Bold")
-  %li.underline(data-start="_" data-end="_" data-placeholder="Underline" data-hint="Underline")
-  %li.list(data-start="- " data-end="" data-placeholder="" data-hint="Bullet Point List")
+  %li.bold(data-cmd="undo" data-hint="Undo")
+    = image_tag "/assets/kit/toolbar/undo.png"
+    %label Undo
+  %li.spacer.bold(data-cmd="redo" data-hint="Redo")
+    = image_tag "/assets/kit/toolbar/redo.png"
+    %label Redo
+
+  %li.bold(data-cmd="bold" data-hint="Bold")
+    = image_tag "/assets/kit/toolbar/bold.png"
+    %label Bold
+  %li.spacer.underline(data-cmd="underline" data-hint="Underline")
+    = image_tag "/assets/kit/toolbar/underline.png"
+    %label Underline
+  %li.list(data-cmd="list" data-hint="Bullet Point List")
+    = image_tag "/assets/kit/toolbar/list.png"
+    %label List
+  %li.spacer.numbered_list(data-cmd="numbered_list" data-hint="Numbered List")
+    = image_tag "/assets/kit/toolbar/numbered_list.png"
+    %label Numbered
+  %li.image(data-cmd="image" data-hint="Insert Image")
+    = image_tag "/assets/kit/toolbar/image.png"
+    %label Image
+  %li.link(data-cmd="link" data-hint="Insert Link")
+    = image_tag "/assets/kit/toolbar/link.png"
+    %label Link
+  %li.spacer.link(data-cmd="video" data-hint="Insert Video")
+    = image_tag "/assets/kit/toolbar/video.png"
+    %label Video
+  %li.quote(data-cmd="quote" data-hint="Quote")
+    = image_tag "/assets/kit/toolbar/quote.png"
+    %label Quote
+  %li.spacer.pre(data-cmd="pre" data-hint="Preformatted")
+    = image_tag "/assets/kit/toolbar/formatted.png"
+    %label Formatted
+  %li.pre(data-cmd="preview" data-hint="Preview")
+    = image_tag "/assets/kit/toolbar/preview.png"
+    %label Preview
+  
 %script
   $(document).ready(function() {
   $('#tb_#{rand} li').on('click', function() {
-  
-  if ($(this).attr('data-end')=='') {
-  insert_code('#{name}', $(this).attr('data-start'));
-  }
-
-  insert_formatting('#{name}', $(this).attr('data-start'), $(this).attr('data-end'), $(this).attr('data-placeholder')); 
+  if ($(this).attr('data-cmd')) { do_cmd("#{name}", $(this).attr('data-cmd')); }
   });
   });

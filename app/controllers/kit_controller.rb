@@ -239,7 +239,7 @@ HERE
         inline_template = "<div id='page_#{page.id}' class='template_#{error_template.id}'>\n\n" + error_template.body + "\n\n</div>"
         render :inline=>inline_template, :layout=>error_template.layout.path, :type=>error_template.template_type || 'erb'
       else
-        render "error/application", :layout=>Preference.getCached(_sid, "error_layout") || "error", :status=>status
+        render "error/application", :layout=>Preference.getCached(_sid, "error_layout") || "application", :status=>status
       end
     end
 

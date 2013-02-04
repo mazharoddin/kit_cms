@@ -2,7 +2,6 @@
  *= require './forums'
  *= require './calendar'
  *= require './dsc'
- *= require './markdown.css'
  *= require_self
  */
 

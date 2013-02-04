@@ -508,3 +508,33 @@ div#forums div.watch a {
 div#forums div#threads div.mod_actions {
   width: 600px;
 }
+
+div.markdown_preview {
+  background-color: white;
+  padding: 10px;
+  }
+
+div.modal_markdown_preview div.ui-dialog-content {
+  border: thin black solid;
+  font-family: Arial, "sans serif";
+}
+
+div.modal_markdown_preview div.ui-dialog-titlebar {
+  height: 20px;  
+  padding: 10px;
+  color: white;
+  background-color: #444;
+  font-family: Arial, "sans serif";
+  
+}
+
+div.modal_markdown_preview div.ui-dialog-titlebar span.ui-icon-closethick {
+  float: right;
+}
+
+div.ui-widget-overlay {
+  opacity: 0.2;
+  background-color: black;
+}
+
+

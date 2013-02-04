@@ -430,7 +430,9 @@ class Admin::DashboardController < AdminController
     @activity = @activity.includes(:user)
     end
     @activity = @activity.where(["category = ?", params[:cat]]) if params[:cat]
+    @activity = @activity.sys(_sid)
     @activity = @activity.order("created_at desc").page(params[:page]).per(100)
+    
 
     if request.xhr?
       render :partial=>"activity_list"

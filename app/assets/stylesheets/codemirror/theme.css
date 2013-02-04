@@ -53,7 +53,8 @@
 
 }
 
-.cm-s-neat span.cm-em { font-weight: bold; }
+.cm-s-neat span.cm-strong { font-weight: bold; }
+.cm-s-neat span.cm-em { text-decoration: underline; }
 .cm-s-neat span.cm-comment { color: #a86; }
 .cm-s-neat span.cm-keyword { line-height: 1em; font-weight: bold; color: blue; }
 .cm-s-neat span.cm-string { color: #a22; }
@@ -71,35 +72,54 @@
   padding: 5px 5px 0 5px;
   background-color: #CCC;
   width: 99%;
+  height: 36px;
+
 }
 
 .toolbar ul li {
   cursor: pointer;
   list-style-type: none;
   float: left;
-  width: 18px;
-  font-size: 10px;
+  width: 46px;
+  font-size: 9px;
   font-family: Arial, "sans serif";
+  font-weight: normal;
   background-repeat: no-repeat;
-  height: 18px;
-  background-color: #eee;
-  border: 1px #000 solid;
+  height: 26px;
+  color: #666;
+  border: 1px #444 solid;
   margin-right: 5px;
   text-align: center;
   position: relative;
-  background-position: 4px 4px;
+  background-position: center center;
   border-radius: 2px;
+  text-align: center;
+  padding: 2px 0 0 0;
+
+  border-top: 1px solid #26485e;
+   background: #bdbdbd;
+   background: -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#bdbdbd));
+   background: -webkit-linear-gradient(top, #f0f0f0, #bdbdbd);
+   background: -moz-linear-gradient(top, #f0f0f0, #bdbdbd);
+   background: -ms-linear-gradient(top, #f0f0f0, #bdbdbd);
+   background: -o-linear-gradient(top, #f0f0f0, #bdbdbd);
+}
+
+.toolbar ul li.spacer {
+  margin-right: 15px;
+}
+
+.toolbar ul li img {
+  opacity: 0.6;
 }
 
 .toolbar ul li label {
   position: absolute;
-  bottom: 2px;
+  width: 46px;
+  text-align: center;
+  bottom: 1px;
 }
 
-.toolbar ul li.underline {
-  background-image: url('/assets/kit/toolbar/underline.png');
+.toolbar .list img, .toolbar .numbered_list img {
+  margin-top: 2px;
 }
-.toolbar ul li.bold {
-  background-image: url('/assets/kit/toolbar/bold.png');
-}
-

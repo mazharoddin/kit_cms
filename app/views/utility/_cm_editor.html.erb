@@ -38,5 +38,9 @@
 
 <%= form.text_area field %>
 
-
+<% unless options[:no_preview] %>
+<div id="preview_<%= form_field %>" class='markdown_preview' style='display: none;'>
+  Please wait whilst the preview loads
+</div>
+<% end %>
 

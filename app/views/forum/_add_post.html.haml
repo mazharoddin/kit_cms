@@ -35,7 +35,8 @@
           %label(label_for='post_body')
             = t "forum.post_body"
           .post_box(style="border: thin #AAA solid; margin-bottom: 10px;")
-            = cm_editor('markdown', :topic_post, :body, form, nil, {:theme=>"neat", :dont_show_mode=>true, :dont_show_line_numbers=>true, :height=>300, :show_toolbar=>true})
+            = f.text_area :body
+            = cm_editor('markdown', :topic_post, :body, form, nil, {:theme=>"neat", :dont_show_mode=>true, :dont_show_line_numbers=>true, :height=>300, :show_toolbar=>true}) if Preference.get_cached(_sid, "use_markdown_editor")=="true"
 
         - formatting = kit_snippet('Forum Post Formatting Help')
         - if formatting.not_blank?
@@ -44,7 +45,6 @@
 
         #submit
           = link_to_function t("forum.submit_post"), "send_this_form();", :class=>"action"
-          = link_to_function t("forum.preview_post"), "$('#body .markItUpButton9').mouseup();", :class=>"action"
           .display_name
             Posting as &quot;
             = current_user.display_name if current_user && current_user.display_name
