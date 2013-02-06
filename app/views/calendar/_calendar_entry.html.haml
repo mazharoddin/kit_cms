@@ -81,7 +81,7 @@
       Owner options: 
       = link_to options[:list_sold_label] || "Show Sold Tickets", options[:list_sold_url]
 
-  - if options[:sell_tickets_setup_url] && entry.sell_tickets==0 && ( (current_user && entry.user_id == current_user.id ) || current_user.admin?)
+  - if options[:sell_tickets_setup_url] && entry.sell_tickets==0 && ( (current_user && entry.user_id == current_user.id ) || (current_user && current_user.admin?))
     = link_to options[:sell_tickets_setup_label] || "Sell Tickets For This Online", options[:sell_tickets_setup_url]
 
 

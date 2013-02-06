@@ -25,7 +25,7 @@ class User::RegistrationsController < Devise::RegistrationsController
         if params[attr.code_name]
           uav = UserAttributeValue.new
           uav.user_attribute_id = attr.id
-          uav.user = user
+          uav.user_id = user.id
           uav.value = params[attr.code_name]
           uav.updated_by = current_user
           uav.system_id = _sid

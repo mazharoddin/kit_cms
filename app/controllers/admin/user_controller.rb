@@ -197,7 +197,7 @@ class Admin::UserController < AdminController
         search.filter :terms, :system_id=>system_id
         @users = search.results
       else 
-        @users = User.sys(_sid).order(:email).page(params[:page]).per(per_page)
+        @users = User.sys(_sid).order('created_at desc').page(params[:page]).per(per_page)
       end
     end
 
