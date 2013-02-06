@@ -57,7 +57,7 @@
           %ul
             - other_fields.each do |field|
               - next if field.hidden==1
-              - value = current_value(@sub, field)
+              - value = current_value(@sub, field) rescue ""
               = render :partial=>"/form/field", :locals=>{:field=>field, :value=>value}
 
       - if form.use_text_captcha?(request, current_user)

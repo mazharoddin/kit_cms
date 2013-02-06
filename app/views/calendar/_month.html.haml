@@ -101,6 +101,7 @@
           - col += 1
 
       %td(id="box_#{key}" rel="#{key}" class="date_box #{date.strftime("%A").downcase if key==1} #{'today' if (date+(key-1).days).to_date==Date.today}")
+        .day_wrap
         - if mini
           = key
         - else
@@ -121,8 +122,9 @@
                 = link_to_function "more...", "month_show_day(#{key})"
                 - break
               - else
-                = "*" unless entry.approved_at
-                = link_to_function truncate(entry.name, :length=>20), "month_show_entry(#{key}, #{entry.id})"
+                .day_entry
+                  = "*" unless entry.approved_at
+                  = link_to_function truncate(entry.name, :length=>20), "month_show_entry(#{key}, #{entry.id})"
 
 
       - if col==7

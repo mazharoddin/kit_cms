@@ -111,12 +111,13 @@ class PagesController < KitController
         query do
           string search_term, :fields=>search_fields.uniq
         end
-        filter :term, :status => "published"
+        filter :term, :status => "Published"
         filter :term, :is_deleted => 0
         from (the_page-1)*search_size 
         size search_size
         filter :term, :system_id=>system_id
       end
+      logger.info "SEARCH: #{indexes.join(',')} #{search.to_json}"
       @results = search.results
     else
       @results = nil

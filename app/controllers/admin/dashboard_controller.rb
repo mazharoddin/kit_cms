@@ -414,7 +414,7 @@ class Admin::DashboardController < AdminController
       filter :term, :system_id=>system_id
 
     end
-    logger.debug "SEARCH: #{indexes.join(',')} #{search.to_json}"
+    logger.info "SEARCH: #{indexes.join(',')} #{search.to_json}"
 
     @results = search.results
     logger.debug "RESULTS: #{@results.size}"

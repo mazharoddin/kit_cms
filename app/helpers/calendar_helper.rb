@@ -129,6 +129,7 @@ module CalendarHelper
     entries = {}
     days_in_this_month = days_in_month(month)
 
+    logger.debug "**** days in month #{month} #{days_in_this_month}"
     for i in 1..days_in_this_month do
       entries[i] = []
     end
@@ -160,8 +161,11 @@ module CalendarHelper
     end
   end
 
-  def days_in_month(d)
-    (Date.new(d.year, 12, 31) << (12-d.month)).day
+  COMMON_YEAR_DAYS_IN_MONTH = [nil, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+  def days_in_month(month, year = Time.now.year)
+   return 29 if month == 2 && Date.gregorian_leap?(year)
+   COMMON_YEAR_DAYS_IN_MONTH[month]
   end
 
   def regions_list

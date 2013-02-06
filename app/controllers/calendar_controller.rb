@@ -19,7 +19,7 @@ class CalendarController < KitController
     item.save
 
     unless current_user.admin?  
-        Notification.moderation_required("Ticket Sales", "Ticket sales set up for #{@calendar_entry.calendar.name}.  View: #{Preference.get_cached(_sid, 'host')}/admin/calendar_entries/#{@calendar_entry.id}", _sid).deliver
+        Notification.moderation_required("Ticket Sales", "Ticket sales set up for #{item.calendar.name}.  View: #{Preference.get_cached(_sid, 'host')}/admin/calendar_entries/#{item.id}", _sid).deliver if params[:item_model]=="CalendarEntry"
     end      
     redirect_to (params[:redirect] || "/") and return
   end

@@ -149,7 +149,6 @@ div#calendar table {
   margin: 0;
   border-collapse: collapse;
   border: 2px black solid !important;
-  overflow: hidden;
 }
  
 div#calendar th, div#calendar td {
@@ -182,6 +181,12 @@ div#calendar table.full td {
 div#calendar table.full td, div#calendar table.full th {
   width: 74px;
   padding: 5px;
+}
+
+div#calendar table.full div.day_entry {
+  height: 16px;
+  width: 74px;
+  overflow: hidden;
 }
 
 div#calendar table td.pad {

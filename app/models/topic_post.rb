@@ -1,5 +1,3 @@
-require 'rdiscount'
-
 class TopicPost < KitIndexed
 
   TopicPost.do_indexing  :TopicPost, [
