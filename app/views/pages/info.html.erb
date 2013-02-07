@@ -19,9 +19,12 @@ return false;
     <%# TODO: render(:partial=>"favourite_link", :locals=>{:page_url=>@page.full_path }) %>
   </div>
 
+  <% unless @page.is_stub? %>
   <div class="clearfix">
     <%= icon_to "View", @page.full_path, false, :method=>:get %> <%= icon_to("Edit", @page.full_path+"?edit=1") unless @page.is_stub? || @page.locked? %>
   </div>
+  <% end %>
+
   <h1 class="summary_icon" style="margin-top: 20px;">Summary</h1>
   <div class="clearfix">
     <%= icon_to "Edit Info", "/page/#{@page.id}/edit"  unless @page.locked? %> 
