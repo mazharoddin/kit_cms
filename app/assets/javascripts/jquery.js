@@ -9545,7 +9545,7 @@ if ( browser.chrome ) {
 jQuery.browser = browser;
 
 // Warn if the code tries to get jQuery.browser
-migrateWarnProp( jQuery, "browser", browser, "jQuery.browser is deprecated" );
+//migrateWarnProp( jQuery, "browser", browser, "jQuery.browser is deprecated" );
 
 jQuery.sub = function() {
 	function jQuerySub( selector, context ) {
