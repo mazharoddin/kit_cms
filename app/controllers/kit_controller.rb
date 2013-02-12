@@ -280,12 +280,12 @@ HERE
   end
 
   def can_use
-    authenticate_user!
+    authenticate!
     authorize! :use, self.class
   end
 
   def can_moderate
-    authenticate_user!
+    authenticate!
     authorize! :moderate, self.class
   end
 
@@ -437,6 +437,9 @@ HERE
     @gibbon = Gibbon.new(Preference.get_cached(_sid,'mailchimp_api_key'))
   end
 
+  def pref(name)
+    Preference.get_cached(_sid, name)
+  end
 
   Pagebase = Page.includes([:page_contents_version0, {:page_template=>:layout}, {:block_instances0=>:block}])
 

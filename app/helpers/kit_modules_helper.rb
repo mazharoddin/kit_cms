@@ -1,5 +1,9 @@
 module KitModulesHelper
 
+  def kit_signin_form(options = {})
+    account_sign_in_form(options)
+  end
+
   def kit_page_list(options={})
     # category, template_snippet, limit = 5, order_by = "updated_at desc")
     pages = Page.sys(_sid)
@@ -328,6 +332,7 @@ module KitModulesHelper
   end
 
   def kit_snippet(id, default = nil, sid = nil)
+    logger.debug "***&&&****&&&&*"
     b = Snippet.cache_get(sid ? sid : _sid, id)
 
     return default || "[Snippet missing '#{id}']" unless b

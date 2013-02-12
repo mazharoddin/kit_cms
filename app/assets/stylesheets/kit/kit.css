@@ -149,4 +149,6 @@ label {
   border: thin dotted #BBB !important;
 }
 
-
+.users #outro {
+  display: none;
+}

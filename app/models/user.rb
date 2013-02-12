@@ -1,4 +1,8 @@
 class User < KitIndexed
+  include BCrypt
+  include ActionView::Helpers
+
+  has_many :user_logins
 
   User.do_indexing :User, [
     {:name=>"id", :index=>:not_analyzed, :include_in_all=>false},
@@ -103,28 +107,26 @@ class User < KitIndexed
     "%d" % r rescue nil
   end
 
-  def active_for_authentication?
-    super && self.banned_at == nil
-  end
-
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :lockable,
-         :maximum_attempts=>10, :unlock_strategy=>:time
-
-  if Rails.configuration.respond_to?(:use_rest_auth) && Rails.configuration.use_rest_auth
-    devise :encryptable, :encryptor => :restful_authentication_sha1
-  end
-
   after_create :welcome_message
 
   validates :display_name, :uniqueness=>{:scope=>:system_id}, :allow_blank => true
-  validates :email, :presence=>true, :uniqueness=>{:scope=>:system_id}
-  validates :password, :presence=>true, :confirmation=>true, :on=>:create
-  validates_confirmation_of :password, :on=>:create
+  validates :email, :presence=>true, :uniqueness=>{:scope=>:system_id}, :email=>true
+  attr_accessor :skip_password
 
+  validates :password, :presence=>true, :confirmation=>true, :length=>{:minimum=>4, :maximum=>40}, :unless=>proc {self.skip_password==true}
+  validates :password_confirmation, :presence=>true, :unless=>proc {self.skip_password==true}
   attr_accessible :email, :password, :password_confirmation, :remember_me, :display_name, :subscribe_newsletter, :spam_points, :system_id
   
   attr_accessor :fave_pages
+
+  def password=(new_password)
+    @password = new_password
+    self.encrypted_password = Password.create(new_password)
+  end
+
+  def password
+    @password ||= Password.new(self.encrypted_password)
+  end
 
   def concatenated_groups
     self.groups.map {|g| g.name}.join(", ")
@@ -142,10 +144,21 @@ class User < KitIndexed
     User.connection.execute("update users set last_heard_from=now() where id = #{self.id}")
   end
 
+  def unlock_access!
+    Activity.add(self.system.id, "UnLocking user <a href='/admin/user/#{self.id}'>#{self.email}</a>", 0, "Users")
+    self.locked_at = nil
+    self.save
+  end
+
   def lock_access!
     Activity.add(self.system.id, "Locking user <a href='/admin/user/#{self.id}'>#{self.email}</a> after #{self.failed_attempts} failed attempts", 0, "Users")
-    super   
+    self.locked_at = Time.now
+    self.save
   end 
+
+  def locked?
+    self.locked_at != nil
+  end
 
   def load_favourite_pages
     unless self.fave_pages
@@ -230,7 +243,7 @@ class User < KitIndexed
   end
 
   def active?
-    super && self.not_banned?
+    self.not_banned?
   end
 
   def add_role(role, current_user_id = nil)
@@ -294,5 +307,76 @@ class User < KitIndexed
   def mailchimp_connection
     Gibbon.new(Preference.get_cached(self.system_id,'mailchimp_api_key'))
   end
-  
+
+  def self.authenticate(sid, email, password)
+    logger.debug "Authenticating #{email}"
+    u = User.sys(sid).where(:email=>email).first
+
+    unlock_hours = Preference.get_cached(sid, "account_unlock_after_hours")
+    if unlock_hours.not_blank?
+      unlock_hours = unlock_hours.to_i
+      if Time.now >= u.locked_at + unlock_hours.hours
+        u.unlock_access!
+      end
+    end
+
+    return nil unless u
+    return nil unless u.password==password
+    return nil unless u.not_banned?
+    return nil if u.locked?
+    return u
+  end
+
+  def self.token_authenticate(sid, token)
+    if Preference.get_cached(sid, "account_token_auth")=="true" 
+      User.sys(sid).where("token is not null and token<>''").where(:token=>token).first rescue nil
+    else
+      nil
+    end
+  end
+
+  def status_display
+    status = []
+    roles = self.roles.collect {|r| r.name }.join(',  ')
+    status << "[#{roles}]" if roles.not_blank?
+    status << "Banned" if self.banned_at
+    status << "Locked" if self.locked_at
+    status << "Failures: #{self.failed_attempts}" if self.failed_attempts>0
+    status.join(", ")
+  end
+
+
+
+  def record_signin(sid, request, method = 'e')
+    lh = UserLogin.new
+    lh.user_id = self.id
+    lh.ip = request.remote_ip
+    lh.method = method
+    lh.system_id = sid
+    lh.save
+    self.sign_in_count = (self.sign_in_count + 1) rescue 1
+    self.last_sign_in_at = self.current_sign_in_at
+    self.current_sign_in_at = Time.now
+    self.last_sign_in_ip = self.current_sign_in_ip
+    self.current_sign_in_ip = request.remote_ip
+    self.failed_attempts = 0
+    self.save
+  end
+ 
+  def self.record_failed_signin(sid, request, method = 'e')
+    user = nil
+    email = request.params[:email] || request.params[:user][:email]
+    if email
+      user = User.sys(sid).where(:email=>email).first
+      if user
+        user.failed_attempts = (self.failed_attempts + 1) rescue 1
+        if user.failed_attempts >= (Preference.get_cached(sid, "account_lock_after_failures") || "10").to_i
+          user.lock_access!
+        end
+        user.save
+      end
+    end
+    return user
+  end 
+
 end

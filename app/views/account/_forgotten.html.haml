@@ -1,0 +1,20 @@
+#forgotten.users
+
+  %h2= t "account.forgotten_title"
+
+  #intro
+    = render :partial=>"forgotten_intro"
+
+  = form_tag "/users/forgotten" do |f|
+
+    #email
+      %label= t "account.email_label"
+      = text_field_tag :email, params[:email]
+
+    #submit
+      = submit_tag t("account.forgotten_label")
+
+  #outro
+    = render :partial=>"forgotten_intro"
+
+

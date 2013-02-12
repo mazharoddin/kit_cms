@@ -360,7 +360,7 @@ module KitHelper
   end
 
   def pref(name, system = false, default = nil)
-    return nil unless current_user || system
+    return nil unless system || current_user 
     p = Preference.getCached(_sid, name, system ? nil : current_user.id)
     return p ? p : default
   end
@@ -474,6 +474,10 @@ module KitHelper
             output = upper.index(char) + 65 if upper.include?(char)
             output ? "&##{output};" : (char == '@' ? '&#0064;' : char)
         }.join
+    end
+
+   def ip_info_link(ip)
+     link_to ip, "http://www.infobyip.com/ip-#{ip}.html"
     end
 
 end

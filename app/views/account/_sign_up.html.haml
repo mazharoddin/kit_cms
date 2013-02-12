@@ -1,0 +1,46 @@
+#sign_up.users
+
+  %h2= t "account.sign_up_title"
+
+  #intro
+    = render :partial=>"sign_up_intro"
+
+  = form_tag "/users/sign_up" do |f|
+
+    - if @user
+      = error_messages_for @user
+
+    #email
+      %label= t "account.email_label"
+      = text_field_tag :email, params[:email]
+
+    #password
+      %label= t "account.password_label"
+      = password_field_tag :password
+
+    #password_confirmation
+      %label= t "account.password_confirmation_label"
+      = password_field_tag :password_confirmation
+
+    - if params[:groups]
+      = hidden_field_tag :groups, params[:groups]
+
+    - @attributes = UserAttribute.sys(_sid).where(:show_on_signup=>1).all
+
+    - if @attributes && @attributes.size>0
+      .attributes
+        - @attributes.each do |attr|
+          .attribute(class="#{attr.code_name}")
+            %label= attr.name
+
+            = render :partial=>"form/form_field", :locals=>{:type=>attr.form_field_type, :field=>attr, :value=>params["#{attr.code_name}"], :is_mandatory=>attr.is_mandatory?, :has_error=>@errors && @errors[attr.id], :show_options_editor=>false}
+
+            - if attr.description.not_blank?
+              .description
+                = attr.description
+    #submit
+      = submit_tag t("account.sign_up_label")
+
+  #outro
+    = render :partial=>"sign_up_intro"
+

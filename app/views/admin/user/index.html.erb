@@ -52,14 +52,23 @@
   <% if @users != nil  %> 
   <div style="margin-top: 10px;" id="user-list">
     <%= paginate(@users) %>
-    <ul class='long_list'>
+    <table class='loosen'>
+      <tr>
+        <th>Email</th>
+        <th>Nickname</th>
+        <th>Status</th>
+        <th>Last Sign In</th>
+      </tr>
       <% @users.each do |user| %>
         <% next if user.id.to_i==1 %>
-        <li>
-        <%= link_to user.email, "/admin/user/#{user.id}" %> <%= user.display_name %>
-        </li>
+        <tr>
+          <td><%= link_to user.email, "/admin/user/#{user.id}" %></td>
+            <td><i><%= user.display_name %></i></td>
+            <td><%= user.status_display %></td>
+            <td><%= time_ago_in_words user.last_sign_in_at rescue 'not signed in' %></td>
+          </tr>
       <% end %>
-    </ul>
+    </table>
   </div>
 
 

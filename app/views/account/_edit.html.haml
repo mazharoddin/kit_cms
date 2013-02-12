@@ -1,0 +1,40 @@
+#edit.users
+  %h2= t "account.edit_user_title"
+
+  - unless options[:dont_show_intro]
+    #intro
+      = render :partial=>"edit_intro"
+
+  
+  = form_tag "/users/edit" do |f|
+
+    - if user
+      = error_messages_for user
+    
+    - if options[:return_to]
+      = hidden_field_tag :return_to, options[:return_to]
+
+    - unless options[:must_change_password]==true || params[:must_change_password]=="1"
+      #email
+        %label= t "account.email_label"
+        = email_field_tag :email, user.email
+
+    - if options[:must_change_password]==true || params[:must_change_password]=="1"
+      = hidden_field_tag :must_change_password, 1
+  
+    #password 
+      = t "account.only_if_changing_password" unless options[:dont_show_leave_blank_passwords]==true
+      %label= t "account.password_label"
+      = password_field_tag :password
+
+    #password_confirmation
+      %label= t "account.password_confirmation_label"
+      = password_field_tag :password_confirmation
+
+    #submit
+      = submit_tag t("account.edit_user_label")
+  
+  - unless options[:dont_show_intro]
+    #outro
+      = render :partial=>"edit_intro"
+

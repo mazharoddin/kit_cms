@@ -44,11 +44,12 @@
 
   <tr><td width="200">Sign in count:</td><td><%= @user.sign_in_count %></td></tr>
   <tr><td>Registered:</td><td><%= time_ago_in_words(@user.created_at) %> ago at <%= @user.created_at %></td></tr>
+  <tr><td>Sign Up IP:</td><td><%= ip_info_link @user.sign_up_ip rescue '' %></td></tr>
     <tr><td>Last sign in:</td><td><%= time_ago_in_words(@user.last_sign_in_at) rescue 'never' %> ago at <%= @user.last_sign_in_at rescue 'never' %></tr>
     <tr><td>Current sign in:</td><td><%= time_ago_in_words(@user.current_sign_in_at) rescue 'never' %> ago at <%= @user.current_sign_in_at rescue 'never'%></tr>
-      <tr><td>Current sign in IP:</td><td><%= @user.current_sign_in_ip %></td></tr>
+      <tr><td>Current sign in IP:</td><td><%= ip_info_link @user.current_sign_in_ip %></td></tr>
       <tr><td>Last sign in:</td><td><%= time_ago_in_words(@user.last_sign_in_at) rescue 'never' %></td></tr>
-      <tr><td>Last sign in IP:</td><td><%= @user.last_sign_in_ip rescue 'none' %></td></tr>
+      <tr><td>Last sign in IP:</td><td><%= @user.last_sign_in_up ? ip_info_link(@user.last_sign_in_ip) : '' rescue 'none' %></td></tr>
       <% if feature?("newsletters") %>
       <tr><td>Subscribed Newsletter:</td><td><%= @user.subscribe_newsletter==1 ? 'Yes' : 'No' %>
           <%= link_to "Unsubscribe", "/admin/user/#{@user.id}?newsletter=0", :class=>"action_pl" if @user.subscribe_newsletter==1 %>

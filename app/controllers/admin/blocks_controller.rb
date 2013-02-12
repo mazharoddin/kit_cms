@@ -2,6 +2,7 @@ class Admin::BlocksController < AdminController
   layout "cms"
   
   def index
+    logger.debug "*****************************************" * 5
     @blocks = Block.sys(_sid).order(:name)
     @blocks = @blocks.where('name like "%' + params[:for] + '%" or body like "%' + params[:for] + '%" or description like "%' + params[:for] + '%"') if params[:for].not_blank?
     @blocks = @blocks.page(params[:page]).per(25)
@@ -10,6 +11,7 @@ class Admin::BlocksController < AdminController
   def show
     @block = Block.find_sys_id(_sid,params[:id])
   end
+
 
   def new
     @block = Block.new

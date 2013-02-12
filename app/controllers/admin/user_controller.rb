@@ -274,7 +274,7 @@ class Admin::UserController < AdminController
       redirect_to "/db", :notice=>"You cannot become that user"
       return
     else
-      sign_in(:user,  target)
+      warden.set_user target
       redirect_to "/", :notice=>"You've successfully become that user"
       return
     end

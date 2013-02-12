@@ -1,0 +1,31 @@
+#sign_in.users
+  %h2= t "account.sign_in_title"
+  
+  #intro
+    = render :partial=>"sign_in_intro"
+  
+  = form_tag "/users/sign_in" do |f|
+
+    - if options[:return_to]
+      = hidden_field_tag :return_to, options[:return_to]
+
+    #email
+      %label= t "account.email_label"
+      = email_field_tag :email, params[:email]
+
+    #password
+      %label= t "account.password_label"
+      = password_field_tag :password
+      .forgotten
+        = link_to t("account.forgotten_password"), forgotten_url
+
+    - unless sys_pref('account_no_remember')=='true'
+      #remember
+        %label= t "account.remember_label"
+        = check_box_tag :remember_me, params[:remember_me]
+
+    #submit
+      = submit_tag t("account.sign_in_label")
+
+  #outro
+    = render :partial=>"sign_in_intro"

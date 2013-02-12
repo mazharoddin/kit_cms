@@ -25,6 +25,16 @@
     %p
       = f.label :body
       = cm_editor('xml', :block, :body, f)
+
+    - if Preference.get_cached(_sid, "cms_server")=='true'
+      %p
+        = f.label "Share in CMS Repo"
+        = f.check_box :repo
+
+      %p
+        = f.label "Repo Tags"
+        = f.text_field :repo_tags
+
     %p
       = kit_submit "Save"
       = kit_submit "Save And Edit Again"

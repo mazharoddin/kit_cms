@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
 
-  devise_for :users, :controllers=>{:sessions=>"user/sessions", :registrations=>"user/registrations", :passwords=>"user/passwords", :unlocks=>"user/unlocks", :confirmations=>"user/confirmations"}
+  match '/users/sign_in' => 'account#sign_in'
+  match '/users/sign_out' => 'account#sign_out'
+  match '/users/sign_up' => 'account#sign_up'
+  match '/users/edit' => 'account#edit'
+  match '/users/forgotten' => 'account#forgotten'
+  get   '/users/reset/:code' => 'account#reset'
 
   namespace "admin" do
     resources :snippet
@@ -22,6 +27,8 @@ Rails.application.routes.draw do
     resources :goals
     resources :experiments
   end
+
+  get '/repo' => 'repo#index'
 
   get '/plumb' => 'admin/dashboard#plumb'
   get '/admin/salesforce' => 'admin/dashboard#salesforce'

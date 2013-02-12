@@ -50,6 +50,8 @@ module DomainController
             break
         end
       end
+ 
+      session[:system_id] = nil
 
       if system_id
         session[:system_id] = system_id

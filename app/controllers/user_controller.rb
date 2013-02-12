@@ -3,7 +3,7 @@ class UserController < KitController
   layout Preference.get_cached!(0,"user_profile_layout", "application")
   append_view_path Layout.resolver  
 
-  before_filter :authenticate_user!
+  before_filter :authenticate
 
   def preferences
     @page_title = 'Preferences'

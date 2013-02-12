@@ -20,6 +20,16 @@ class Notification < ActionMailer::Base
     mail :subject=>"#{Preference.get_cached(@sid, "site_name")}: New post on thread '#{truncate(post.topic_thread.title, :length=>80, :ommission=>'...')}'", :to=>@to_user.email, :from=>isfrom(@sid)
   end
 
+  def forgotten_password(to_user_id)
+    @user = User.find(to_user_id)
+    reset_url = Preference.get_cached(@user.system_id, "account_reset_url") || "/users/reset"
+
+    @reset_link =  Preference.get_cached(@user.system_id, "host") + reset_url + "/" + @user.reset_password_token
+    mail :subject=>t("account.forgotten_password_subject"),
+         :to=>@user.email,
+         :from=>isfrom(@user.system_id)
+  end
+
   def welcome_message(to, sid)
     @sid = sid
     mail(:from=>isfrom(sid), :to=>to.email, :subject=>"Thanks for joining")
