@@ -4,6 +4,8 @@ class User < KitIndexed
 
   has_many :user_logins
 
+  after_initialize { self.skip_password = true }
+
   User.do_indexing :User, [
     {:name=>"id", :index=>:not_analyzed, :include_in_all=>false},
     {:name=>"system_id", :index=>:not_analyzed, :include_in_all=>false},
@@ -327,6 +329,11 @@ class User < KitIndexed
     return u
   end
 
+  def self.cookie_authenticate(sid, token)
+    return nil unless token
+    User.sys(sid).where(:remember_token=>token).where("remember_token is not null and remember_token <> ''").first
+  end
+
   def self.token_authenticate(sid, token)
     if Preference.get_cached(sid, "account_token_auth")=="true" 
       User.sys(sid).where("token is not null and token<>''").where(:token=>token).first rescue nil
@@ -346,6 +353,11 @@ class User < KitIndexed
   end
 
 
+  def dont_remember
+    self.remember_created_at = nil
+    self.remember_token = nil
+    self.save
+  end
 
   def record_signin(sid, request, method = 'e')
     lh = UserLogin.new
@@ -360,6 +372,15 @@ class User < KitIndexed
     self.last_sign_in_ip = self.current_sign_in_ip
     self.current_sign_in_ip = request.remote_ip
     self.failed_attempts = 0
+    self.skip_password = true
+
+    if method=='c' || request.params[:remember_me]
+      self.remember_created_at = Time.now
+      self.remember_token ||= Digest::MD5.hexdigest(self.email + Time.now.to_s + rand(100000).to_s) 
+    else
+      self.remember_created_at = nil
+      self.remember_token = nil
+    end
     self.save
   end
  

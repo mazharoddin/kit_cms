@@ -111,6 +111,10 @@ class AccountController < KitController
       authenticate
       if current_user
         current_user.record_signin(_sid, request)
+        if params[:remember_me]
+          remember_for = (Preference.get_cached(_sid, "account_remember_for_days") || "90").to_i
+          cookies[:sign_in] = { :value=> current_user.remember_token, :expires=> remember_for.days.from_now }
+        end
         redirect_after_signin(:email)
         return
       else
@@ -126,7 +130,9 @@ class AccountController < KitController
       if current_user.respond_to?(:last_sign_out)
         current_user.update_attributes(:last_sign_out=>Time.now)
       end
+      current_user.dont_remember
       warden.logout
+      
     end
 
     redirect_to params[:url] || pref("url_after_sign_out") || "/"
@@ -158,7 +164,7 @@ class AccountController < KitController
   end
 
   def redirect_after_signup
-    url = url_after_signup || url_after_signin
+    url = url_after_signup 
 
     redirect_to url
   end
@@ -198,15 +204,26 @@ class AccountController < KitController
   end
 
   def url_after_signup
-    path = session[:return_to] || "/"
+    path = session[:return_to] || url_after_group(:signup) || url_after_group(:signin) || '/'
     session[:return_to] = nil
     return path.to_s
   end
 
   def url_after_signin
-    path = session[:return_to] || "/"
+    path = session[:return_to] || url_after_group(:signin) || "/"
     session[:return_to] = nil
     return path.to_s
+  end
+
+  def url_after_group(mode)
+    Preference.sys(_sid).where("name like 'account_after_#{mode}_%'").all.each do |pref|
+      pref.name =~ /^account_after_#{mode}_(.*)$/
+      if user.groups.where(:name=>$1).count>0
+        return pref.value
+      end
+    end
+
+    return nil
   end
 
   def redirect_to_signin
@@ -238,13 +255,24 @@ class AccountController < KitController
     flash[:notice] = options[:notice] if options[:notice]
     flash[:error] = options[:error] if options[:error]
 
-    if page_id = pref("account_#{name}_pageid") && @page = Pagebase.sys(_sid).where(:id=>page_id.to_i).first
-      render_page(@page)
-    else
-      options[:layout] = pref("account_#{name}_layout") || "application"
-      @options = options
-      render name, options
+    if params[:custom]
+      @page = Pagebase.sys(_sid).where(:full_path=>URI(request.referer).path).first
+      if @page
+        render_page(@page)
+        return
+      end
     end
+
+    if page_id = pref("account_#{name}_pageid") && @page = Pagebase.sys(_sid).where(:id=>page_id.to_i).first
+      if @page
+        render_page(@page)
+        return
+      end
+    end
+  
+    options[:layout] = pref("account_#{name}_layout") || "application"
+    @options = options
+    render name, options
   end    
 
   def sign_in_url

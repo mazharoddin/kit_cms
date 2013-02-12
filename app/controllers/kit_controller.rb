@@ -5,6 +5,7 @@ class KitController <  ActionController::Base
   before_filter :set_requested_url, :except=>[:not_found_404]
   before_filter :set_system, :except=>[:not_found_404]
   before_filter :offline, :except=>[:not_found_404, :down_for_maintenance]
+  before_filter :check_user
   before_filter :kit_session, :except=>[:not_found_404]
   after_filter :kit_session_end, :except=>[:not_found_404]
   append_view_path Layout.resolver
@@ -18,6 +19,16 @@ class KitController <  ActionController::Base
   
   attr_accessor :is_image_request
   attr_accessor :kit_request
+
+  def check_user
+    return true unless self.kit_system
+
+    u = User.cookie_authenticate(_sid, cookies[:sign_in])
+    if u
+     u.record_signin(_sid, request, 'c')
+     warden.set_user u
+    end 
+  end
 
   def set_requested_url
     self.is_image_request = false 

@@ -3,7 +3,7 @@
   %h2= t "account.sign_up_title"
 
   #intro
-    = render :partial=>"sign_up_intro"
+    = render :partial=>"account/sign_up_intro"
 
   = form_tag "/users/sign_up" do |f|
 
@@ -42,5 +42,5 @@
       = submit_tag t("account.sign_up_label")
 
   #outro
-    = render :partial=>"sign_up_intro"
+    = render :partial=>"account/sign_up_intro"
 

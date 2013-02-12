@@ -1,8 +1,7 @@
 class PagesController < KitController
-
+  
   before_filter :load_page, :except=>[:search, :cookie_text, :unique, :index, :new, :create, :stub, :zoom, :terms, :editor_trial]
   before_filter :can_use, :except=>[:show, :search, :cookie_text, :editor_trial, :save, :redir]
-
   layout "layouts/cms"
 
   def copy
