@@ -22,6 +22,7 @@
   var options = { lineNumbers: true, theme: 'blackboard', indentUnit: 2, lineWrapping: true, matchBrackets: true  , collapseRange: true};
   html_editor = parent.CodeMirror.fromTextArea(editor_a, options);
   html_editor.focus();
+  parent.$('.CodeMirror').css('height', ($(window).height()-40) + 'px');
   }
 
   function the_editor() {
