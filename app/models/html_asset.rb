@@ -1,10 +1,17 @@
 class HtmlAsset < ActiveRecord::Base
-  has_many :page_template_html_assets
-  has_many :layout_html_assets
-  has_many :page_templates, :through=>:page_template_html_assets
-  has_many :layouts, :through=>:layout_html_assets
-  has_many :form_html_assets
-  has_many :forms, :through=>:form_html_assets
+#  has_many :page_template_html_assets
+#  has_many :layout_html_assets
+#  has_many :page_templates, :through=>:page_template_html_assets
+#  has_many :layouts, :through=>:layout_html_assets
+#  has_many :form_html_assets
+#  has_many :forms, :through=>:form_html_assets
+
+  has_many :html_assetables
+
+  has_many :layouts, :through=>:html_assetables, :source=>:html_assetable, :source_type=>"Layout"
+  has_many :page_templates, :through=>:html_assetables, :source=>:html_assetable, :source_type=>"PageTemplate"
+  has_many :forms, :through=>:html_assetables, :source=>:html_assetable, :source_type=>"Form"
+
 
   belongs_to :user
   validates :name, :presence=>true, :length=>{:minimum=>1, :maximum=>80}

@@ -1,6 +1,6 @@
 class Layout < ActiveRecord::Base
-  has_many :layout_html_asset
-  has_many :html_assets, :through=>:layout_html_asset
+  has_many :html_assetable, :as=>:html_assetable
+  has_many :html_assets, :through=>:html_assetable
 
   store_templates
 

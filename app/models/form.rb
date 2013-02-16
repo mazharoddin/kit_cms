@@ -3,8 +3,9 @@ require 'net/http'
 require 'digest/md5'
 
 class Form < ActiveRecord::Base
-  has_many :form_html_assets
-  has_many :html_assets, :through=>:form_html_assets
+  has_many :html_assetable, :as=>:html_assetable
+  has_many :html_assets, :through=>:html_assetable
+
   has_many :form_fields, :dependent => :destroy, :order=>:display_order
   has_many :form_field_groups, :order=>:order_by
   has_many :form_submissions, :dependent => :destroy

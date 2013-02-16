@@ -1,6 +1,6 @@
 class PageTemplate < ActiveRecord::Base
-  has_many :page_template_html_asset
-  has_many :html_assets, :through=>:page_template_html_asset
+  has_many :html_assetable, :as=>:html_assetable
+  has_many :html_assets, :through=>:html_assetable
 
   has_many :pages
   belongs_to :layout
