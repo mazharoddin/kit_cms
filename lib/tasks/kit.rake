@@ -313,33 +313,33 @@ namespace :kit do
 
       Layout.all.each do |layout|
         puts "Doing Layout #{layout.name} for System #{layout.system_id}"
-        puts "stylesheets #{layout.stylesheets}"
-        layout.stylesheets.split(",").each do |s|
+        puts "stylesheets #{layout.old_stylesheets}"
+        layout.old_stylesheets.split(",").each do |s|
           puts "Doing stylesheet '#{s}'"
           layout.html_assets << HtmlAsset.sys(layout.system_id).where(:name=>s).where(:file_type=>'css').first rescue nil
-        end if layout.stylesheets
+        end if layout.old_stylesheets
       end
       Layout.all.each do |layout|
-        layout.javascripts.split(",").each do |s|
+        layout.old_javascripts.split(",").each do |s|
           layout.html_assets << HtmlAsset.sys(layout.system_id).where(:name=>s).where(:file_type=>'js').first rescue nil
-        end if layout.javascripts
+        end if layout.old_javascripts
       end
       PageTemplate.all.each do |pt|
         puts "Doing PT #{pt.name} for System #{pt.system_id}"
-        pt.stylesheets.split(",").each do |s|
+        pt.old_stylesheets.split(",").each do |s|
           pt.html_assets << HtmlAsset.sys(pt.system_id).where(:name=>s).where(:file_type=>'css').first rescue nil
-        end if pt.stylesheets
+        end if pt.old_stylesheets
       end
       PageTemplate.all.each do |pt|
-        pt.javascripts.split(",").each do |s|
+        pt.old_javascripts.split(",").each do |s|
           pt.html_assets << HtmlAsset.sys(pt.system_id).where(:name=>s).where(:file_type=>'js').first rescue nil
-        end if pt.javascripts
+        end if pt.old_javascripts
       end
       Form.all.each do |f|
         puts "Doing form #{f.title} for System #{f.system_id}"
-        f.stylesheets.split(",").each do |s|
+        f.old_stylesheets.split(",").each do |s|
           f.html_assets << HtmlAsset.sys(f.system_id).where(:name=>s).where(:file_type=>"css").first rescue nil
-        end if f.stylesheets
+        end if f.old_stylesheets
       end
   end
 

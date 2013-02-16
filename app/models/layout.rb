@@ -78,6 +78,10 @@ eos
   def stylesheets
     self.html_assets.where(:file_type=>"css").all
   end
+  
+  def old_stylesheets
+    self.read_attribute(:stylesheets)
+  end
 
   def self.preference(sid, name)
     l = Layout.sys(sid).where(:id=>Preference.get_cached(sid, name)).first rescue nil

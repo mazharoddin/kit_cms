@@ -27,7 +27,11 @@ class Form < ActiveRecord::Base
   def stylesheets
     self.html_assets.where(:file_type=>"css").all
   end
-  
+ 
+  def old_stylesheets
+    self.read_attribute(:stylesheets)
+  end
+
   def field_by_name(name)
     self.form_fields.each do |ff|
       if ff.code_name == name.to_s
