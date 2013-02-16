@@ -657,7 +657,7 @@ class ForumController < KitController
       if l
         Layout.sys(_sid).where(:name=>l).first 
       else
-        Layout.preference(_sid, "forum")
+        Layout.preference(_sid, "forum_layout")
       end
     end
     ll
