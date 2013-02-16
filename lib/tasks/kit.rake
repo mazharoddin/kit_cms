@@ -312,7 +312,9 @@ namespace :kit do
   task :upgrade_assets => :environment do 
 
       Layout.all.each do |layout|
+        puts "Doing Layout #{layout.name} for System #{layout.system_id}"
         layout.stylesheets.split(",").each do |s|
+          puts "Doing stylesheet '#{s}'"
           layout.html_assets << HtmlAsset.sys(layout.system_id).where(:name=>s).where(:file_type=>'css').first rescue nil
         end if layout.stylesheets
       end
@@ -322,6 +324,7 @@ namespace :kit do
         end if layout.javascripts
       end
       PageTemplate.all.each do |pt|
+        puts "Doing PT #{pt.name} for System #{pt.system_id}"
         pt.stylesheets.split(",").each do |s|
           pt.html_assets << HtmlAsset.sys(pt.system_id).where(:name=>s).where(:file_type=>'css').first rescue nil
         end if pt.stylesheets
@@ -332,6 +335,7 @@ namespace :kit do
         end if pt.javascripts
       end
       Form.all.each do |f|
+        puts "Doing form #{f.name} for System #{f.system_id}"
         f.stylesheets.split(",").each do |s|
           f.html_assets << HtmlAsset.sys(f.system_id).where(:name=>s).where(:file_type=>"css").first rescue nil
         end
