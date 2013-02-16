@@ -240,6 +240,53 @@ namespace :kit do
     end
   end
 
+  desc "Reset Password"
+  task :reset_password => :environment do 
+    print "\nThis will reset the password of any admin user in any system. Typically you will use this to reset the superadmin account to allow access to the CMS Dashboard from where you can reset any other passwords. \n\nFirst you must select the system ID from this list:\n\n"
+
+    System.all.each do |s|
+      puts "#{s.id} : #{s.name}"
+    end
+    print "\nSystem ID? "
+    system_id = STDIN.gets.chomp
+   
+    s = System.sys(system_id).first
+    unless s
+      puts "That System ID isn't valid.  You'll have to start again.\n\n"
+      exit -1
+    end
+     
+    puts "\nAdmin users of '#{s.name}':\n"
+    User.sys(system_id).includes(:roles).each do |u|
+      puts "User ID: #{u.id} Email: #{u.email}" if u.admin?
+    end
+
+    print "\nWhat is the User ID of the user whose password you want to change? "
+    user_id = STDIN.gets.chomp
+
+    u = User.sys(system_id).where(:id=>user_id).first
+
+    unless u
+      puts "That User ID isn't valid.  You'll have to start again.\n\n"
+      exit -1
+    end
+
+    u = User.find(user_id)
+
+    print "\nFinally, enter a new password for #{u.email} within #{s.name}: "
+
+    password = STDIN.gets.chomp
+    if password.strip.length<=0
+      puts "\n\nThis utility has no restrictions on password complexity, but won't set an empty password.  You'll have to start again.\n\n"
+      exit -1
+    end
+
+    u.password = password
+    u.save
+
+    puts "\nThe password has been changed. You should now sign in as '#{u.email}' with the new password '#{password}', then change the password from within the dashboard.\n\n"
+  end
+    
 
   desc "Initial Kit Setup" 
   task :setup_cms, [:email, :password] => :environment do |t, args|
@@ -260,5 +307,35 @@ namespace :kit do
     puts "\nStart the Rails server then visit http://localhost:3000 or to login to the administrative dashboard go to http://localhost:3000/db\n\n"
   end
 
+
+  desc "Upgrade Stylesheets and Javascripts"
+  task :upgrade_assets => :environment do 
+
+      Layout.all.each do |layout|
+        layout.stylesheets.split(",").each do |s|
+          layout.html_assets << HtmlAsset.sys(layout.system_id).where(:name=>s).where(:file_type=>'css').first rescue nil
+        end if layout.stylesheets
+      end
+      Layout.all.each do |layout|
+        layout.javascripts.split(",").each do |s|
+          layout.html_assets << HtmlAsset.sys(layout.system_id).where(:name=>s).where(:file_type=>'js').first rescue nil
+        end if layout.javascripts
+      end
+      PageTemplate.all.each do |pt|
+        pt.stylesheets.split(",").each do |s|
+          pt.html_assets << HtmlAsset.sys(pt.system_id).where(:name=>s).where(:file_type=>'css').first rescue nil
+        end if pt.stylesheets
+      end
+      PageTemplate.all.each do |pt|
+        pt.javascripts.split(",").each do |s|
+          pt.html_assets << HtmlAsset.sys(pt.system_id).where(:name=>s).where(:file_type=>'js').first rescue nil
+        end if pt.javascripts
+      end
+      Form.all.each do |f|
+        f.stylesheets.split(",").each do |s|
+          f.html_assets << HtmlAsset.sys(f.system_id).where(:name=>s).where(:file_type=>"css").first rescue nil
+        end
+      end
+  end
 
 end

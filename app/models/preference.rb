@@ -75,7 +75,7 @@ class Preference < ActiveRecord::Base
   end
  
   def Preference.licensed?(sid, name)
-    licensed = Rails.cache.fetch("licenses_#{sid}_#{name}", :expires_in=>10.minutes) do 
+    licensed = Rails.cache.fetch("licenses_#{sid}_#{name}", :expires_in=>1.minutes) do 
       Preference.get_cached(sid, "feature_#{name}")=="true" || Preference.get_cached(sid, "feature_*")=="true"
     end
 

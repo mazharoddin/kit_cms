@@ -1,5 +1,10 @@
 module AccountHelper
   include KitHelper
+
+  def users_have_profiles?
+    UserAttribute.sys(_sid).where(:owner_editable=>1).count>0
+  end
+
   def account_forgotten(options = {})
     render :partial=>"account/forgotten", :locals=>{:options=>options}
   end

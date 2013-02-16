@@ -9,7 +9,7 @@ class PageTemplate < ActiveRecord::Base
   has_many :page_template_terms
   belongs_to :user
 
-  attr_accessible :name, :template_type, :layout_id, :allow_anonymous_comments, :allow_user_comments, :hidden, :is_mobile, :mobile_version_id, :body, :system_id, :html_asset_ids
+  attr_accessible :name, :template_type, :layout_id, :allow_anonymous_comments, :allow_user_comments, :hidden, :is_mobile, :mobile_version_id, :body, :system_id, :html_asset_ids, :header, :footer, :is_default, :page_type
 
   use_kit_caching
 

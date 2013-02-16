@@ -640,7 +640,7 @@ class ForumController < KitController
   end
 
   def get_layout(name, names = nil)
-    ll = Rails.cache.fetch("layout-exists-forum-#{name}", :expires_in=>60.seconds) do
+    ll = Rails.cache.fetch("layout-exists-forum-#{_sid}-#{name}", :expires_in=>60.seconds) do
       l = nil
       names = [name] unless names
       names.each do |aname|

@@ -6,7 +6,7 @@ class Layout < ActiveRecord::Base
 
   use_kit_caching
 
-  attr_accessible :name, :handler, :stylesheets, :javascripts, :body, :html_asset_ids
+  attr_accessible :name, :handler,  :body, :html_asset_ids, :path, :format, :locale, :system_id, :user_id
   before_save :make_path
   before_save :set_format
   has_many :page_templates
@@ -55,7 +55,7 @@ class Layout < ActiveRecord::Base
   end
 
   def self.create_default(sid, user_id)
-    layout = Layout.new(:stylesheets=>"application", :javascripts=>"", :path=>"layouts/#{sid}/application", :handler=>"haml", :format=>"html", :locale=>"en", :system_id=>sid, :user_id=>user_id, :name=>"application", :body=><<eos
+    layout = Layout.new(:path=>"layouts/#{sid}/application", :handler=>"haml", :format=>"html", :locale=>"en", :system_id=>sid, :user_id=>user_id, :name=>"application", :body=><<eos
 !!!
 %html
   / Layout: application [#{sid}]
