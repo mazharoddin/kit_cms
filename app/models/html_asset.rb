@@ -1,4 +1,11 @@
 class HtmlAsset < ActiveRecord::Base
+  has_many :page_template_html_assets
+  has_many :layout_html_assets
+  has_many :page_templates, :through=>:page_template_html_assets
+  has_many :layouts, :through=>:layout_html_assets
+  has_many :form_html_assets
+  has_many :forms, :through=>:form_html_assets
+
   belongs_to :user
   validates :name, :presence=>true, :length=>{:minimum=>1, :maximum=>80}
   before_save :generate_fingerprint
@@ -7,6 +14,7 @@ class HtmlAsset < ActiveRecord::Base
   attr_accessor :compiled
 
   before_save :record_history
+  after_save :write_to_file
 
   def display_name
     full_type
@@ -23,7 +31,7 @@ class HtmlAsset < ActiveRecord::Base
   end
 
   def self.fetch(system_id, name, type)
-    Rails.cache.fetch(HtmlAsset.cache_key(system_id, name.downcase, type), :expires_in=>5.minutes) do 
+    Rails.cache.fetch(HtmlAsset.cache_key(system_id, name.downcase, type), :expires_in=>1.second) do 
       asset = HtmlAsset.sys(system_id).where(:name=>name.downcase).where(:file_type=>type).first
       asset.write_to_file if asset
       asset
@@ -35,11 +43,11 @@ class HtmlAsset < ActiveRecord::Base
   end
   
   def write_to_file
-    parent = File.join(Rails.root, "public", "kit", self.file_type)
+    parent = File.join(Rails.root, "public", "kit",  self.system_id.to_s, self.file_type)
     FileUtils.mkdir_p(parent) unless File.exists?(parent)
 
-    path = File.join(Rails.root, "public", "kit", self.file_type, self.kit_name)
-    dir = File.join(Rails.root, "public", "kit", self.file_type)
+    path = File.join(Rails.root, "public", "kit", self.system_id.to_s, self.file_type, self.kit_name)
+    dir = File.join(Rails.root, "public", "kit", self.system_id.to_s, self.file_type)
     found = false
     Dir.glob(dir + "/#{self.name.downcase}*") do |f|
       if f==path

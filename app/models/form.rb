@@ -3,10 +3,13 @@ require 'net/http'
 require 'digest/md5'
 
 class Form < ActiveRecord::Base
+  has_many :form_html_assets
+  has_many :html_assets, :through=>:form_html_assets
   has_many :form_fields, :dependent => :destroy, :order=>:display_order
   has_many :form_field_groups, :order=>:order_by
   has_many :form_submissions, :dependent => :destroy
 
+  belongs_to :layout
   has_many :ungrouped_form_fields, :class_name=>"FormField", :conditions=>"form_fields.form_field_group_id is null"  
   validates :title, :uniqueness=>{:scope=>:system_id}, :presence=>true
   validates :url, :uniqueness=>true, :allow_blank=>true
@@ -16,11 +19,14 @@ class Form < ActiveRecord::Base
     self.form_fields.joins(:form_field_type).where("form_field_types.field_type in ('line','paragraph','select','multiselect')").all
   end
 
-  def include_stylesheets
-    return ["application"] if self.stylesheets.is_blank?
-    return self.stylesheets.split(',').uniq
+  def javascripts
+    self.html_assets.where(:file_type=>"js").all
   end
 
+  def stylesheets
+    self.html_assets.where(:file_type=>"css").all
+  end
+  
   def field_by_name(name)
     self.form_fields.each do |ff|
       if ff.code_name == name.to_s
@@ -156,7 +162,8 @@ class Form < ActiveRecord::Base
   end
 
   def self.get_textcaptcha_qa
-    xml   = Net::HTTP.get(URI::Parser.new.parse("http://textcaptcha.com/api/7zsxcgrbaacc4cs4swsswk4sk863uwld"))
+    xml   = Net::HTTP.get(URI::Parser.new.parse("http://textcaptcha.com/api/7zsxcgrbaacc4cs4swsswk4sk863uwld")) rescue nil
+    return unless xml
     if xml.empty?
       raise Textcaptcha::BadResponse
     else

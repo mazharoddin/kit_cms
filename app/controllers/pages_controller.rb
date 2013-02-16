@@ -125,7 +125,7 @@ class PagesController < KitController
     @searched_for = params[:search]
 
     @show_edit_link = user_can_edit = can?(:use, self)
-    kit_render "pages/search", :layout=>Preference.getCached(_sid, "layout_search") || "application"
+    kit_render "pages/search", :layout_o=>Layout.preference(_sid, "layout_search") 
   end
 
   def auto_save_delete
@@ -271,7 +271,7 @@ class PagesController < KitController
 
     if (@page==nil || @page.is_deleted==1 || !@page.is_published?) && !@page.editable && cannot?(:use, self)
       session[:error_message] = "Page not found"
-      render "/error/404", :status=>404, :layout=>@page ? @page.dif_template(use_mobile?).layout.path : false
+      render "/error/404", :status=>404, :layout_o=>@page ? @page.dif_template(use_mobile?).layout : false
       return
     end 
 

@@ -6,18 +6,6 @@
     setup_index
   end
 
-  # replace with model which writes itself to File system and is served up by webserver
-  def serve 
-    name,stamp = params[:path].split('-')
-    asset = HtmlAsset.fetch(_sid, name.downcase, params[:format])
-    response.headers['Content-Type'] = "text/#{asset.file_type}"
-    response.headers['Cache-Control'] = 'max-age=31536000, public'
-    response.headers["Expires"] = CGI.rfc1123_date(Time.now + 360.days)
-    mime_type = Mime::Type.lookup_by_extension(asset.file_type)
-    content_type = mime_type.to_s unless mime_type.nil?
-    
-    render :inline=>asset.compiled, :type=>:erb, :layout=>false, :mime_type => content_type
-  end
 
   def create
     add_sid(:html_asset)

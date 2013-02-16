@@ -13,7 +13,7 @@ class KitController <  ActionController::Base
   after_filter :check_and_record_goal, :except=>[:not_found_404]
 
 
-  attr_accessor :layout_name_being_used
+  attr_accessor :layout_being_used
   attr_accessor :template_being_used
   attr_accessor :requested_url
   
@@ -87,25 +87,25 @@ class KitController <  ActionController::Base
 
   def stylesheets
     if @page
-      return (@page.page_template.layout.stylesheets + "," + @page.page_template.stylesheets).split(',').uniq
+      return (@page.page_template.layout.stylesheets + @page.page_template.stylesheets).uniq
     elsif @form
-      return @form.include_stylesheets
+      return (@form.stylesheets + @form.layout.stylesheets).uniq
     else
       layout = kit_layout_in_use
       if layout
-        return layout.stylesheets.split(',').uniq
-      else
-        return ["application"]
+        return layout.stylesheets
       end
     end
+
+    return []
   end
 
 
   def kit_layout_in_use
     l = nil
 
-    if self.layout_name_being_used # this gets set if kit_render is being used
-      l = Layout.sys(_sid).where(:name=>self.layout_name_being_used).first
+    if self.layout_being_used # this gets set if kit_render is being used
+      l = self.layout_being_used
     else 
       l = @page.layout if @page
     end
@@ -138,12 +138,17 @@ class KitController <  ActionController::Base
       @content = render_to_string name, :layout=>false
       options[:type] = custom_template.template_type || 'erb'
       options[:inline] = custom_template.body
-      options[:layout] = custom_template.layout.path
+      options[:layout] = custom_template.layout.name
       self.template_being_used = custom_template
-      self.layout_name_being_used = custom_template.layout.name
+      self.layout_id_being_used = custom_template.layout_id
       super_render options
     else
-      self.layout_name_being_used = options[:layout]
+      if options[:layout_o] 
+        self.layout_being_used = options[:layout_o]
+        options[:layout] = self.layout_being_used.path
+      elsif options[:layout]
+        self.layout_being_used = Layout.sys(_sid).where(:path=>options[:layout]).first rescue nil
+      end
       super_render name, options
     end
   end
@@ -250,7 +255,7 @@ HERE
         inline_template = "<div id='page_#{page.id}' class='template_#{error_template.id}'>\n\n" + error_template.body + "\n\n</div>"
         render :inline=>inline_template, :layout=>error_template.layout.path, :type=>error_template.template_type || 'erb'
       else
-        render "error/application", :layout=>Preference.getCached(_sid, "error_layout") || "application", :status=>status
+        render "error/application", :layout=>Layout.sys(_sid).where(:id=>(Preference.getCached(_sid, "error_layout") || Layout.sys(_sid).first.id)).path, :status=>status
       end
     end
 
@@ -348,7 +353,7 @@ HERE
       end
     end
 
-    render "form/show", :layout=>((form.respond_to?(:layout) && form.layout) ? form.layout : 'application')
+    render "form/show", :layout=>form.layout.path
   end    
   
   def captcha_okay?

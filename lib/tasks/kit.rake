@@ -95,9 +95,7 @@ namespace :kit do
     l.locale = 'en'
     l.handler = 'haml'
     l.format = 'html'
-    l.stylesheets = 'application'
     l.system_id = 1
-    l.javascripts = 'application'
     l.path = 'layouts/application'
     l.save!
   end

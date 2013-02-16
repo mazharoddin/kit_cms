@@ -1,8 +1,6 @@
 include ActionView::Helpers::TextHelper
 
 class ForumController < KitController
-  append_view_path Layout.resolver
-  layout "forums"
   before_filter :load_forum_user_options, :only => [:topic_index, :thread, :search, :add_post, :recent, :im_on, :favourites, :thread_last_unread, :index]
 
   before_filter :is_moderator
@@ -10,13 +8,13 @@ class ForumController < KitController
   before_filter :post_order, :only=>[:thread]
 
   def test
-    kit_render "test", :layout=>get_layout('index')
+    kit_render "test", :layout_o=>get_layout('index')
   end
 
   def moderate
     redirect_to "/users/sign_in" and return unless @mod
     @topic_posts = TopicPost.sys(_sid).order("id desc").where(:is_visible=>1).page(params[:page]).per(25)  
-    kit_render "moderate", :layout=>get_layout('index')
+    kit_render "moderate", :layout_o=>get_layout('index')
   end
 
   def rate_post
@@ -60,7 +58,7 @@ class ForumController < KitController
       @threads = current_user.topic_threads.page(params[:page]).per(@user_options.threads_per_page)
       @page_title = "Forum: Favourite Threads"
       @show_watch = true
-      kit_render "thread_list", :layout=>get_layout('im-watching', ['im-watching', 'threads']) 
+      kit_render "thread_list", :layout_o=>get_layout('im-watching', ['im-watching', 'threads']) 
     else
       redirect_to "/users/sign_in"
     end
@@ -72,7 +70,7 @@ class ForumController < KitController
     if current_user
       @page_title = "Forum: Threads I Posted To"
       @threads = TopicThread.im_on(current_user, @user_options.threads_per_page, @mod, params[:page])
-      kit_render "thread_list", :layout=>get_layout('im-on', ['im-on', 'threads'])
+      kit_render "thread_list", :layout_o=>get_layout('im-on', ['im-on', 'threads'])
     else
       redirect_to "/users/sign_in"
     end
@@ -93,7 +91,7 @@ class ForumController < KitController
     @destination_last = true
   
     respond_to do |format|
-      format.html { kit_render "thread_list", :layout=>get_layout('recent', ['recent', 'threads']) }
+      format.html { kit_render "thread_list", :layout_o=>get_layout('recent', ['recent', 'threads']) }
       format.rss { render "forum/thread_list.rss" }
     end
   end
@@ -120,7 +118,7 @@ class ForumController < KitController
       return
     end 
 
-    kit_render "report", :layout=>get_layout('report')
+    kit_render "report", :layout_o=>get_layout('report')
   end
 
   def index
@@ -129,7 +127,7 @@ class ForumController < KitController
     @categories = categories.all
     @page_title = "Forums"
     @canonical_tag = "/forums"
-    kit_render "index", :layout=>get_layout('index')
+    kit_render "index", :layout_o=>get_layout('index')
   end
 
   def search
@@ -185,7 +183,7 @@ class ForumController < KitController
       @results = nil
     end
 
-    kit_render "search", :layout=>get_layout('search')
+    kit_render "search", :layout_o=>get_layout('search')
   end
 
   def topic_index
@@ -215,7 +213,7 @@ class ForumController < KitController
     @page_title = "Forums: #{@topic.name}"
     @canonical_tag = "/forums/#{@topic.url}"
     @meta_description = "Forums"
-    kit_render "topic_index", :layout=>get_layout('threads')
+    kit_render "topic_index", :layout_o=>get_layout('threads')
   end
 
   def category_topic_list
@@ -292,7 +290,7 @@ class ForumController < KitController
     @page_title = "#{@thread.topic.name} - #{@thread.title}"
     @canonical_tag = @thread.link
 
-    kit_render "thread", :layout=>get_layout('posts')
+    kit_render "thread", :layout_o=>get_layout('posts')
   end
 
   def preview
@@ -325,7 +323,7 @@ class ForumController < KitController
 
     if params[:topic_post][:body] && params[:topic_post][:body].strip.length<2
       flash[:form_message] = "Your message must be at least 2 characters"            
-      kit_render "thread", :layout=>get_layout('thread')
+      kit_render "thread", :layout_o=>get_layout('thread')
       return
     end
 
@@ -392,7 +390,7 @@ class ForumController < KitController
     @threads = nil
     @page_id = params[:page_id] 
     @about_page_title = Page.find_sys_id(_sid, @page_id).title
-    kit_render "topic_index", :layout=>get_layout('threads')
+    kit_render "topic_index", :layout_o=>get_layout('threads')
   end
 
   def create_thread
@@ -408,12 +406,12 @@ class ForumController < KitController
 
     if @post.raw_body.strip.length<2
       flash[:form_message] = "Your message must be at least 2 characters"      
-      kit_render "topic_index", :layout=>get_layout('threads')
+      kit_render "topic_index", :layout_o=>get_layout('threads')
       return
     end
     if params[:topic_post][:title].strip.length<2
       flash[:form_message] = "Title must be at least 4 characters"
-      kit_render "topic_index", :layout=>get_layout('threads')
+      kit_render "topic_index", :layout_o=>get_layout('threads')
       return
     end
     @post.system_id = _sid
@@ -563,9 +561,9 @@ class ForumController < KitController
     @post = TopicPost.sys(_sid).where(:id=>params[:id]).first
 
     if can?(:moderate, self) || (@post.is_visible==1 && @post.topic_thread.is_visible==1 && @post.topic_thread.topic.is_visible==1 && level_okay(@post.topic_thread.topic.read_access_level))
-      render :text=>@post.raw_body, :layout=>false
+      render :text=>@post.raw_body, :layout_o=>false
     else
-      render :text=>"n/a", :layout=>false
+      render :text=>"n/a", :layout_o=>false
     end
   end
 
@@ -642,23 +640,25 @@ class ForumController < KitController
   end
 
   def get_layout(name, names = nil)
-    ll = Rails.cache.fetch("layout-exists-forum-#{name}", :expires_in=>5.seconds) do
+    ll = Rails.cache.fetch("layout-exists-forum-#{name}", :expires_in=>60.seconds) do
       l = nil
       names = [name] unless names
       names.each do |aname|
-        if Layout.name_exists?("forum-#{aname}")
+        if Layout.name_exists?(_sid, "forum-#{aname}")
           l = "forum-#{aname}"
           break
         end
       end
       if l==nil
-        if Layout.name_exists?("forum")
+        if Layout.name_exists?(_sid, "forum")
           l = "forum"
-        else
-          l = "application"
         end
       end 
-      l
+      if l
+        Layout.sys(_sid).where(:name=>l).first 
+      else
+        Layout.sys(_sid).order(:created_at).first
+      end
     end
     ll
   end

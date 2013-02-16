@@ -52,15 +52,11 @@ module KitHelper
     request.fullpath.split("?")[0]
   end
 
-  def kit_javascripts(additional = [])
+  def kit_javascripts
     op = []
-    (additional + javascripts).each do |name|
-      next if name.is_blank?
-      js = HtmlAsset.fetch(_sid, name.downcase.strip, "js")
+    javascripts.each do |js|
       if js
-        op << "<script type='text/javascript' src='/kit/js/#{js.kit_name.downcase}'></script>"
-      else
-        op << "<!-- javascript missing '#{name.downcase.strip}' -->"
+        op << "<script type='text/javascript' src='/kit/#{js.system_id}/js/#{js.kit_name.downcase}'></script>"
       end
     end
     op.join("\n").html_safe
@@ -68,19 +64,19 @@ module KitHelper
 
   def javascripts
     if @page
-      (@page.page_template.layout.javascripts + "," + @page.page_template.javascripts).split(',').uniq rescue []
+      (@page.page_template.layout.javascripts + @page.page_template.javascripts).uniq rescue []
     else
       js = []
       layout_name = controller.layout_name_being_used rescue "application"
       if layout_name.not_blank?
         layout = Layout.sys(_sid).where(:name=>layout_name).first
         if layout
-          js += layout.javascripts.split(',').uniq
+          js += layout.javascripts.uniq
         end
       end
       begin
       if controller.template_being_used
-        js += controller.template_being_used.javascripts.split(',').uniq 
+        js += controller.template_being_used.javascripts.uniq 
       end
       rescue 
         logger.debug "Javascripts error"
@@ -90,23 +86,13 @@ module KitHelper
     end
   end
 
-  def kit_stylesheets(additional = [])
+  def kit_stylesheets
     op = []
-    begin
-    s = stylesheets 
-    rescue Exception => e
-      s = ['application'] 
-      logger.info "#{e.message}"
-    end
-    (additional + s).each do |name|
-      next if name.is_blank?
-      sheet = HtmlAsset.fetch(_sid, name.downcase.strip, "css")
+    stylesheets.each do |sheet|
       if sheet
-        op << "<link rel='stylesheet' type='text/css' href='/kit/css/#{sheet.kit_name.downcase}'>"
-      else
-        op << "<!-- stylesheet missing '#{name.downcase.strip}' -->"
+        op << "<link rel='stylesheet' type='text/css' href='/kit/#{sheet.system_id}/css/#{sheet.kit_name.downcase}'>"
       end
-    end
+    end 
     op.join("\n").html_safe
   end
 

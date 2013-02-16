@@ -39,7 +39,7 @@ class FormController < KitController
       @results = nil
     end
 
-    kit_render "search", :layout=>"application"
+    kit_render "search", :layout=>Layout.preference(_sid, "forum-search")
   end
 
 

@@ -1,9 +1,12 @@
 class Layout < ActiveRecord::Base
+  has_many :layout_html_asset
+  has_many :html_assets, :through=>:layout_html_asset
+
   store_templates
 
   use_kit_caching
 
-  attr_accessible :name, :handler, :stylesheets, :javascripts, :body
+  attr_accessible :name, :handler, :stylesheets, :javascripts, :body, :html_asset_ids
   before_save :make_path
   before_save :set_format
   has_many :page_templates
@@ -32,7 +35,7 @@ class Layout < ActiveRecord::Base
   end
   
   def make_path
-    self.path = "layouts/" + self.name.urlise 
+    self.path = "layouts/#{self.system_id}/#{self.name.urlise}"
   end
 
   def set_format
@@ -47,15 +50,15 @@ class Layout < ActiveRecord::Base
     ['haml', 'erb', 'builder']
   end
 
-  def self.name_exists?(name)
-    Layout.where("name = '#{name}'").count > 0
+  def self.name_exists?(sid, name)
+    Layout.sys(sid).where("name = '#{name}'").count > 0
   end
 
   def self.create_default(sid, user_id)
-    layout = Layout.new(:stylesheets=>"application", :javascripts=>"", :path=>"layouts/application", :handler=>"haml", :format=>"html", :locale=>"en", :system_id=>sid, :user_id=>user_id, :name=>"application-#{sid}", :body=><<eos
+    layout = Layout.new(:stylesheets=>"application", :javascripts=>"", :path=>"layouts/#{sid}/application", :handler=>"haml", :format=>"html", :locale=>"en", :system_id=>sid, :user_id=>user_id, :name=>"application", :body=><<eos
 !!!
 %html
-  / Layout: application-#{sid}
+  / Layout: application [#{sid}]
   %head
     = render :partial=>"layouts/kit_header"
     %style(type="text/css")
@@ -67,4 +70,19 @@ eos
 
     layout.save!
   end
+
+  def javascripts
+    self.html_assets.where(:file_type=>"js").all
+  end
+
+  def stylesheets
+    self.html_assets.where(:file_type=>"css").all
+  end
+
+  def self.preference(sid, name)
+    l = Layout.sys(sid).where(:id=>Preference.get_cached(sid, name)).first rescue nil
+    return l if l
+    Layout.sys(sid).order("created_at").first
+  end
+
 end

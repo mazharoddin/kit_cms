@@ -108,7 +108,7 @@ Rails.application.routes.draw do
   post 'admin/dashboard/maintenance' => 'admin/dashboard#maintenance'
   put 'admin/system/:attr' => 'admin/dashboard#update_preference'
   post 'admin/system/:attr/:value' => 'admin/dashboard#system_settings'
-  get 'admin/system' => 'admin/dashboard#system'
+  match 'admin/system' => 'admin/dashboard#system'
   get 'admin/sysadmin' => 'admin/dashboard#sysadmin'
   get 'admin/integrity' => 'admin/dashboard#integrity'
 

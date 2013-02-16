@@ -16,7 +16,14 @@
 
         %li 
           %label Used By:
-          = (Layout.sys(_sid).where("(stylesheets='' and '#{@html_asset.name}'='application' and '#{@html_asset.file_type}'='css') or stylesheets like '%#{@html_asset.name}%' or javascripts like '%#{@html_asset.name}%'")+ PageTemplate.sys(_sid).where("(stylesheets='' and '#{@html_asset.name}'='application' ) or stylesheets like '%#{@html_asset.name}%' or javascripts like '%#{@html_asset.name}%'")).collect { |i| link_to "'#{i.name}' #{i.class.name.titleize}", "/admin/#{i.class.name.tableize}/#{i.id}" }.join(', ').html_safe
+          Layouts:
+          = @html_asset.layouts.pluck(:name).join(', ')
+          %br
+          Page Templates: 
+          = @html_asset.page_templates.pluck(:name).join(', ')
+          %br
+          Forms:
+          = @html_asset.forms.pluck(:title).join(', ')
         %li
           %label Last Updated By:
           = @html_asset.user.email rescue ''

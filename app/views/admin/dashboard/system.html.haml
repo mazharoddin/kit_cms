@@ -63,4 +63,15 @@
             = best_in_place pref, :value, :path=>"/admin/system/#{pref.name}"
         %td(nowrap)= pref.updated_at.to_formatted_s(:short)
 
+  - if is_admin?
+    %h4 New Preference Setting
+    = form_for @preference, :url=>"/admin/system" do |f|
+      %p
+        %label Name
+        = f.text_field :name
+      %p
+        %label Value
+        = f.text_field :value
+      %p
+        = f.submit "Create"
 

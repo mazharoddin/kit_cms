@@ -23,21 +23,15 @@
           %label Updated:
           = @layout.updated_at
         %li
-          %label Stylesheets
-          = f.text_field :stylesheets
-          %br
-          Existing stylesheets:
-          = HtmlAsset.where(:file_type=>"css").sys(_sid).order(:name).all.collect {|s| s.name}.join(", ")
-          .dehighlight
-            Comma separated list of stylesheets to include.  If left blank it will default to the standard 'application'.
+          %label CSS
+          - HtmlAsset.sys(_sid).order(:name).where(:file_type=>"css").each do |ha|
+            = ha.name
+            = check_box_tag "layout[html_asset_ids][]", ha.id, layout_asset_selected(ha)
         %li
-          %label Javascripts
-          = f.text_field :javascripts
-          %br
-          Existing javascripts:
-          = HtmlAsset.where(:file_type=>"js").sys(_sid).order(:name).all.collect {|s| s.name}.join(", ")
-          .dehighlight
-            Comma separated list of javascripts to include.  If left blank it will default to none.
+          %label Javascript
+          - HtmlAsset.sys(_sid).order(:name).where(:file_type=>"js").each do |ha|
+            = ha.name
+            = check_box_tag "layout[html_asset_ids][]", ha.id, layout_asset_selected(ha)
         %li
           %label Body
           = cm_editor('html', :layout, :body, f)

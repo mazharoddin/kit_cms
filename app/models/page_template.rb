@@ -1,4 +1,7 @@
 class PageTemplate < ActiveRecord::Base
+  has_many :page_template_html_asset
+  has_many :html_assets, :through=>:page_template_html_asset
+
   has_many :pages
   belongs_to :layout
   has_and_belongs_to_many :blocks
@@ -6,7 +9,7 @@ class PageTemplate < ActiveRecord::Base
   has_many :page_template_terms
   belongs_to :user
 
-  attr_accessible :name, :template_type, :layout_id, :allow_anonymous_comments, :allow_user_comments, :hidden, :is_mobile, :mobile_version_id, :body, :stylesheets, :javascripts, :system_id
+  attr_accessible :name, :template_type, :layout_id, :allow_anonymous_comments, :allow_user_comments, :hidden, :is_mobile, :mobile_version_id, :body, :system_id, :html_asset_ids
 
   use_kit_caching
 
@@ -83,7 +86,14 @@ class PageTemplate < ActiveRecord::Base
   end
 
   def self.create_default(sid, user_id)
-    PageTemplate.create(:system_id=>sid, :stylesheets=>"application", :header=>'', :footer=>'', :layout_id=>Layout.sys(sid).first.id, :template_type=>"haml", :is_mobile=>0, :is_default=>1, :page_type=>"default", :name=>"default", :body=>"= field('body')")
+    PageTemplate.create(:system_id=>sid, :header=>'', :footer=>'', :layout_id=>Layout.sys(sid).first.id, :template_type=>"haml", :is_mobile=>0, :is_default=>1, :page_type=>"default", :name=>"default", :body=>"= field('body')")
   end
 
+  def javascripts
+    self.html_assets.where(:file_type=>"js").all
+  end
+
+  def stylesheets
+    self.html_assets.where(:file_type=>"css").all
+  end
 end

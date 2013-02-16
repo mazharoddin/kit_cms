@@ -47,23 +47,15 @@
       .field_help
         The content of the template.  
     %p
-      = f.label :stylesheets
-      = f.text_field :stylesheets
-      %br
-      Existing stylesheets:
-      = HtmlAsset.sys(_sid).order(:name).where(:file_type=>"css").all.collect {|s| s.name}.join(", ")
-      .field_help
-        Comma separated list of stylesheets to include.  If left blank it will default to the standard 'application'. Do not use a file extension.
-
+      %label CSS
+      - HtmlAsset.sys(_sid).order(:name).where(:file_type=>"css").each do |ha|
+        = ha.name
+        = check_box_tag "page_template[html_asset_ids][]", ha.id, page_template_asset_selected(ha)
     %p
-      = f.label :javascripts
-      = f.text_field :javascripts
-      %br
-      Existing javascripts:
-      = HtmlAsset.sys(_sid).order(:name).where(:file_type=>"js").all.collect {|s| s.name}.join(", ")
-      .field_help
-        Comma separated list of javascripts to include.  If left blank it will default to none. Do not use a file extension.
-
+      %label Javascript
+      - HtmlAsset.sys(_sid).order(:name).where(:file_type=>"js").each do |ha|
+        = ha.name
+        = check_box_tag "page_template[html_asset_ids][]", ha.id, page_template_asset_selected(ha)
 
     %p
       = kit_submit "Save"

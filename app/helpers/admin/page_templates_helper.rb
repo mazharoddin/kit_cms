@@ -1,5 +1,13 @@
 module Admin::PageTemplatesHelper
 
+  def page_template_asset_selected(asset)
+    if @page_template && @page_template.id!=nil
+      @page_template.html_assets.include?(asset)
+    else
+      false
+    end
+  end
+  
   def show_html_assets(list, type)
     return '' unless list
     o = ''

@@ -1,6 +1,6 @@
 class UserController < KitController
 
-  layout Preference.get_cached!(0,"user_profile_layout", "application")
+  layout Layout.where(:id=>(Preference.get_cached(0,"user_profile_layout"))).first.path
   append_view_path Layout.resolver  
 
   before_filter :authenticate

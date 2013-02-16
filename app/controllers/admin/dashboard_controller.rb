@@ -105,8 +105,16 @@ class Admin::DashboardController < AdminController
   def system
     raise Exception("permissions") unless can?(:dashboard, :super)
 
+    if request.post? && params[:preference][:name]
+      name = params[:preference][:name]
+      value = params[:preference][:value]
+      Preference.set(_sid, name, value)
+    end
+
     @preferences = Preference.sys(_sid).where("user_id is null").order(:name)
     @preferences = @preferences.all
+
+    @preference = Preference.new    
   end
 
   def build_system
@@ -164,6 +172,33 @@ class Admin::DashboardController < AdminController
       HtmlAsset.fetch(sid, ha.name, ha.file_type)
     end
 
+    if params[:do_html_assets]
+      Layout.all.each do |layout|
+        layout.stylesheets.split(",").each do |s|
+          layout.html_assets << HtmlAsset.sys(layout.system_id).where(:name=>s).where(:file_type=>'css').first rescue nil
+        end if layout.stylesheets
+      end
+      Layout.all.each do |layout|
+        layout.javascripts.split(",").each do |s|
+          layout.html_assets << HtmlAsset.sys(layout.system_id).where(:name=>s).where(:file_type=>'js').first rescue nil
+        end if layout.javascripts
+      end
+      PageTemplate.all.each do |pt|
+        pt.stylesheets.split(",").each do |s|
+          pt.html_assets << HtmlAsset.sys(pt.system_id).where(:name=>s).where(:file_type=>'css').first rescue nil
+        end if pt.stylesheets
+      end
+      PageTemplate.all.each do |pt|
+        pt.javascripts.split(",").each do |s|
+          pt.html_assets << HtmlAsset.sys(pt.system_id).where(:name=>s).where(:file_type=>'js').first rescue nil
+        end if pt.javascripts
+      end
+      Form.all.each do |f|
+        f.stylesheets.split(",").each do |s|
+          f.html_assets << HtmlAsset.sys(f.system_id).where(:name=>s).where(:file_type=>"css").first rescue nil
+        end
+      end
+    end
 
     @system_id = sid
     prefs = {

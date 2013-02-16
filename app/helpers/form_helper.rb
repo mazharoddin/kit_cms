@@ -1,5 +1,13 @@
 module FormHelper
 
+  def form_asset_selected(asset)
+    if @form && @form.id!=nil
+      @form.html_assets.include?(asset)
+    else
+      false
+    end
+  end
+  
 
   def text_captcha_entry
       question, answers = Form.captcha_question(500)

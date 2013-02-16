@@ -1,10 +1,5 @@
 require 'digest/md5'
 
-# TODO: password reset
-# TODO: 
-#
-
-
 class AccountController < KitController
 
   before_filter :redirect_current, :only=>[:sign_in, :sign_up, :forgotten]
@@ -269,8 +264,10 @@ class AccountController < KitController
         return
       end
     end
-  
-    options[:layout] = pref("account_#{name}_layout") || "application"
+
+    layout =  Layout.preference(_sid, "account_#{name}_layout") 
+    options[:layout] = layout.path
+    self.layout_being_used = layout
     @options = options
     render name, options
   end    

@@ -60,19 +60,20 @@
     %strong Stylesheets
     %br
     Layout:
-    = show_html_assets(@page_template.layout.stylesheets, "css")
+    = @page_template.layout.html_assets.where(:file_type=>"css").pluck(:name).join(", ")
     %br
     Template:
-    = show_html_assets(@page_template.stylesheets, "css")
+    = @page_template.html_assets.where(:file_type=>"css").pluck(:name).join(", ")
 
   %p
     %strong Javascripts
     %br
     Layout:
-    = show_html_assets(@page_template.layout.javascripts, "js")
+    = @page_template.layout.html_assets.where(:file_type=>"js").pluck(:name).join(", ")
     %br
     Template:
-    = show_html_assets(@page_template.javascripts, "js")
+    = @page_template.html_assets.where(:file_type=>"js").pluck(:name).join(", ")
+
 
   %p
     %strong= icon_to "Terms: ", "/admin/page_template_terms?page_template_id=#{@page_template.id}", false, :style=>"margin-right: 20px;"

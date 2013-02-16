@@ -12,7 +12,7 @@ module ForumHelper
     color = 'green' if user.forum_status == -1
     
     ( "[" +
-      link_to(user.email, "/admin/users/#{user.id}") +
+      link_to(user.email, "/admin/user/#{user.id}") +
     "] <span class='#{color}'>" +
       user.display_name + 
       "</span> " +

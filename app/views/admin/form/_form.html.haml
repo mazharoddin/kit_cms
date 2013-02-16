@@ -52,19 +52,24 @@
         .field_help
           Include new and updated entries in system activity log
 
-      - if @form.respond_to?(:layout)
-        %li.advanced
-          = f.label "Layout"
-          = f.select :layout, options_from_collection_for_select(Layout.sys(_sid).order(:name).all, 'name', 'name')
+      %li.advanced
+        = f.label "Layout"
+        = f.select :layout_id, options_from_collection_for_select(Layout.sys(_sid).order(:name).all, 'id', 'name', @form.layout_id)
 
-          .field_help
-            The layout to use for this form when rendering it as a page.
+        .field_help
+          The layout to use for this form when rendering it as a page.
 
       %li.advanced
-        = f.label "Stylesheets"
-        = f.text_field :stylesheets
-        .field_help
-          Optional.  A comma separated list of stylesheets to include when showing this form.  'Application' is included by default if none are specified.  This is not included if the form is rendered as a block.
+        %label CSS
+        - HtmlAsset.sys(_sid).order(:name).where(:file_type=>"css").each do |ha|
+          = ha.name
+          = check_box_tag "form[html_asset_ids][]", ha.id, form_asset_selected(ha)
+      %li.advanced
+        %label Javascript
+        - HtmlAsset.sys(_sid).order(:name).where(:file_type=>"js").each do |ha|
+          = ha.name
+          = check_box_tag "form[html_asset_ids][]", ha.id, form_asset_selected(ha)
+
 
       %li.advanced
         = f.label "Class"
