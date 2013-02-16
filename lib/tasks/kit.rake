@@ -313,6 +313,7 @@ namespace :kit do
 
       Layout.all.each do |layout|
         puts "Doing Layout #{layout.name} for System #{layout.system_id}"
+        puts "stylesheets #{layout.stylesheets}"
         layout.stylesheets.split(",").each do |s|
           puts "Doing stylesheet '#{s}'"
           layout.html_assets << HtmlAsset.sys(layout.system_id).where(:name=>s).where(:file_type=>'css').first rescue nil
@@ -335,10 +336,10 @@ namespace :kit do
         end if pt.javascripts
       end
       Form.all.each do |f|
-        puts "Doing form #{f.name} for System #{f.system_id}"
+        puts "Doing form #{f.title} for System #{f.system_id}"
         f.stylesheets.split(",").each do |s|
           f.html_assets << HtmlAsset.sys(f.system_id).where(:name=>s).where(:file_type=>"css").first rescue nil
-        end
+        end if f.stylesheets
       end
   end
 
