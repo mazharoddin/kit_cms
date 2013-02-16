@@ -83,6 +83,10 @@ eos
     self.read_attribute(:stylesheets)
   end
 
+  def old_javascripts
+    self.read_attribute(:javascripts)
+  end
+
   def self.preference(sid, name)
     l = Layout.sys(sid).where(:id=>Preference.get_cached(sid, name)).first rescue nil
     return l if l
