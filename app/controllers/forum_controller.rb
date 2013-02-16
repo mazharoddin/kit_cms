@@ -657,7 +657,7 @@ class ForumController < KitController
       if l
         Layout.sys(_sid).where(:name=>l).first 
       else
-        Layout.sys(_sid).order(:created_at).first
+        Layout.preference(_sid, "forum")
       end
     end
     ll
