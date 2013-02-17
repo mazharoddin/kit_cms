@@ -206,9 +206,10 @@ return false;
 
   <tr class="advanced">
     <td colspan="3">
-      <p>Show: <%= icon_to "Page Analysis", "/db/content/analyse/#{@page.id}", false, :class=>"icon_stack advanced" %>
+      <p>Show: <%= icon_to "Links", "/page/#{@page.id}/links", false %>
+      <%= icon_to "Page Analysis", "/db/content/analyse/#{@page.id}", false, :class=>"icon_stack advanced" %>
       <%= icon_to "Content", "/page/#{@page.id}/contents", false, :class=>"advanced"  %>
-      <%= icon_to "Blocks Used On This Page", "/admin/block_instances?page_id=#{@page.id}", false, :class=>"advanced" %>
+      <%= icon_to "Blocks Used", "/admin/block_instances?page_id=#{@page.id}", false, :class=>"advanced" %>
       <%= icon_to_function "Access Permissions", "$('#access').slideDown(); $('#show_access_link').hide();",false, {:id=>'show_access_link', :class=>"icon_stack"} %>
       </p>
     </td>

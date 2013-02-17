@@ -1,0 +1,27 @@
+- content_for :main do 
+
+  %h1.page_icon Page '#{@page.title}' Links
+
+  %h3 Pages This One Links To
+
+  %ul.link_list
+    - @page.page_links.order(:url).limit(500).all.each do |page|
+      %li
+        - other_page = Page.sys(_sid).where(:full_path=>page.url).first rescue nil
+        .title.clearfix(class="http_#{page.http_status}")
+          .left
+            = link_to truncate(page.url, :length=>80), page.url
+          = other_page.title  if other_page
+
+
+  %h3 Pages Linking To This One
+
+  %ul.link_list
+    - PageLink.sys(_sid).order(:url).where(:url=>@page.full_path).limit(500).all.each do |page|
+      %li
+        = page.page.title
+        %br
+        = link_to page.page.full_path, "/page/#{page.page.id}/info"
+
+
+

@@ -1,6 +1,6 @@
 class Page < KitIndexed
 
-  attr_accessible :full_path, :category_id, :status_id, :name, :title, :page_template_id, :created_by, :updated_by, :system_id, :tags, :meta_description, :meta_keywords, :header, :status
+  attr_accessible :full_path, :category_id, :status_id, :name, :title, :page_template_id, :created_by, :updated_by, :system_id, :tags, :meta_description, :meta_keywords, :header, :status, :needs_crawl, :updated_crawl
 
     @@index_def =  [
       {:name=>:id, :index=>:not_analyzed, :include_in_all=>false},
@@ -93,6 +93,7 @@ class Page < KitIndexed
     belongs_to :status
     belongs_to :user, :class_name=>"User", :foreign_key=>"created_by"
 
+    has_many :page_links
     has_many :comments
     has_many :block_instances, :dependent=>:destroy
     has_many :page_histories, :dependent=>:destroy
@@ -108,8 +109,11 @@ class Page < KitIndexed
     before_save { self.name.downcase! }
     before_save :history_start
     before_save :change_full_path
+    
     after_save :history_end
     after_save :clear_cache
+    before_update :queue_crawl
+
     after_destroy :clear_cache
     after_create :set_page_template_defaults
 
@@ -122,6 +126,34 @@ class Page < KitIndexed
     validates :title, :presence=>true
     validate :path_must_be_unique
 
+
+    def full_url
+      "#{Preference.get_cached(self.system_id, "host")}#{self.full_path}"
+    end
+
+    def queue_crawl
+      self.needs_crawl = Time.now
+    end
+
+    def crawl(force = false)
+      return unless force || self.needs_crawl 
+      self.update_attributes(:needs_crawl=>nil)
+      PageLink.delete_all("page_id = #{self.id}")
+
+      Anemone.crawl(full_url, :depth_limit=>1) do |anemone|
+        first_page = true
+        anemone.on_every_page do |page|
+          if first_page
+            first_page = false
+            next
+          end
+
+          uri = URI.parse(page.url.to_s)
+          PageLink.create(:page_id=>self.id, :url=>uri.path, :http_status=>page.code, :system_id=>self.system_id)
+        end
+      end
+      self.update_attributes(:updated_crawl=>Time.now) 
+    end      
 
     attr_writer :editable
     def editable

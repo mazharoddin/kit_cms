@@ -90,6 +90,10 @@ class PagesController < KitController
     params[:mode] = 'current' unless params[:mode]
   end
 
+  def links
+     
+  end
+
   def search
     if params[:search]
       search_fields = []

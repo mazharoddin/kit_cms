@@ -24,6 +24,8 @@ require 'browser'
 require 'mercury-rails'
 require 'dynamic_form'
 require 'best_in_place'
+require 'uri'
+require 'anemone'
 
 module KitCms
 end

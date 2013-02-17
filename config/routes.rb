@@ -345,6 +345,7 @@ Rails.application.routes.draw do
   get 'page/:id/notes' => 'pages#notes'
   get 'page/:id/content/:content_id/edit' => 'pages#content_edit'
   post 'page/:id/content/:content_id' => 'pages#content_update'
+  get 'page/:id/links' => 'pages#links' 
   get 'page/:id/contents' => 'pages#contents' 
   get 'page/:id/content/:content_id/field' => 'pages#show_content' 
   get 'page/:id/content/:content_id/block' => 'pages#show_block_content' 

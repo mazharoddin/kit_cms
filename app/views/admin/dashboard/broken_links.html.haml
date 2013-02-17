@@ -1,0 +1,9 @@
+- content_for :main do 
+
+  %h1 Broken Links
+
+  %ul
+    - @broken.each do |broken|
+      %li
+        = broken
+

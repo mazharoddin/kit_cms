@@ -478,4 +478,18 @@ class Admin::DashboardController < AdminController
     "<span class='check_warning'>#{s}</span>".html_safe
   end
 
+  def broken_links
+    @broken = []
+    Anemone.crawl(Preference.get_cached(_sid, "host"), :skip_query_strings=>true) do |anemone|
+      anemone.skip_links_like [ /\/db/, /\/page\/\d+\/info/, /\?edit\=1/ ]
+       anemone.on_every_page do |page|
+         @broken << page
+        if page.code == 404
+         uri = URI.parse(page.url.to_s)
+         @broken << uri.path
+        end
+       end
+    end
+
+  end
 end

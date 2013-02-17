@@ -44,5 +44,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'imgkit'
   s.add_dependency 'dynamic_form'
   s.add_dependency 'grit'
-
+  s.add_dependency 'anemone'
 end

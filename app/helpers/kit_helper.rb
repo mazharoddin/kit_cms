@@ -451,15 +451,35 @@ module KitHelper
     date.strftime(Preference.getCached(_sid, 'date_time_format') || '%d-%b-%y %H:%M')
   end    
 
-   def obscure_email(email)
-        return nil if email.nil? #Don't bother if the parameter is nil.
-        lower = ('a'..'z').to_a
+  def entity_encode(s)
+      lower = ('a'..'z').to_a
         upper = ('A'..'Z').to_a
-        email.split('').map { |char|
+        s.split('').map { |char|
             output = lower.index(char) + 97 if lower.include?(char)
             output = upper.index(char) + 65 if upper.include?(char)
             output ? "&##{output};" : (char == '@' ? '&#0064;' : char)
         }.join
+  end
+
+   def obscure_email(email)
+        return nil if email.nil? #Don't bother if the parameter is nil.
+        op = []
+
+        m = rand(4)+1
+        for i in 0..email.length-1
+          if (i % m)==0
+            random_class = "c#{rand(1000000)}"
+            op << "<style type='text/css'>span.#{random_class} { display: none; }</style>"
+            op << "<span class='#{random_class}'>"
+            for x in 0..rand(5) 
+              op << (97+rand(25)).chr
+            end
+            op << "</span>"
+          end 
+          op << entity_encode(email[i])
+        end
+
+        op.join('').html_safe
     end
 
    def ip_info_link(ip)

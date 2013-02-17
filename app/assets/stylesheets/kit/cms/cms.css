@@ -1675,3 +1675,14 @@ ul#mapping li label {
   float: left;
   width: 300px;
 }
+
+ul.link_list div.http_404 a {
+  color: red;
+}
+
+ul.link_list div.left {
+  float: left;
+  width: 300px;
+}
+
+

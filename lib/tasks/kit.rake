@@ -341,6 +341,14 @@ namespace :kit do
           f.html_assets << HtmlAsset.sys(f.system_id).where(:name=>s).where(:file_type=>"css").first rescue nil
         end if f.old_stylesheets
       end
+
+      Form.all.each do |f|
+        if f.layout
+          l = Layout.sys(f.system_id).where(:name=>f.layout).first
+          f.layout = l if l
+          f.save
+        end
+      end
   end
 
 end
