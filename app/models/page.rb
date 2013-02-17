@@ -135,6 +135,12 @@ class Page < KitIndexed
       self.save
     end
 
+    def self.do_crawl(sid)
+      Page.sys(sid).where("needs_crawl is not null").find_each do |p|
+        p.crawl
+      end
+    end
+
     def crawl(force = false)
       return unless force || self.needs_crawl 
       self.update_attributes(:needs_crawl=>nil)
