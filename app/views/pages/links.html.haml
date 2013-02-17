@@ -2,26 +2,54 @@
 
   %h1.page_icon Page '#{@page.title}' Links
 
-  %h3 Pages This One Links To
+  .link
+    = icon_to "Page Info", "/page/#{@page.id}/info"
 
+  - if @page.needs_crawl
+    .warning(style="margin-top: 10px; color: red;")
+      This information may be out of date. You can
+      = link_to "force an update", "/page/#{@page.id}/links?refresh=1"
+      but be aware it make take some time.  Alternatively one will happen automatically soon.
+
+  - links = @page.page_links.order(:url).limit(500).all
+  %h3 
+    Pages This One Links To:
+    - if links.size==500
+      Showing the first 500 but there are more
+    - else
+      = links.size
   %ul.link_list
-    - @page.page_links.order(:url).limit(500).all.each do |page|
+    - links.each do |page|
       %li
         - other_page = Page.sys(_sid).where(:full_path=>page.url).first rescue nil
         .title.clearfix(class="http_#{page.http_status}")
           .left
             = link_to truncate(page.url, :length=>80), page.url
-          = other_page.title  if other_page
+          - if other_page
+            = other_page.title
+            [
+            = link_to other_page.status.name, "/page/#{other_page.id}/info"
+            ]
 
 
-  %h3 Pages Linking To This One
+  - links = PageLink.sys(_sid).order(:url).where(:url=>@page.full_path).limit(500).all
+  %h3 
+    Pages Linking To This One:
+    - if links.size==500
+      Showing the first 500 but there are mot
+    - else
+      = links.size
 
   %ul.link_list
-    - PageLink.sys(_sid).order(:url).where(:url=>@page.full_path).limit(500).all.each do |page|
+    - links.each do |page|
       %li
-        = page.page.title
-        %br
-        = link_to page.page.full_path, "/page/#{page.page.id}/info"
-
+        .title.clearfix(class="http_#{page.http_status}")
+          .left
+            = link_to truncate(page.page.full_path, :length=>80), page.page.full_path
+          - if page.page
+            = page.page.title
+            [
+            = link_to page.page.status.name, "/page/#{page.page.id}/info"
+            ]
 
 

@@ -73,6 +73,12 @@ return false;
       <td>Path:</td>
       <td colspan='2'><%= @page.full_path %></td>
     </tr>
+
+    <tr>
+      <td>Links To This Page:</td>
+      <td colspan="2"><%= PageLink.sys(_sid).where(:url=>@page.full_path).count %></td>
+    </tr>
+
     <tr>
       <td>Template:</td>
       <td><%= link_to(@page.page_template.name, "/admin/page_templates/#{@page.page_template_id}") rescue '' %></td>
@@ -206,7 +212,8 @@ return false;
 
   <tr class="advanced">
     <td colspan="3">
-      <p>Show: <%= icon_to "Links", "/page/#{@page.id}/links", false %>
+      <p>Show: 
+      <%= icon_to "Links", "/page/#{@page.id}/links", false %>
       <%= icon_to "Page Analysis", "/db/content/analyse/#{@page.id}", false, :class=>"icon_stack advanced" %>
       <%= icon_to "Content", "/page/#{@page.id}/contents", false, :class=>"advanced"  %>
       <%= icon_to "Blocks Used", "/admin/block_instances?page_id=#{@page.id}", false, :class=>"advanced" %>

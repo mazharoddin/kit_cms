@@ -130,16 +130,21 @@ class Page < KitIndexed
       "#{Preference.get_cached(self.system_id, "host")}#{self.full_path}"
     end
 
-    def queue_crawl
+    def queue_crawl(start_crawl = true)
       self.needs_crawl = Time.now
       self.save
-      Page.delay.do_crawl
+      Page.delay.do_crawl if start_crawl
     end
 
     def self.do_crawl(sid = 0)
+      last_crawl = (Time.zone.parse(Preference.get(sid, "last_crawl")) rescue nil) || (Time.now - 10.years)
+      this_crawl = Time.now
+      Preference.set(sid, "last_crawl", this_crawl)
       begin
         pages = Page
         pages = pages.sys(sid) unless sid == 0
+        pages = pages.where(:needs_crawl > last_crawl)
+        pages = pages.where(:needs_crawl <= this_crawl)
         pages.where("needs_crawl is not null").find_each do |p|
           p.crawl
         end
@@ -152,7 +157,6 @@ class Page < KitIndexed
       self.update_attributes(:needs_crawl=>nil)
       PageLink.delete_all("page_id = #{self.id}")
       
-      logger.info "Crawling #{full_url}"
       Anemone.crawl(full_url, :depth_limit=>1, :read_timeout=>2, :discard_page_bodies=>true) do |anemone|
         first_page = true
         anemone.on_every_page do |page|
@@ -162,7 +166,6 @@ class Page < KitIndexed
           end
 
           uri = URI.parse(page.url.to_s)
-          logger.info "Recording #{page.url.to_s}"
           PageLink.create(:page_id=>self.id, :url=>uri.path, :http_status=>page.code, :system_id=>self.system_id)
         end
       end

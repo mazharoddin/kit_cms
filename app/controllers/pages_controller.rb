@@ -91,7 +91,17 @@ class PagesController < KitController
   end
 
   def links
-     
+    if params[:refresh]
+       @page.crawl
+    end  
+
+    if params[:deep]
+      Page.sys(_sid).find_each do |p|      
+        p.queue_crawl(false)
+      end
+
+      @page.queue_crawl
+    end
   end
 
   def search
