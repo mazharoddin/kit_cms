@@ -133,11 +133,17 @@ class Page < KitIndexed
     def queue_crawl
       self.needs_crawl = Time.now
       self.save
+      Page.delay.do_crawl
     end
 
-    def self.do_crawl(sid)
-      Page.sys(sid).where("needs_crawl is not null").find_each do |p|
-        p.crawl
+    def self.do_crawl(sid = 0)
+      begin
+        pages = Page
+        pages = pages.sys(sid) unless sid == 0
+        pages.where("needs_crawl is not null").find_each do |p|
+          p.crawl
+        end
+      ensure
       end
     end
 
@@ -147,7 +153,7 @@ class Page < KitIndexed
       PageLink.delete_all("page_id = #{self.id}")
       
       logger.info "Crawling #{full_url}"
-      Anemone.crawl(full_url, :depth_limit=>1) do |anemone|
+      Anemone.crawl(full_url, :depth_limit=>1, :read_timeout=>2, :discard_page_bodies=>true) do |anemone|
         first_page = true
         anemone.on_every_page do |page|
           if first_page
