@@ -112,7 +112,6 @@ class Page < KitIndexed
     
     after_save :history_end
     after_save :clear_cache
-    before_update :queue_crawl
 
     after_destroy :clear_cache
     after_create :set_page_template_defaults
@@ -133,13 +132,15 @@ class Page < KitIndexed
 
     def queue_crawl
       self.needs_crawl = Time.now
+      self.save
     end
 
     def crawl(force = false)
       return unless force || self.needs_crawl 
       self.update_attributes(:needs_crawl=>nil)
       PageLink.delete_all("page_id = #{self.id}")
-
+      
+      logger.info "Crawling #{full_url}"
       Anemone.crawl(full_url, :depth_limit=>1) do |anemone|
         first_page = true
         anemone.on_every_page do |page|
@@ -149,6 +150,7 @@ class Page < KitIndexed
           end
 
           uri = URI.parse(page.url.to_s)
+          logger.info "Recording #{page.url.to_s}"
           PageLink.create(:page_id=>self.id, :url=>uri.path, :http_status=>page.code, :system_id=>self.system_id)
         end
       end

@@ -171,6 +171,7 @@ class PagesController < KitController
       @page.updated_at = Time.now 
       @page.save
       @page.update_index 
+      @page.queue_crawl
     end
 
     render :js=>""
