@@ -26,6 +26,7 @@ require 'dynamic_form'
 require 'best_in_place'
 require 'uri'
 require 'anemone'
+require 'fast-aes'
 
 module KitCms
 end

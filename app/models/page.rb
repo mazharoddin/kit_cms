@@ -131,25 +131,10 @@ class Page < KitIndexed
     end
 
     def queue_crawl(start_crawl = true)
+      logger.debug "Queueing crawl for page #{self.id}"
       self.needs_crawl = Time.now
       self.save
-      Page.delay.do_crawl if start_crawl
-    end
-
-    def self.do_crawl(sid = 0)
-      last_crawl = (Time.zone.parse(Preference.get(sid, "last_crawl")) rescue nil) || (Time.now - 10.years)
-      this_crawl = Time.now
-      Preference.set(sid, "last_crawl", this_crawl)
-      begin
-        pages = Page
-        pages = pages.sys(sid) unless sid == 0
-        pages = pages.where(:needs_crawl > last_crawl)
-        pages = pages.where(:needs_crawl <= this_crawl)
-        pages.where("needs_crawl is not null").find_each do |p|
-          p.crawl
-        end
-      ensure
-      end
+      Delayed::Job.enqueue PageLinkJob.new(self.system_id) if start_crawl
     end
 
     def crawl(force = false)

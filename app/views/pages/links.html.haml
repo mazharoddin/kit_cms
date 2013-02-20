@@ -11,6 +11,14 @@
       = link_to "force an update", "/page/#{@page.id}/links?refresh=1"
       but be aware it make take some time.  Alternatively one will happen automatically soon.
 
+  - else 
+    - unless @page.updated_crawl
+      .warning(style="margin-top: 10px; color: red;")
+        This page hasn't been processed for link information. You can
+        = link_to "force an update", "/page/#{@page.id}/links?refresh=1"
+        but it will take some time to process.
+    
+
   - links = @page.page_links.order(:url).limit(500).all
   %h3 
     Pages This One Links To:

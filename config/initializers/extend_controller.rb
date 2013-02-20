@@ -2,6 +2,7 @@ module DomainController
 
   attr_accessor :kit_system
 
+
   def licensed(c = nil)
     if c!=nil
       function = c
