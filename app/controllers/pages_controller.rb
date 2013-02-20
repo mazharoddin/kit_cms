@@ -101,6 +101,7 @@ class PagesController < KitController
       end
 
       @page.queue_crawl
+      redirect_to "/page/#{@page.id}/links"
     end
   end
 
