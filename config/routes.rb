@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  post '/api/1/q/token' => 'q#token'
+  post '/api/1/q/register' => 'q#register'
+  post '/api/1/q/subscribe' => 'q#subscribe'
+  post '/api/1/q/event' => 'q#event'
+
+
   match '/users/sign_in' => 'account#sign_in'
   match '/users/sign_out' => 'account#sign_out'
   match '/users/sign_up' => 'account#sign_up'

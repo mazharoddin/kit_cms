@@ -92,12 +92,16 @@ class PagesController < KitController
 
   def links
     if params[:refresh]
-       @page.crawl
+       @page.queue_crawl
+       redirect_to "/page/#{@page.id}/info", :notice=>"Request processed"
+       return
     end  
 
     if params[:deep]
       Page.sys(_sid).find_each do |p|      
         p.queue_crawl(false)
+        redirect_to "/page/#{@page.id}/info", :notice=>"Request processed"
+        return
       end
 
       @page.queue_crawl
