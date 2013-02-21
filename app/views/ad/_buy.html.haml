@@ -5,6 +5,7 @@
 
     = hidden_field_tag :options, options.to_json
 
+    = f.error_messages 
     %label(for="name") 
       Name
       = f.text_field :name, :class=>"required"
@@ -34,7 +35,7 @@
       Content
       = f.file_field :creative, :class=>"required"
       .help
-        The content of your ad - a GIF, JPG or PNG file, no larger than 100Kb in size.  It will automatically be resized to fit but for best results you should resize it to #{@zones.first.width}px (width) by #{@zones.first.height}px (height) before uploading.
+        The content of your ad - a GIF, JPG or PNG file, no larger than 100Kb in size.  It will automatically be resized to fit but for best results you should resize it to be the same size as the zone you're creating the ad for.
 
     %label(for="link")
       Link

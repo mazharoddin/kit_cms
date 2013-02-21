@@ -9,6 +9,8 @@ class AdController < KitController
     @ad.height = zone.height
     @ad.width = zone.width
     @ad.system_id = _sid
+    @ad.name = params[:ad][:name]
+    @ad.start_date = params[:ad][:start_date]
     @ad.user_id = current_user.id
     @ad.end_date = @ad.start_date + @ad.duration.send(zone.period.downcase) rescue nil
     @ad.activated = nil

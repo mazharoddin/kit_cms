@@ -7,6 +7,7 @@
  *= require "./css"
  *= require "./markdown"
  *= require "./xml"
+ *= require "./ruby"
  *= require "./javascript"
  *= require "./dialog"
  *= require "./match-highlighter"

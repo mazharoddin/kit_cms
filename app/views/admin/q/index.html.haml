@@ -1,0 +1,28 @@
+- content_for :main do 
+
+  %h1.notificationqueue_icon Notification Queue Clients
+
+  .link(style="margin: 20px 0;")
+    = icon_to_show "Create", "create"
+
+  #create(style="display: none;")
+    = form_for @q_client, :url=>"/admin/q" do |f|
+      %label Name:
+      = f.text_field :name
+
+      = kit_submit "Create"
+
+  %table.loosen
+    %tr
+      %th Name
+      %th Authentication Method
+      %th Authentication ID
+      %th Delete
+    - @clients.each do |client|
+      %tr
+        %td= link_to client.name, "/admin/q/#{client.id}"
+        %td= client.auth_method
+        %td= client.auth_id
+        %td= button_to "Delete", "/admin/q/#{client.id}", :method=>:delete, :confirm=>"Are you sure?"
+
+

@@ -44,6 +44,16 @@ class QController < ApiController
     render :json=>{:id=>quser.q_external_id}
   end
 
+
+  # deregistered a User ID with a notification method/address - i.e. destroy the user account
+  # params: user (the external ID by which the user is known)
+  def deregister
+    quser = @client.q_users.sys(_sid).where(:q_external_id=>params[:user]).first
+
+    quser.destroy
+    head :ok
+  end
+
   # subscribe to a topic (i.e. receive a notification when that topic happens)
   # params: user (the external ID by which the user is known)
   #         topic (the topic to which is being subscribed)
@@ -68,8 +78,28 @@ class QController < ApiController
     render :json=>{:subscription=>qs.id}
   end
 
+  # unsubscribe from topic (i.e. stop receiving notifications when a topic happens)
+  # params: user (the external ID by which the user is known)
+  #         topic (the topic to which is being unsubscribed)
+  def unsubscribe
+    quser = @client.q_users.sys(_sid).where(:q_external_id=>params[:user]).first
+
+    unless quser
+     head :bad_request
+     return
+    end
+
+    qs = QSubscription.sys(_sid).where(:q_client_id=>@client.id).where(:q_user_id=>quser.id).where(:topic=>params[:topic]).first
+
+    qs.destroy    
+
+    head :ok
+  end
+
+
   def event
-    event = QEvent.create(:system_id=>_sid, :q_client_id=>@client.id, :topic=>params[:topic])
+    event = QEvent.create(:system_id=>_sid, :q_client_id=>@client.id, 
+                          :topic=>params[:topic], :data=>params[:data], :klass=>params[:class])
 
     render :json=>{:event=>event.id} 
   end

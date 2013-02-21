@@ -41,6 +41,8 @@
   %p
     = icon_to "Edit", edit_admin_ad_zone_path(@ad_zone)
     = link_to "Destroy", [:admin, @ad_zone], :confirm => 'Are you sure?', :method => :delete, :class=>"action"
+    
+    = link_to "Create Block For This Ad Zone", "/admin/ad_zone/#{@ad_zone.id}/create_block", :class=>"action", :method=>:post
 
   %p
     = icon_to "Ad Zones", admin_ad_zones_path

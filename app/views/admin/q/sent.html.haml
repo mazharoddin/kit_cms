@@ -1,0 +1,32 @@
+- content_for :main do
+
+  %h1.notificationqueue_icon= "Notification Queue '#{@client.name}' Sent Notifications"
+
+  .link(style='margin: 20px 0;')
+    = icon_to "Notification Queue", "/admin/q/#{@client.id}"
+
+  - sents = @client.q_sents.includes(:q_user).order("id desc").page(params[:page]).per(100)
+
+  = paginate sents
+
+  %table.loosen_more
+    %tr
+      %th User
+      %th Status
+      %th Topic 
+      %th Sent
+      %th Destination
+
+      %th Message
+    - sents.each do |s|
+      %tr
+        %td(nowrap)= "#{s.q_user.q_external_id} [ #{s.q_user.id} ]"
+        %td(width="150")= s.status
+        %td= s.q_event.topic 
+        %td= time_ago_in_words s.created_at rescue ''
+        %td= s.destination
+        %td= field_reveal(s.body, 500)
+
+  = paginate sents
+
+

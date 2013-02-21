@@ -134,7 +134,7 @@ class Page < KitIndexed
       logger.debug "Queueing crawl for page #{self.id}"
       self.needs_crawl = Time.now
       self.save
-      Delayed::Job.enqueue PageLinkJob.new(self.system_id) if start_crawl
+      Delayed::Job.enqueue PageLinkJob.new(self.system_id), :queue=>self.system_id if start_crawl
     end
 
     def crawl(force = false)

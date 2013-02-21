@@ -1,0 +1,40 @@
+- content_for :main do 
+
+  %h1 Delayed Jobs Queue
+
+  %h3 
+    Status:
+    = @running ? "Running [ #{@pid} ]" : "NOT Running"
+
+  - if @running
+    = icon_to "Stop Process", "/admin/dj?process=stop", false, :method=>:post
+    = icon_to "Restart Process", "/admin/dj?process=restart", false, :method=>:post
+  - else
+    = icon_to "Start Process", "/admin/dj?process=start", false,:method=>:post
+
+  %table.loosen
+    %tr
+      %th ID
+      %th Created
+      %th Priority
+      %th Attempts
+      %th Run At
+      %th(nowrap) Failed At
+      %th Queue
+    - @delayed_jobs.each do |job|
+      %tr
+        %td
+          = job.id
+          = link_to "Delete", "/admin/dj?delete=#{job.id}", :method=>:post
+        %td= job.created_at
+        %td= job.priority
+        %td= job.attempts
+        %td= job.run_at
+        %td= job.failed_at
+        %td= job.queue
+      %tr
+        %td(colspan='7')= truncate(job.handler, :length=>300)
+      - if job.last_error
+        %tr
+          %td(colspan='7')= truncate(job.last_error, :length=>300)
+

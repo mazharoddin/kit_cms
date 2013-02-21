@@ -86,6 +86,8 @@
             %a.ads_wicon(href="/admin/advertisments") Advertisments
         %p.advanced
           %a.menu_wicon(href="/menus") Menus
+        %p.advanced
+          %a.notificationqueue_wicon(href="/admin/q") Notification Queue
 
     - if can?(:use, :design) 
       %li
@@ -119,6 +121,8 @@
             %a(href="/admin/dashboard/errors") Errors
           %p
             %a(href="/admin/dashboard/logfile") Log File
+          %p
+            %a(href="/admin/dj") Delayed Job Queue
         %p
           %a.help_wicon(href="/db/help") Help
 

@@ -1142,9 +1142,15 @@ a.icon:hover, a.no_icon:hover {
 
 h1.order_icon {
   background-image: url('/assets/kit/icons/32/cur_bp_icon&32.png');
-
 }
 
+h1.notificationqueue_icon {
+  background-image: url('/assets/kit/icons/32/twitter_2_icon&32.png');
+}
+
+a.notificationqueue_wicon {
+  background-image: url('/assets/kit/icons/white/16/twitter_2_icon&16.png');
+}
 h1.experiments_icon {
   background-image: url('/assets/kit/icons/32/balance_icon&32.png');
 }
@@ -1683,6 +1689,25 @@ ul.link_list div.http_404 a {
 ul.link_list div.left {
   float: left;
   width: 300px;
+}
+
+.auth label {
+  font-weight: bold;
+  float: left; 
+  width: 210px;
+}
+
+.auth form label, .klass form label {
+  float: none;
+  display: block;
+}
+.auth form input, .klass form input[type=text] {
+  width: 600px;
+}
+
+.auth form textarea, .klass form textarea {
+  width: 600px;
+  height: 300px;
 }
 
 

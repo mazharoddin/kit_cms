@@ -5,6 +5,6 @@ class QEvent < ActiveRecord::Base
   after_create :run_queue
 
   def run_queue
-    Delayed::Job.enqueue QueueJob.new(self.id)
+    Delayed::Job.enqueue QueueJob.new(self.id), :queue=>self.system_id
   end    
 end

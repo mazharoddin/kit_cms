@@ -1,0 +1,94 @@
+- content_for :main do
+
+  .auth
+    %h1.notificationqueue_icon Notification Queue '#{@client.name}'
+
+    .link(style='margin: 20px 0;')
+      = icon_to "Notification Queue Clients", "/admin/q" if is_admin?
+
+    = icon_to_show "Create Event", "create" 
+
+    #create(style="display: none;")
+      = form_for @event, :url=>"/admin/q/#{@client.id}" do |f|
+        %p
+          %label Topic
+          = f.text_field :topic
+        
+        %p
+          %label Class
+          = f.select :klass, options_from_collection_for_select(@client.q_klasses.select("distinct name").all, :name, :name, @event.klass), :include_blank=>true
+
+        %p
+          %label Data
+          = f.text_area :data
+
+        %p
+          %label
+          = kit_submit "Create"
+
+    .advanced
+      %h3
+        Classes: 
+        = @client.q_klasses.count
+
+      = icon_to "Classes", "/admin/q/#{@client.id}/klasses"
+
+    %h3
+      Sent:
+      = @client.q_sents.count
+    
+    = icon_to "Sent", "/admin/q/#{@client.id}/sent" 
+
+    %h3 
+      Events:
+      = @client.q_events.count
+
+    = icon_to "Events", "/admin/q/#{@client.id}/events" 
+ 
+    %h3 
+      Subscriptions:
+      = @client.q_subscriptions.count
+
+    = icon_to "Subscriptions", "/admin/q/#{@client.id}/subscriptions" 
+
+    %h3 
+      Users:
+      = @client.q_users.count
+
+    = icon_to "Users", "/admin/q/#{@client.id}/users" 
+
+    .advanced(style="margin-top: 10px;")
+      = icon_to_show("Authentication", "auth") unless params[:auth]
+
+      #auth(style='#{"display: none; " unless params[:auth]} margin-top: 10px;')
+        %p
+          %label Name: 
+          = best_in_place @client, :name, :path=>"/admin/q/#{@client.id}"
+        %p
+          %label Auth ID: 
+          = best_in_place @client, :auth_id, :path=>"/admin/q/#{@client.id}"
+        %p
+          %label Method: 
+          = best_in_place @client, :auth_method, :path=>"/admin/q/#{@client.id}"
+          Typically: digest, token
+        %p
+          %label Token: 
+          = best_in_place @client, :token, :path=>"/admin/q/#{@client.id}"
+        %p
+          %label Auth Secret: 
+          = best_in_place @client, :auth_secret, :path=>"/admin/q/#{@client.id}"
+
+        %p
+          %label Twitter Consumer Key:
+          = best_in_place @client, :twitter_consumer_key, :path=>"/admin/q/#{@client.id}"
+        %p
+          %label Twitter Consumer Secret:
+          = best_in_place @client, :twitter_consumer_secret, :path=>"/admin/q/#{@client.id}"
+        %p
+          %label Twitter OAuth Token:
+          = best_in_place @client, :twitter_oauth_token, :path=>"/admin/q/#{@client.id}"
+        %p
+          %label Twitter OAuth Token Scret:
+          = best_in_place @client, :twitter_oauth_token_secret, :path=>"/admin/q/#{@client.id}"
+
+

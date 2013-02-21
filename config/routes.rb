@@ -2,9 +2,24 @@ Rails.application.routes.draw do
 
   post '/api/1/q/token' => 'q#token'
   post '/api/1/q/register' => 'q#register'
+  post '/api/1/q/deregister' => 'q#deregister'
   post '/api/1/q/subscribe' => 'q#subscribe'
+  post '/api/1/q/unsubscribe' => 'q#unsubscribe'
   post '/api/1/q/event' => 'q#event'
 
+  put '/admin/q/:id' => 'admin/q#update'
+  delete '/admin/q/:id' => 'admin/q#destroy'
+  post '/admin/q' => 'admin/q#create'
+  get '/admin/q/:id/users' => 'admin/q#users'
+  get '/admin/q/:id/events' => 'admin/q#events'
+  get '/admin/q/:id/sent' => 'admin/q#sent'
+  match '/admin/q/:id/klasses/:klass_id' => 'admin/q#klasses'
+  match '/admin/q/:id/klasses' => 'admin/q#klasses'
+  get '/admin/q/:id/subscriptions' => 'admin/q#subscriptions'
+  match '/admin/q/:id' => 'admin/q#show'
+  get '/admin/q' => 'admin/q#index'
+
+  match '/admin/dj' => 'admin/dj#index'
 
   match '/users/sign_in' => 'account#sign_in'
   match '/users/sign_out' => 'account#sign_out'
@@ -42,6 +57,7 @@ Rails.application.routes.draw do
   get '/admin/engagements' => 'admin/kit_engagement#index'
   post '/admin/ad/:id/activate/:mode' => 'admin/ads#activate'
   post '/admin/ad_unit/:id/create_block' => 'admin/ad_units#create_block'
+  post '/admin/ad_zone/:id/create_block' => 'admin/ad_zone#create_block'
   get '/admin/advertisments' => 'admin/advertisments#index'
   get '/admin/orders' => 'admin/order#index'
   get '/admin/order/:id' => 'admin/order#show'

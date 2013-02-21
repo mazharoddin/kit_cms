@@ -39,7 +39,7 @@ class Newsletter < ActiveRecord::Base
     job.send_id = ns.id
     job.test_mode = test
 
-    Delayed::Job.enqueue job
+    Delayed::Job.enqueue job, :queue=>sid
 
     self.status = test ? "test" : "sent"
     self.save

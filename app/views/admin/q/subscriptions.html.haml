@@ -1,0 +1,28 @@
+- content_for :main do
+
+  %h1.notificationqueue_icon= "Notification Queue '#{@client.name}' Subscriptions"
+
+  .link(style='margin: 20px 0;')
+    = icon_to "Notification Queue", "/admin/q/#{@client.id}"
+
+
+
+  - subscriptions = @client.q_subscriptions.includes(:q_user).order("id desc").page(params[:s_page]).per(100)
+  
+  %table.loosen_more
+    %tr
+      %th Topic
+      %th Created
+      %th User External ID
+      %th Address
+      %th Last Notification Sent
+      
+    - subscriptions.each do |s|
+      %tr
+        %td= s.topic
+        %td= time_ago_in_words(s.created_at) 
+        %td= s.q_user.q_external_id
+        %td= s.q_user.display_notification
+        %td= time_ago_in_words(s.last_notification) rescue ''
+  = paginate subscriptions, :param_name=>:s_page
+

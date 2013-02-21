@@ -1,0 +1,26 @@
+- content_for :main do
+
+  %h1.notificationqueue_icon= "Notification Queue '#{@client.name}' Events"
+
+  .link(style='margin: 20px 0;')
+    = icon_to "Notification Queue", "/admin/q/#{@client.id}"
+
+  - events = @client.q_events.order("id desc").page(params[:e_page]).per(100)
+
+  = paginate events, :params_name=>:e_page
+  %table.loosen_more
+    %tr
+      %th Topic
+      %th Occurred 
+      %th Processed
+      %th Class
+      %th Data
+    - events.each do |e|
+      %tr
+        %td= e.topic
+        %td= time_ago_in_words e.created_at
+        %td= time_ago_in_words e.processed_at rescue ''
+        %td= e.klass
+        %td= field_reveal(e.data, 250)
+  = paginate events, :param_name=>:e_page
+

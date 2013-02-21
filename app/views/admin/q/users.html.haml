@@ -1,0 +1,27 @@
+- content_for :main do
+
+  %h1.notificationqueue_icon= "Notification Queue '#{@client.name}' Users"
+
+  .link(style='margin: 20px 0;')
+    = icon_to "Notification Queue", "/admin/q/#{@client.id}"
+
+  - users = @client.q_users.order("id desc").page(params[:u_page]).per(100)
+  
+  = paginate users, :param_name=>:u_page
+  %table.loosen_more
+    %tr
+      %th External ID
+      %th Created 
+      %th Updated
+      %th Method
+      %th Address
+    - users.each do |u|
+      %tr
+        %td= u.q_external_id
+        %td= time_ago_in_words(u.created_at)
+        %td= time_ago_in_words(u.updated_at)
+        %td= u.notification_method
+        %td= u.display_notification
+
+
+

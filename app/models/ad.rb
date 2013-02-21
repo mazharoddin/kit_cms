@@ -1,8 +1,9 @@
 class Ad < ActiveRecord::Base
-
+  include ActionView::Helpers
   attr_accessor :duration
   attr_accessor :not_found
 
+  attr_accessible :impression_count
   has_many :order_items, :as=>:orderable
   belongs_to :sellable, :polymorphic=>true 
 
@@ -96,7 +97,7 @@ class Ad < ActiveRecord::Base
     ad = self
 
     if ad.creative_file_name
-      content = image_tag ad.creative.url(options[:preview] ? :thumb : :display)
+      content = "<img src='#{ad.creative.url(options[:preview] ? :thumb : :display)}' />".html_safe
     else
       content = ad.not_found ? "[[ad not found]]" : (ad.allow_html==1 ? ad.body : (h ad.body))
     end
@@ -134,9 +135,8 @@ class Ad < ActiveRecord::Base
         adsa << ad
       end
     end 
-    rand_id = adsa[rand(adsa.length)].id
+    adsa[rand(adsa.length-1)]
 
-    adsa[rand_id]
   end    
 
   def impress

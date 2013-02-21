@@ -1,0 +1,49 @@
+- content_for :main do
+
+  %h1.notificationqueue_icon= "Notification Queue '#{@client.name}' Classes"
+
+  .link(style='margin: 20px 0;')
+    = icon_to "Notification Queue", "/admin/q/#{@client.id}"
+
+  = icon_to_show 'Create', 'create' unless params[:klass_id]
+
+  #create.klass(style="#{'display: none;' unless params[:klass_id]}")
+    = form_for @q_klass, :url=>"/admin/q/#{@client.id}/klasses" do |f|
+      = f.hidden_field :id if @q_klass.id
+      %p
+        %label Name:
+        = f.text_field :name
+
+      %p
+        %label Method:
+        = f.select :notification_method, options_for_select(["twitter", "email"])
+
+      %p
+        %label Code:
+        - @q_klass.code ||= ''
+        = cm_editor('ruby', :q_klass, :code, f)
+
+      %p
+        = kit_submit "Save"
+
+  - klasses = @client.q_klasses.order("id desc").page(params[:page]).per(100)
+  
+  = paginate klasses, :param_name=>:page
+  
+  %table.loosen_more
+    %tr
+      %th Name
+      %th Method
+      %th User?
+      %th Code
+    - klasses.each do |k|
+      %tr
+        %td= link_to k.name, "/admin/q/#{@client.id}/klasses/#{k.id}"
+        %td= k.notification_method
+        %td
+          %pre
+            = k.code
+
+  = paginate klasses, :param_name=>:page
+
+

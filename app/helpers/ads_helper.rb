@@ -28,6 +28,7 @@ module AdsHelper
   end
 
   def kit_ad_by_unit(unit_id, options = {})
+    return "[[ads may appear here]]" if params[:edit]
     begin
       possible_zones = []
       highest_priority = nil
@@ -43,7 +44,7 @@ module AdsHelper
       if possible_zones.length>0 
         return kit_ad_by_zone(possible_zones, options)
       else
-        return "[[no zones found]]"
+        return nil
       end
     rescue Exception => e
       logger.error e.message
@@ -68,17 +69,15 @@ module AdsHelper
   end
 
   def kit_ad(id, options = {})
-  begin
-    ad = Ad.sys(_sid).where(:id=>id).includes(:ad_zones).first
-    
-    ad = Ad.ensure_ad(ad)
-    ad.impress
-    ad.render
-  rescue Exception => e
-    e.message
-  end
-
-
+    begin
+      ad = Ad.sys(_sid).where(:id=>id).includes(:ad_zones).first
+      
+      ad = Ad.ensure_ad(ad)
+      ad.impress
+      ad.render
+    rescue Exception => e
+      e.message
+    end
   end
 
   def zone_with_price(zone)

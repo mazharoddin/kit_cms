@@ -2,6 +2,21 @@ class Admin::AdZonesController < AdminController
 
   before_filter :check_feature
 
+  def create_block
+    @ad_zone = AdZone.find_sys_id(_sid, params[:id])
+    
+    block = Block.sys(_sid).where(:name=>@ad_zone.block_name).first
+
+    if block
+      notice = 'Block already exists'
+    else
+      block = Block.create(:system_id=>_sid, :name=>@ad_zone.block_name, :description=>"System generated block to display an ad from zone '#{@ad_zone.name}'", :show_editors=>true, :all_templates=>true, :user_id=>current_user.id, :body=>"<% if params[:edit] %>[[ad will appear here]]<% else %><% ad = kit_ad_by_zone(#{@ad_zone.id}) %><%= kit_ad(ad.id) if ad %><% end %>")
+      notice = 'Block created'
+    end
+
+    redirect_to [:admin, @ad_zone], :notice=>notice
+  end
+
   def index
     @ad_zones = AdZone.sys(_sid).includes(:ad_unit)
     @ad_zones = @ad_zones.where(:ad_unit_id=>params[:ad_unit]) if params[:ad_unit] 
