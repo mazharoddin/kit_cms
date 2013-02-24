@@ -1,6 +1,7 @@
 class Block < ActiveRecord::Base
   has_and_belongs_to_many :page_templates
 
+
   attr_accessible :name, :show_editors, :all_templates, :page_template_ids, :description, :body, :system_id, :user_id
   validates :name, :presence=>true, :length=>{:minimum=>1, :maximum=>80}
   belongs_to :user
