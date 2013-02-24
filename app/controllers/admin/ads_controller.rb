@@ -37,7 +37,12 @@ class Admin::AdsController < AdminController
     @ad = Ad.new(params[:ad])
     @ad.system_id = _sid
     @ad.activated = Time.now
+#    @ad.duration = params[:ad][:duration].to_i
     @ad.approved_by_id = current_user.id
+    @ad.user_id = current_user.id
+    @ad.name = params[:ad][:name]
+    @ad.start_date = params[:ad][:start_date]
+    @ad.end_date = params[:ad][:end_date] #@ad.start_date + @ad.duration.send(zone.period.downcase) rescue nil
 
     zones = check_zones
     if zones.instance_of?(String)

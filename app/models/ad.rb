@@ -3,7 +3,7 @@ class Ad < ActiveRecord::Base
   attr_accessor :duration
   attr_accessor :not_found
 
-  attr_accessible :impression_count
+  attr_accessible :impression_count, :start_date, :end_date, :user_id, :name
   has_many :order_items, :as=>:orderable
   belongs_to :sellable, :polymorphic=>true 
 
@@ -14,7 +14,6 @@ class Ad < ActiveRecord::Base
   has_many :ad_clicks
 
   validates :system_id, :presence=>true
-  validates :user_id, :presence=>true
   validates :start_date, :presence=>true
   validates :end_date, :presence=>true
   validates :name, :presence=>true
@@ -99,7 +98,7 @@ class Ad < ActiveRecord::Base
     if ad.creative_file_name
       content = "<img src='#{ad.creative.url(options[:preview] ? :thumb : :display)}' />".html_safe
     else
-      content = ad.not_found ? "[[ad not found]]" : (ad.allow_html==1 ? ad.body : (h ad.body))
+      content = ad.not_found ? "[[ad not found]]" : (ad.body.is_blank ? "[[no HTML]]" : (ad.allow_html==1 ? ad.body : (h ad.body)))
     end
     
     op = []
