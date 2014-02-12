@@ -72,14 +72,6 @@ Edit the config/database.yml file to point to a local, not-yet-existing databsae
     pool: 5
     timeout: 5000
 
-Create the database:
-
-    rake db:create
-  
-Setup the database:
-
-    rake kit:setup_db
-    
 Now to install and run ElasticSearch, which must be running before you start your CMS.  Download the latest version from (http://www.elasticsearch.org/download/).  
 Extract the contents of the file you downloaded in to a fresh directory called `elasticsearch` then do:
 
